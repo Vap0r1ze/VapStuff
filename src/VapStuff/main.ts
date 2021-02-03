@@ -19,6 +19,7 @@ export default class VapStuff extends JsPlugin {
   onEnable () {
     // UseableItems
     this.registerEvent(PlayerInteractEvent, this.useableItems.onPlayerInteract.bind(this.useableItems))
+    this.registerEvent(InventoryCloseEvent, this.useableItems.onInventoryClose.bind(this.useableItems))
 
     // ShulkerPocket
     this.registerEvent(PlayerInteractEvent, this.shulkerPocket.onPlayerInteract.bind(this.shulkerPocket))
