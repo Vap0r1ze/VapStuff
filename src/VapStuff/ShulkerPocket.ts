@@ -2,7 +2,6 @@ import { Config } from './config.js'
 import ShulkerBox from '../lib/org/bukkit/block/ShulkerBox.js'
 import Bukkit from '../lib/org/bukkit/Bukkit.js'
 import HumanEntity from '../lib/org/bukkit/entity/HumanEntity.js'
-import Player from '../lib/org/bukkit/entity/Player.js'
 import Action from '../lib/org/bukkit/event/block/Action.js'
 import ClickType from '../lib/org/bukkit/event/inventory/ClickType.js'
 import InventoryAction from '../lib/org/bukkit/event/inventory/InventoryAction.js'
@@ -16,13 +15,21 @@ import BlockStateMeta from '../lib/org/bukkit/inventory/meta/BlockStateMeta.js'
 import PlayerInventory from '../lib/org/bukkit/inventory/PlayerInventory.js'
 import Material from '../lib/org/bukkit/Material.js'
 import Sound from '../lib/org/bukkit/Sound.js'
+import Module from './Module.js'
 
 type UUID = string
 
-export default class ShulkerPocket {
+export default class ShulkerPocket extends Module {
   private shulkerBoxSlots: Record<UUID, number> = {}
   private shulkerBoxOpen: Record<UUID, boolean> = {}
   private shulkerBoxOnCursors: Record<UUID, boolean> = {}
+
+  onEnable () {
+    this.plugin.registerEvent(PlayerInteractEvent, this.onPlayerInteract.bind(this))
+    this.plugin.registerEvent(InventoryClickEvent, this.onInventoryClick.bind(this))
+    this.plugin.registerEvent(InventoryCloseEvent, this.onInventoryClose.bind(this))
+    this.plugin.registerEvent(InventoryDragEvent, this.onInventoryDrag.bind(this))
+  }
 
   onPlayerInteract (listener: any, event: PlayerInteractEvent) {
     const player = event.getPlayer()
