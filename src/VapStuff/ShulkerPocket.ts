@@ -1,3 +1,4 @@
+import { Config } from './config.js'
 import ShulkerBox from '../lib/org/bukkit/block/ShulkerBox.js'
 import Bukkit from '../lib/org/bukkit/Bukkit.js'
 import HumanEntity from '../lib/org/bukkit/entity/HumanEntity.js'
@@ -322,14 +323,16 @@ export default class ShulkerPocket {
     item.setPickupDelay(40)
   }
 
-  debugLog (event?: PlayerInteractEvent | InventoryClickEvent) {
-    // console.log(event.getAction())
-    // console.log(`Cursor: [${Object.keys(this.shulkerBoxOnCursors).join(', ')}]`)
-    // console.log(`Open: [${Object.keys(this.shulkerBoxOpen).join(', ')}]`)
-    // console.log(
-    //   `Slots: {${Array.from(Object.entries(this.shulkerBoxSlots))
-    //     .map(e => `'${e[0]}': ${e[1]}`)
-    //     .join(', ')}}`
-    // )
+  debugLog (event: PlayerInteractEvent | InventoryClickEvent) {
+    if (Config.DEBUG) {
+      console.log(event.getAction())
+      console.log(`Cursor: [${Object.keys(this.shulkerBoxOnCursors).join(', ')}]`)
+      console.log(`Open: [${Object.keys(this.shulkerBoxOpen).join(', ')}]`)
+      console.log(
+        `Slots: {${Array.from(Object.entries(this.shulkerBoxSlots))
+          .map(e => `'${e[0]}': ${e[1]}`)
+          .join(', ')}}`
+      )
+    }
   }
 }
