@@ -21,24 +21,35 @@ type UUID = string
 export default class ShulkerPocket {
   private shulkerBoxSlots: Record<UUID, number> = {}
   private shulkerBoxOpen: Record<UUID, boolean> = {}
-  private shulkerBoxOnCursors: UUID[] = []
+  private shulkerBoxOnCursors: Record<UUID, boolean> = {}
 
   onPlayerInteract (listener: any, event: PlayerInteractEvent) {
-    let itemInMainHand: ItemStack
-    let player: Player
+    const player = event.getPlayer()
+    const itemInMainHand = (player.getInventory() as PlayerInventory).getItemInMainHand()
     if (
       event.getAction() === Action.RIGHT_CLICK_AIR &&
-      (itemInMainHand = ((player = event.getPlayer()).getInventory() as PlayerInventory).getItemInMainHand()) !=
-        null &&
+      itemInMainHand != null &&
       this.isShulkerBox(itemInMainHand.getType()) &&
       !this.shulkerBoxOpen[player.getUniqueId()]
     ) {
+      const playerInv = Array.from(player.getInventory().getContents())
+      if (playerInv.filter(item => this.isShulkerBox(item?.getType())).length > 1) {
+        player.sendMessage('\xA7a[VapStuff] \xA77You cannot open a Shulker Pocket with multiple shulker boxes in your inventory.')
+        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 1, 1)
+        return
+      }
+
       this.shulkerBoxOpen[player.getUniqueId()] = true
       const shulkerBox = (itemInMainHand.getItemMeta() as BlockStateMeta).getBlockState() as ShulkerBox
       const meta = itemInMainHand.getItemMeta()
       const title =
-        (meta.getDisplayName() == null || meta.getDisplayName() === '')
-          ? itemInMainHand.getType().name().split('_').map(w => w[0] + w.slice(1).toLowerCase()).join(' ')
+        meta.getDisplayName() == null || meta.getDisplayName() === ''
+          ? itemInMainHand
+              .getType()
+              .name()
+              .split('_')
+              .map(w => w[0] + w.slice(1).toLowerCase())
+              .join(' ')
           : meta.getDisplayName()
       const inv = Bukkit.createInventory(null, InventoryType.SHULKER_BOX, title)
       inv.setContents(shulkerBox.getInventory().getContents())
@@ -50,14 +61,15 @@ export default class ShulkerPocket {
         .getWorld()
         .playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, 1, 1)
       event.setCancelled(true)
+      this.debugLog(event)
     }
   }
 
   onInventoryClose (listener: any, event: InventoryCloseEvent) {
-    let player: HumanEntity
-    if (this.shulkerBoxSlots[(player = event.getPlayer()).getUniqueId()]) {
+    const player = event.getPlayer()
+    if (this.shulkerBoxSlots[player.getUniqueId()]) {
       const items = event.getInventory().getContents()
-      this.saveShulkerBox(player, items)
+      this.saveShulkerBoxByPlayer(player, items)
       delete this.shulkerBoxSlots[player.getUniqueId()]
       if (this.shulkerBoxOpen[player.getUniqueId()]) {
         delete this.shulkerBoxOpen[player.getUniqueId()]
@@ -69,8 +81,10 @@ export default class ShulkerPocket {
   }
 
   onInventoryClick (listener: any, event: InventoryClickEvent) {
-    let player: HumanEntity
-    if (this.shulkerBoxSlots[(player = event.getWhoClicked()).getUniqueId()]) {
+    const player = event.getWhoClicked()
+    if (this.shulkerBoxSlots[player.getUniqueId()]) {
+      this.debugLog(event)
+
       if (
         event.getCursor() != null &&
         this.isShulkerBox(event.getCursor().getType()) &&
@@ -81,11 +95,11 @@ export default class ShulkerPocket {
       }
 
       const items = event.getInventory().getContents()
-      this.saveShulkerBox(player, items)
+      this.saveShulkerBoxByPlayer(player, items)
 
       if (this.shulkerBoxSlots[player.getUniqueId()] === event.getRawSlot()) {
         if (this.isPickupAction(event.getAction())) {
-          this.shulkerBoxOnCursors.push(player.getUniqueId())
+          this.shulkerBoxOnCursors[player.getUniqueId()] = true
           return
         } else if (
           event.getAction() === InventoryAction.DROP_ALL_SLOT ||
@@ -100,7 +114,7 @@ export default class ShulkerPocket {
 
       let newItemSlot: number
 
-      if (this.shulkerBoxOnCursors.includes(player.getUniqueId())) {
+      if (this.shulkerBoxOnCursors[player.getUniqueId()]) {
         if (
           event.getAction() === InventoryAction.DROP_ALL_CURSOR ||
           event.getAction() === InventoryAction.DROP_ONE_CURSOR
@@ -109,10 +123,7 @@ export default class ShulkerPocket {
           return
         } else if (this.isPlaceAction(event.getAction())) {
           newItemSlot = event.getRawSlot()
-          this.shulkerBoxOnCursors.splice(
-            this.shulkerBoxOnCursors.indexOf(player.getUniqueId()),
-            1
-          )
+          delete this.shulkerBoxOnCursors[player.getUniqueId()]
         }
       }
 
@@ -173,10 +184,10 @@ export default class ShulkerPocket {
   }
 
   onInventoryDrag (listener: any, event: InventoryDragEvent) {
-    let player: HumanEntity
+    const player = event.getWhoClicked()
 
     if (
-      this.shulkerBoxSlots[(player = event.getWhoClicked()).getUniqueId()] &&
+      this.shulkerBoxSlots[player.getUniqueId()] &&
       this.isShulkerBox(event.getOldCursor().getType())
     ) {
       if (
@@ -187,14 +198,11 @@ export default class ShulkerPocket {
         return
       }
 
-      if (this.shulkerBoxOnCursors.includes(player.getUniqueId())) {
+      if (this.shulkerBoxOnCursors[player.getUniqueId()]) {
         this.shulkerBoxSlots[player.getUniqueId()] = this.toRawSlot(
           event.getInventorySlots().toArray()[0]
         )
-        this.shulkerBoxOnCursors.splice(
-          this.shulkerBoxOnCursors.indexOf(player.getUniqueId()),
-          1
-        )
+        delete this.shulkerBoxOnCursors[player.getUniqueId()]
       }
     }
   }
@@ -208,18 +216,22 @@ export default class ShulkerPocket {
     return arr
   }
 
-  saveShulkerBox (player: HumanEntity, items: ItemStack[]) {
+  saveShulkerBox (shulkerbox: ItemStack, items: ItemStack[]) {
+    const bsm = shulkerbox.getItemMeta() as BlockStateMeta
+    const box = bsm.getBlockState() as ShulkerBox
+    box.getInventory().setContents(items)
+    bsm.setBlockState(box)
+    shulkerbox.setItemMeta(bsm)
+  }
+
+  saveShulkerBoxByPlayer (player: HumanEntity, items: ItemStack[]) {
     const shulkerbox = player
       .getInventory()
       .getItem(this.toSlot(this.shulkerBoxSlots[player.getUniqueId()]))
     if (shulkerbox === null || !this.isShulkerBox(shulkerbox.getType())) {
       return
     }
-    const bsm = shulkerbox.getItemMeta() as BlockStateMeta
-    const box = bsm.getBlockState() as ShulkerBox
-    box.getInventory().setContents(items)
-    bsm.setBlockState(box)
-    shulkerbox.setItemMeta(bsm)
+    this.saveShulkerBox(shulkerbox, items)
   }
 
   isShulkerBox (m: Material): boolean {
@@ -305,8 +317,19 @@ export default class ShulkerPocket {
       player
         .getLocation()
         .getDirection()
-        .multiply(1/4)
+        .multiply(1 / 4)
     )
     item.setPickupDelay(40)
+  }
+
+  debugLog (event?: PlayerInteractEvent | InventoryClickEvent) {
+    // console.log(event.getAction())
+    // console.log(`Cursor: [${Object.keys(this.shulkerBoxOnCursors).join(', ')}]`)
+    // console.log(`Open: [${Object.keys(this.shulkerBoxOpen).join(', ')}]`)
+    // console.log(
+    //   `Slots: {${Array.from(Object.entries(this.shulkerBoxSlots))
+    //     .map(e => `'${e[0]}': ${e[1]}`)
+    //     .join(', ')}}`
+    // )
   }
 }
