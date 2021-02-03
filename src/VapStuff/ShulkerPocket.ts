@@ -20,6 +20,7 @@ type UUID = string
 
 export default class ShulkerPocket {
   private shulkerBoxSlots: Record<UUID, number> = {}
+  private shulkerBoxOpen: Record<UUID, boolean> = {}
   private shulkerBoxOnCursors: UUID[] = []
 
   onPlayerInteract (listener: any, event: PlayerInteractEvent) {
@@ -29,8 +30,10 @@ export default class ShulkerPocket {
       event.getAction() === Action.RIGHT_CLICK_AIR &&
       (itemInMainHand = ((player = event.getPlayer()).getInventory() as PlayerInventory).getItemInMainHand()) !=
         null &&
-      this.isShulkerBox(itemInMainHand.getType())
+      this.isShulkerBox(itemInMainHand.getType()) &&
+      !this.shulkerBoxOpen[player.getUniqueId()]
     ) {
+      this.shulkerBoxOpen[player.getUniqueId()] = true
       const shulkerBox = (itemInMainHand.getItemMeta() as BlockStateMeta).getBlockState() as ShulkerBox
       const meta = itemInMainHand.getItemMeta()
       const title =
@@ -56,9 +59,12 @@ export default class ShulkerPocket {
       const items = event.getInventory().getContents()
       this.saveShulkerBox(player, items)
       delete this.shulkerBoxSlots[player.getUniqueId()]
-      player
-        .getWorld()
-        .playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_CLOSE, 1, 1)
+      if (this.shulkerBoxOpen[player.getUniqueId()]) {
+        delete this.shulkerBoxOpen[player.getUniqueId()]
+        player
+          .getWorld()
+          .playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_CLOSE, 1, 1)
+      }
     }
   }
 
