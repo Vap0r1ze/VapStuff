@@ -1,9 +1,17 @@
 import Action from '../lib/org/bukkit/event/block/Action.js';
+import InventoryCloseEvent from '../lib/org/bukkit/event/inventory/InventoryCloseEvent.js';
+import PlayerInteractEvent from '../lib/org/bukkit/event/player/PlayerInteractEvent.js';
 import Material from '../lib/org/bukkit/Material.js';
 import Sound from '../lib/org/bukkit/Sound.js';
-export default class UseableItems {
+import Module from './Module.js';
+export default class UseableItems extends Module {
     constructor() {
+        super(...arguments);
         this.enderChestOpen = {};
+    }
+    onEnable() {
+        this.plugin.registerEvent(PlayerInteractEvent, this.onPlayerInteract.bind(this));
+        this.plugin.registerEvent(InventoryCloseEvent, this.onInventoryClose.bind(this));
     }
     onPlayerInteract(listener, event) {
         const player = event.getPlayer();

@@ -1,7 +1,12 @@
 import Action from '../lib/org/bukkit/event/block/Action.js';
+import PlayerInteractEvent from '../lib/org/bukkit/event/player/PlayerInteractEvent.js';
 import Material from '../lib/org/bukkit/Material.js';
 import Sound from '../lib/org/bukkit/Sound.js';
-export default class GrassPlanter {
+import Module from './Module.js';
+export default class GrassPlanter extends Module {
+    onEnable() {
+        this.plugin.registerEvent(PlayerInteractEvent, this.onPlayerInteract.bind(this));
+    }
     onPlayerInteract(listener, event) {
         let itemInMainHand;
         let player;
