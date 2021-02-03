@@ -13,7 +13,8 @@
     "docs": "npx typedoc --exclude \"**/*.js\" --categorizeByGroup true --name \"ScriptableMC-TypeScript\" --mode modules --includeDeclarations --excludeNotExported --excludePrivate --excludeProtected --excludeExternals --out docs src",
     "compile": "npx tsc",
     "postcompile": "npx copyfiles -u 1 \"src/**/*.json\" \"dist\"",
-    "watch": "npx tsc --watch"
+    "watch": "npx tsc --watch",
+    "dev": "tsc-watch --onSuccess \"./post-dev.sh\""
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,7 @@
     "mocha": "^7.0.0",
     "nyc": "^15.0.0",
     "ts-node": "^8.6.2",
+    "tsc-watch": "^4.2.9",
     "typedoc": "^0.16.8",
     "typescript": "^3.7.5"
   }
