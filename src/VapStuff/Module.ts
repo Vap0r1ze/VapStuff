@@ -1,9 +1,7 @@
-import JsPlugin from "../lib/JsPlugin";
-
 export default class Module {
-  plugin: JsPlugin
+  plugin: import('./main').default;
 
-  constructor (plugin: JsPlugin) {
+  constructor (plugin: import('./main').default) {
     this.plugin = plugin
   }
 
