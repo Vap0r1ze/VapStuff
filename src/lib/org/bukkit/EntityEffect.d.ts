@@ -1,0 +1,54 @@
+export default interface EntityEffect {
+    compareTo(arg0: any): number;
+    compareTo(arg0: any): number;
+    getApplicable(): any;
+    getData(): number;
+    getDeclaringClass(): any;
+    name(): string;
+    ordinal(): number;
+}
+export default class EntityEffect {
+    static get $javaClass(): any;
+    static get ARMOR_STAND_HIT(): EntityEffect;
+    static get ARROW_PARTICLES(): EntityEffect;
+    static get BREAK_EQUIPMENT_BOOTS(): EntityEffect;
+    static get BREAK_EQUIPMENT_CHESTPLATE(): EntityEffect;
+    static get BREAK_EQUIPMENT_HELMET(): EntityEffect;
+    static get BREAK_EQUIPMENT_LEGGINGS(): EntityEffect;
+    static get BREAK_EQUIPMENT_MAIN_HAND(): EntityEffect;
+    static get BREAK_EQUIPMENT_OFF_HAND(): EntityEffect;
+    static get CAT_TAME_FAIL(): EntityEffect;
+    static get CAT_TAME_SUCCESS(): EntityEffect;
+    static get DEATH(): EntityEffect;
+    static get DOLPHIN_FED(): EntityEffect;
+    static get ENTITY_POOF(): EntityEffect;
+    static get FIREWORK_EXPLODE(): EntityEffect;
+    static get FOX_CHEW(): EntityEffect;
+    static get GUARDIAN_TARGET(): EntityEffect;
+    static get HURT(): EntityEffect;
+    static get HURT_BERRY_BUSH(): EntityEffect;
+    static get HURT_DROWN(): EntityEffect;
+    static get HURT_EXPLOSION(): EntityEffect;
+    static get IRON_GOLEM_ROSE(): EntityEffect;
+    static get IRON_GOLEM_SHEATH(): EntityEffect;
+    static get LOVE_HEARTS(): EntityEffect;
+    static get PLAYER_BAD_OMEN_RAID(): EntityEffect;
+    static get RABBIT_JUMP(): EntityEffect;
+    static get RAVAGER_STUNNED(): EntityEffect;
+    static get SHEEP_EAT(): EntityEffect;
+    static get SHIELD_BLOCK(): EntityEffect;
+    static get SHIELD_BREAK(): EntityEffect;
+    static get SQUID_ROTATE(): EntityEffect;
+    static get TELEPORT_ENDER(): EntityEffect;
+    static get THORNS_HURT(): EntityEffect;
+    static get TOTEM_RESURRECT(): EntityEffect;
+    static get VILLAGER_ANGRY(): EntityEffect;
+    static get VILLAGER_HAPPY(): EntityEffect;
+    static get VILLAGER_HEART(): EntityEffect;
+    static get VILLAGER_SPLASH(): EntityEffect;
+    static get WITCH_MAGIC(): EntityEffect;
+    static get WOLF_HEARTS(): EntityEffect;
+    static get WOLF_SHAKE(): EntityEffect;
+    static get WOLF_SMOKE(): EntityEffect;
+    static get ZOMBIE_TRANSFORM(): EntityEffect;
+}

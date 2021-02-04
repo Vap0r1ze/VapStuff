@@ -1,0 +1,24 @@
+import Biome from './block/Biome.js';
+import BlockData from './block/data/BlockData.js';
+import Material from './Material.js';
+export default interface ChunkSnapshot {
+    contains(arg0: BlockData): boolean;
+    getBiome(arg0: number, arg1: number): Biome;
+    getBiome(arg0: number, arg1: number, arg2: number): Biome;
+    getBlockData(arg0: number, arg1: number, arg2: number): BlockData;
+    getBlockEmittedLight(arg0: number, arg1: number, arg2: number): number;
+    getBlockSkyLight(arg0: number, arg1: number, arg2: number): number;
+    getBlockType(arg0: number, arg1: number, arg2: number): Material;
+    getCaptureFullTime(): number;
+    getData(arg0: number, arg1: number, arg2: number): number;
+    getHighestBlockYAt(arg0: number, arg1: number): number;
+    getRawBiomeTemperature(arg0: number, arg1: number): number;
+    getRawBiomeTemperature(arg0: number, arg1: number, arg2: number): number;
+    getWorldName(): string;
+    getX(): number;
+    getZ(): number;
+    isSectionEmpty(arg0: number): boolean;
+}
+export default class ChunkSnapshot {
+    static get $javaClass(): any;
+}

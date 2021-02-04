@@ -1,0 +1,15 @@
+import MapCursor from './MapCursor.js';
+export default interface MapCursorCollection {
+    addCursor(cursor: MapCursor): MapCursor;
+    addCursor(x: number, y: number, direction: number): MapCursor;
+    addCursor(x: number, y: number, direction: number, type: number): MapCursor;
+    addCursor(x: number, y: number, direction: number, type: number, visible: boolean): MapCursor;
+    addCursor(x: number, y: number, direction: number, type: number, visible: boolean, caption: string): MapCursor;
+    getCursor(index: number): MapCursor;
+    removeCursor(cursor: MapCursor): boolean;
+    size(): number;
+}
+export default class MapCursorCollection {
+    static get $javaClass(): any;
+    constructor();
+}
