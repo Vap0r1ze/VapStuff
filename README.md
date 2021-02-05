@@ -12,3 +12,6 @@ A easy way for me to add custom recipes that utilize Item entities. Hopefully wi
 
 # Spawner Disassembler
 Adds a fun way to create a custom pickaxe that is able to harvest spawners.
+
+# No Wither Grief
+Stops withers and wither skulls from breaking blocks in worlds named "world".

@@ -4,6 +4,7 @@ import ShulkerPocket from './ShulkerPocket.js'
 import UseableItems from './UseableItems.js'
 import GrassPlanter from './GrassPlanter.js'
 import SpawnerDisassembler from './SpawnerDisassembler.js'
+import NoWitherGrief from './NoWitherGrief.js'
 import Module from './Module.js'
 
 export default class VapStuff extends JsPlugin {
@@ -13,6 +14,7 @@ export default class VapStuff extends JsPlugin {
   shulkerPocket = new ShulkerPocket(this)
   grassPlanter = new GrassPlanter(this)
   spawnerDisassembler = new SpawnerDisassembler(this)
+  noWitherGrief = new NoWitherGrief(this)
 
   modules: Module[] = [
     this.extraRecipes,
@@ -20,6 +22,7 @@ export default class VapStuff extends JsPlugin {
     this.shulkerPocket,
     this.grassPlanter,
     this.spawnerDisassembler,
+    this.noWitherGrief,
   ]
 
   onLoad () {
