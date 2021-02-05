@@ -1,12 +1,10 @@
 import CreatureSpawner from '../lib/org/bukkit/block/CreatureSpawner.js'
 import Levelled from '../lib/org/bukkit/block/data/Levelled.js'
-import Player from '../lib/org/bukkit/entity/Player.js'
 import Action from '../lib/org/bukkit/event/block/Action.js'
 import BlockBreakEvent from '../lib/org/bukkit/event/block/BlockBreakEvent.js'
 import BlockPlaceEvent from '../lib/org/bukkit/event/block/BlockPlaceEvent.js'
 import EntityDamageByEntityEvent from '../lib/org/bukkit/event/entity/EntityDamageByEntityEvent.js'
 import PlayerInteractEvent from '../lib/org/bukkit/event/player/PlayerInteractEvent.js'
-import PlayerItemDamageEvent from '../lib/org/bukkit/event/player/PlayerItemDamageEvent.js'
 import EquipmentSlot from '../lib/org/bukkit/inventory/EquipmentSlot.js'
 import ItemFlag from '../lib/org/bukkit/inventory/ItemFlag.js'
 import ItemStack from '../lib/org/bukkit/inventory/ItemStack.js'
@@ -28,7 +26,7 @@ export default class SpawnerDisassembler extends Module {
   private readonly SPAWNER_TEST = new RegExp(
     `^${this.SPAWNER_TEMPLATE('([\\w ]+)')}$`
   )
-  private readonly LEVEL_COST = 100
+  private readonly LEVEL_COST = 85
 
   // Hooks
   onEnable () {
