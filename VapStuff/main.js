@@ -4,6 +4,7 @@ import ShulkerPocket from './ShulkerPocket.js';
 import UseableItems from './UseableItems.js';
 import GrassPlanter from './GrassPlanter.js';
 import SpawnerDisassembler from './SpawnerDisassembler.js';
+import NoWitherGrief from './NoWitherGrief.js';
 export default class VapStuff extends JsPlugin {
     constructor() {
         super(...arguments);
@@ -12,12 +13,14 @@ export default class VapStuff extends JsPlugin {
         this.shulkerPocket = new ShulkerPocket(this);
         this.grassPlanter = new GrassPlanter(this);
         this.spawnerDisassembler = new SpawnerDisassembler(this);
+        this.noWitherGrief = new NoWitherGrief(this);
         this.modules = [
             this.extraRecipes,
             this.useableItems,
             this.shulkerPocket,
             this.grassPlanter,
             this.spawnerDisassembler,
+            this.noWitherGrief,
         ];
     }
     onLoad() {
