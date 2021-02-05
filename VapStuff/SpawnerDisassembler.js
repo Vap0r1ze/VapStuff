@@ -20,7 +20,7 @@ export default class SpawnerDisassembler extends Module {
         this.LEARN_MORE = '&8(Hover over this item to learn more)';
         this.SPAWNER_TEMPLATE = (mobName) => this.colorText(`&b${mobName} Spawner`);
         this.SPAWNER_TEST = new RegExp(`^${this.SPAWNER_TEMPLATE('([\\w ]+)')}$`);
-        this.LEVEL_COST = 100;
+        this.LEVEL_COST = 85;
     }
     // Hooks
     onEnable() {
