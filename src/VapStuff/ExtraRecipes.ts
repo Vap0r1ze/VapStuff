@@ -19,24 +19,22 @@ export interface Recipe {
 
 @Subscribe
 export default class ExtraRecipes extends Module {
-  private TRACKED_MATERIALS = []
-
-  private RECIPES: Record<string, Recipe> = {}
-
+  private trackedMaterials = []
+  private recipes: Record<string, Recipe> = {}
   private trackedDrops: Record<string, Item[]> = {}
   private scheduleTaskId?: number
 
   // API
   addRecipe (id: string, recipe: Recipe): boolean {
-    const exists = id in this.RECIPES
-    this.RECIPES[id] = recipe
+    const exists = id in this.recipes
+    this.recipes[id] = recipe
     this.initializeTracked()
     return !exists
   }
   removeRecipe (id: string): boolean {
-    const exists = id in this.RECIPES
+    const exists = id in this.recipes
     if (exists) {
-      delete this.RECIPES[id]
+      delete this.recipes[id]
       this.initializeTracked()
     }
     return exists
@@ -58,7 +56,7 @@ export default class ExtraRecipes extends Module {
   }
   onPlayerDropItem (listener: any, event: PlayerDropItemEvent) {
     const drop = event.getItemDrop()
-    if (this.TRACKED_MATERIALS.includes(drop.getItemStack().getType())) {
+    if (this.trackedMaterials.includes(drop.getItemStack().getType())) {
       const loc = this.serializeLocation(drop.getLocation())
       if (!this.trackedDrops[loc]) this.trackedDrops[loc] = []
       this.trackedDrops[loc].push(drop)
@@ -67,17 +65,17 @@ export default class ExtraRecipes extends Module {
 
   // Internal
   private initializeTracked () {
-    this.TRACKED_MATERIALS.splice(0, this.TRACKED_MATERIALS.length)
-    for (const recipe of Object.values(this.RECIPES)) {
+    this.trackedMaterials.splice(0, this.trackedMaterials.length)
+    for (const recipe of Object.values(this.recipes)) {
       for (const ingr of recipe.ingredients) {
-        if (!this.TRACKED_MATERIALS.includes(ingr[0])) {
-          this.TRACKED_MATERIALS.push(ingr[0])
+        if (!this.trackedMaterials.includes(ingr[0])) {
+          this.trackedMaterials.push(ingr[0])
         }
       }
       if (!recipe.advancedIngredients) continue
       for (const ingr of recipe.advancedIngredients) {
-        if (!this.TRACKED_MATERIALS.includes(ingr[0])) {
-          this.TRACKED_MATERIALS.push(ingr[0])
+        if (!this.trackedMaterials.includes(ingr[0])) {
+          this.trackedMaterials.push(ingr[0])
         }
       }
     }
@@ -88,7 +86,7 @@ export default class ExtraRecipes extends Module {
       ingr: (Item | null)[],
       advIngr: (Item | null)[]
     }> = {}
-    for (const [recipeName, recipe] of Object.entries(this.RECIPES)) {
+    for (const [recipeName, recipe] of Object.entries(this.recipes)) {
       required[recipeName] = {
         ingr: Array(recipe.ingredients.length).fill(null),
         advIngr: Array(recipe.advancedIngredients?.length || 0).fill(null),
@@ -98,7 +96,7 @@ export default class ExtraRecipes extends Module {
     for (const drops of Object.values(this.trackedDrops)) {
       const where = drops[0].getLocation()
       const block = where.getBlock()
-      for (const [recipeName, recipe] of Object.entries(this.RECIPES)) {
+      for (const [recipeName, recipe] of Object.entries(this.recipes)) {
         if (recipe.checkWorkbench && !recipe.checkWorkbench(block)) {
           continue
         }
