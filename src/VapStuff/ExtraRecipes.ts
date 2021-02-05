@@ -5,6 +5,7 @@ import ItemStack from '../lib/org/bukkit/inventory/ItemStack.js'
 import Location from '../lib/org/bukkit/Location.js'
 import Material from '../lib/org/bukkit/Material.js'
 import Sound from '../lib/org/bukkit/Sound.js'
+import { Subscribe } from './EventListener.js'
 import Module from './Module.js'
 
 export interface Recipe {
@@ -16,6 +17,7 @@ export interface Recipe {
   postRecipe?: (where: Location) => void;
 }
 
+@Subscribe
 export default class ExtraRecipes extends Module {
   private TRACKED_MATERIALS = []
 
@@ -47,8 +49,6 @@ export default class ExtraRecipes extends Module {
       .scheduleSyncRepeatingTask(this.plugin.context.getJavaPlugin(), this.scheduleTask.bind(this), 0, 20)
 
     this.initializeTracked()
-
-    this.plugin.registerEvent(PlayerDropItemEvent, this.onPlayerDropItem.bind(this))
   }
   onDisable () {
     const scheduler = this.plugin.server.getScheduler()

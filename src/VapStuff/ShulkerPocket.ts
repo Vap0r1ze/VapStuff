@@ -16,20 +16,15 @@ import PlayerInventory from '../lib/org/bukkit/inventory/PlayerInventory.js'
 import Material from '../lib/org/bukkit/Material.js'
 import Sound from '../lib/org/bukkit/Sound.js'
 import Module from './Module.js'
+import { Subscribe } from './EventListener.js'
 
 type UUID = string
 
+@Subscribe
 export default class ShulkerPocket extends Module {
   private shulkerBoxSlots: Record<UUID, number> = {}
   private shulkerBoxOpen: Record<UUID, boolean> = {}
   private shulkerBoxOnCursors: Record<UUID, boolean> = {}
-
-  onEnable () {
-    this.plugin.registerEvent(PlayerInteractEvent, this.onPlayerInteract.bind(this))
-    this.plugin.registerEvent(InventoryClickEvent, this.onInventoryClick.bind(this))
-    this.plugin.registerEvent(InventoryCloseEvent, this.onInventoryClose.bind(this))
-    this.plugin.registerEvent(InventoryDragEvent, this.onInventoryDrag.bind(this))
-  }
 
   onPlayerInteract (listener: any, event: PlayerInteractEvent) {
     const player = event.getPlayer()

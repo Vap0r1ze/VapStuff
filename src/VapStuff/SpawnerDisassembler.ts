@@ -11,8 +11,10 @@ import ItemStack from '../lib/org/bukkit/inventory/ItemStack.js'
 import PlayerInventory from '../lib/org/bukkit/inventory/PlayerInventory.js'
 import Material from '../lib/org/bukkit/Material.js'
 import Sound from '../lib/org/bukkit/Sound.js'
+import { Subscribe } from './EventListener.js'
 import Module from './Module.js'
 
+@Subscribe
 export default class SpawnerDisassembler extends Module {
   private readonly PICK_NAME = this.colorText('&#2CDA9DSpawner Disassembler')
   private readonly INFO =
@@ -74,14 +76,6 @@ export default class SpawnerDisassembler extends Module {
         block.setBlockData(cauldronData)
       }
     })
-
-    this.plugin.registerEvent(BlockBreakEvent, this.onBlockBreak.bind(this))
-    this.plugin.registerEvent(BlockPlaceEvent, this.onBlockPlace.bind(this))
-    this.plugin.registerEvent(
-      PlayerInteractEvent,
-      this.onPlayerInteract.bind(this)
-    )
-    this.plugin.registerEvent(EntityDamageByEntityEvent, this.onEntityDamageByEntity.bind(this))
   }
   onDisable () {
     this.plugin.extraRecipes.removeRecipe('spawnerDisassembler')

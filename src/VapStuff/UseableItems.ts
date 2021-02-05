@@ -3,17 +3,14 @@ import InventoryCloseEvent from '../lib/org/bukkit/event/inventory/InventoryClos
 import PlayerInteractEvent from '../lib/org/bukkit/event/player/PlayerInteractEvent.js'
 import Material from '../lib/org/bukkit/Material.js'
 import Sound from '../lib/org/bukkit/Sound.js'
+import { Subscribe } from './EventListener.js'
 import Module from './Module.js'
 
 type UUID = string
 
+@Subscribe
 export default class UseableItems extends Module {
   private enderChestOpen: Record<UUID, boolean> = {}
-
-  onEnable () {
-    this.plugin.registerEvent(PlayerInteractEvent, this.onPlayerInteract.bind(this))
-    this.plugin.registerEvent(InventoryCloseEvent, this.onInventoryClose.bind(this))
-  }
 
   onPlayerInteract (listener: any, event: PlayerInteractEvent) {
     const player = event.getPlayer()
@@ -39,7 +36,6 @@ export default class UseableItems extends Module {
       }
     }
   }
-
   onInventoryClose (listener: any, event: InventoryCloseEvent) {
     const player = event.getPlayer()
     if (this.enderChestOpen[player.getUniqueId()]) {
