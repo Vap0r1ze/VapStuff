@@ -1,6 +1,12 @@
-import PlayerDropItemEvent from '../lib/org/bukkit/event/player/PlayerDropItemEvent.js';
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+import { Subscribe } from './EventListener.js';
 import Module from './Module.js';
-export default class ExtraRecipes extends Module {
+let ExtraRecipes = class ExtraRecipes extends Module {
     constructor() {
         super(...arguments);
         this.TRACKED_MATERIALS = [];
@@ -28,7 +34,6 @@ export default class ExtraRecipes extends Module {
         this.scheduleTaskId = scheduler
             .scheduleSyncRepeatingTask(this.plugin.context.getJavaPlugin(), this.scheduleTask.bind(this), 0, 20);
         this.initializeTracked();
-        this.plugin.registerEvent(PlayerDropItemEvent, this.onPlayerDropItem.bind(this));
     }
     onDisable() {
         const scheduler = this.plugin.server.getScheduler();
@@ -146,4 +151,8 @@ export default class ExtraRecipes extends Module {
     serializeLocation(loc) {
         return `${loc.getWorld().getName()}[${loc.getBlockX()},${loc.getBlockY()},${loc.getBlockZ()}]`;
     }
-}
+};
+ExtraRecipes = __decorate([
+    Subscribe
+], ExtraRecipes);
+export default ExtraRecipes;

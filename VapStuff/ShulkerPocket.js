@@ -1,28 +1,25 @@
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 import { Config } from './config.js';
 import Bukkit from '../lib/org/bukkit/Bukkit.js';
 import Action from '../lib/org/bukkit/event/block/Action.js';
 import ClickType from '../lib/org/bukkit/event/inventory/ClickType.js';
 import InventoryAction from '../lib/org/bukkit/event/inventory/InventoryAction.js';
-import InventoryClickEvent from '../lib/org/bukkit/event/inventory/InventoryClickEvent.js';
-import InventoryCloseEvent from '../lib/org/bukkit/event/inventory/InventoryCloseEvent.js';
-import InventoryDragEvent from '../lib/org/bukkit/event/inventory/InventoryDragEvent.js';
 import InventoryType from '../lib/org/bukkit/event/inventory/InventoryType.js';
-import PlayerInteractEvent from '../lib/org/bukkit/event/player/PlayerInteractEvent.js';
 import Material from '../lib/org/bukkit/Material.js';
 import Sound from '../lib/org/bukkit/Sound.js';
 import Module from './Module.js';
-export default class ShulkerPocket extends Module {
+import { Subscribe } from './EventListener.js';
+let ShulkerPocket = class ShulkerPocket extends Module {
     constructor() {
         super(...arguments);
         this.shulkerBoxSlots = {};
         this.shulkerBoxOpen = {};
         this.shulkerBoxOnCursors = {};
-    }
-    onEnable() {
-        this.plugin.registerEvent(PlayerInteractEvent, this.onPlayerInteract.bind(this));
-        this.plugin.registerEvent(InventoryClickEvent, this.onInventoryClick.bind(this));
-        this.plugin.registerEvent(InventoryCloseEvent, this.onInventoryClose.bind(this));
-        this.plugin.registerEvent(InventoryDragEvent, this.onInventoryDrag.bind(this));
     }
     onPlayerInteract(listener, event) {
         const player = event.getPlayer();
@@ -265,4 +262,8 @@ export default class ShulkerPocket extends Module {
                 .join(', ')}}`);
         }
     }
-}
+};
+ShulkerPocket = __decorate([
+    Subscribe
+], ShulkerPocket);
+export default ShulkerPocket;

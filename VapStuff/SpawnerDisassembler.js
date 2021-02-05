@@ -1,15 +1,18 @@
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 import Action from '../lib/org/bukkit/event/block/Action.js';
-import BlockBreakEvent from '../lib/org/bukkit/event/block/BlockBreakEvent.js';
-import BlockPlaceEvent from '../lib/org/bukkit/event/block/BlockPlaceEvent.js';
-import EntityDamageByEntityEvent from '../lib/org/bukkit/event/entity/EntityDamageByEntityEvent.js';
-import PlayerInteractEvent from '../lib/org/bukkit/event/player/PlayerInteractEvent.js';
 import EquipmentSlot from '../lib/org/bukkit/inventory/EquipmentSlot.js';
 import ItemFlag from '../lib/org/bukkit/inventory/ItemFlag.js';
 import ItemStack from '../lib/org/bukkit/inventory/ItemStack.js';
 import Material from '../lib/org/bukkit/Material.js';
 import Sound from '../lib/org/bukkit/Sound.js';
+import { Subscribe } from './EventListener.js';
 import Module from './Module.js';
-export default class SpawnerDisassembler extends Module {
+let SpawnerDisassembler = class SpawnerDisassembler extends Module {
     constructor() {
         super(...arguments);
         this.PICK_NAME = this.colorText('&#2CDA9DSpawner Disassembler');
@@ -65,10 +68,6 @@ export default class SpawnerDisassembler extends Module {
                 block.setBlockData(cauldronData);
             }
         });
-        this.plugin.registerEvent(BlockBreakEvent, this.onBlockBreak.bind(this));
-        this.plugin.registerEvent(BlockPlaceEvent, this.onBlockPlace.bind(this));
-        this.plugin.registerEvent(PlayerInteractEvent, this.onPlayerInteract.bind(this));
-        this.plugin.registerEvent(EntityDamageByEntityEvent, this.onEntityDamageByEntity.bind(this));
     }
     onDisable() {
         this.plugin.extraRecipes.removeRecipe('spawnerDisassembler');
@@ -182,4 +181,8 @@ export default class SpawnerDisassembler extends Module {
     isPickActivated(pick) {
         return pick.containsEnchantment(this.DUMMY_ENCH);
     }
-}
+};
+SpawnerDisassembler = __decorate([
+    Subscribe
+], SpawnerDisassembler);
+export default SpawnerDisassembler;

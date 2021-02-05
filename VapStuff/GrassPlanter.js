@@ -1,12 +1,15 @@
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 import Action from '../lib/org/bukkit/event/block/Action.js';
-import PlayerInteractEvent from '../lib/org/bukkit/event/player/PlayerInteractEvent.js';
 import Material from '../lib/org/bukkit/Material.js';
 import Sound from '../lib/org/bukkit/Sound.js';
+import { Subscribe } from './EventListener.js';
 import Module from './Module.js';
-export default class GrassPlanter extends Module {
-    onEnable() {
-        this.plugin.registerEvent(PlayerInteractEvent, this.onPlayerInteract.bind(this));
-    }
+let GrassPlanter = class GrassPlanter extends Module {
     onPlayerInteract(listener, event) {
         let itemInMainHand;
         let player;
@@ -26,4 +29,8 @@ export default class GrassPlanter extends Module {
             event.setCancelled(true);
         }
     }
-}
+};
+GrassPlanter = __decorate([
+    Subscribe
+], GrassPlanter);
+export default GrassPlanter;
