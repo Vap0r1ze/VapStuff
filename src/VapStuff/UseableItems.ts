@@ -6,8 +6,6 @@ import Sound from '../lib/org/bukkit/Sound.js'
 import { Subscribe } from './EventListener.js'
 import Module from './Module.js'
 
-type UUID = string
-
 @Subscribe
 export default class UseableItems extends Module {
   private enderChestOpen: Record<UUID, boolean> = {}

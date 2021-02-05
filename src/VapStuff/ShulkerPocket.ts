@@ -18,8 +18,6 @@ import Sound from '../lib/org/bukkit/Sound.js'
 import Module from './Module.js'
 import { Subscribe } from './EventListener.js'
 
-type UUID = string
-
 @Subscribe
 export default class ShulkerPocket extends Module {
   private shulkerBoxSlots: Record<UUID, number> = {}
