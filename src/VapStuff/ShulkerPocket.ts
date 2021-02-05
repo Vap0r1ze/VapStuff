@@ -40,13 +40,6 @@ export default class ShulkerPocket extends Module {
       this.isShulkerBox(itemInMainHand.getType()) &&
       !this.shulkerBoxOpen[player.getUniqueId()]
     ) {
-      const playerInv = Array.from(player.getInventory().getContents())
-      if (playerInv.filter(item => this.isShulkerBox(item?.getType())).length > 1) {
-        player.sendMessage('\xA7a[VapStuff] \xA77You cannot open a Shulker Pocket with multiple shulker boxes in your inventory.')
-        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 1, 1)
-        return
-      }
-
       this.shulkerBoxOpen[player.getUniqueId()] = true
       const shulkerBox = (itemInMainHand.getItemMeta() as BlockStateMeta).getBlockState() as ShulkerBox
       const meta = itemInMainHand.getItemMeta()
@@ -92,6 +85,13 @@ export default class ShulkerPocket extends Module {
     const player = event.getWhoClicked()
     if (this.shulkerBoxSlots[player.getUniqueId()]) {
       this.debugLog(event)
+
+      if (
+        event.getRawSlot() === this.shulkerBoxSlots[player.getUniqueId()]
+      ) {
+        event.setCancelled(true)
+        return
+      }
 
       if (
         event.getCursor() != null &&
