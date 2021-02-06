@@ -17,6 +17,9 @@ export default class Module {
     this.plugin = plugin
   }
 
+  get name () {
+    return 'Unnamed Module'
+  }
   onEnable () {}
   onDisable () {}
 

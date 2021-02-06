@@ -10,6 +10,8 @@ import Module from './Module.js'
 
 @Subscribe
 export default class GrassPlanter extends Module {
+  get name () { return 'Grass Planter' }
+
   onPlayerInteract (listener: any, event: PlayerInteractEvent) {
     let itemInMainHand: ItemStack
     let player: Player

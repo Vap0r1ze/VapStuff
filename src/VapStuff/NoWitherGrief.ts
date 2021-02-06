@@ -5,6 +5,8 @@ import Module from './Module.js'
 
 @Subscribe
 export default class NoWitherGrief extends Module {
+  get name () { return 'No Wither Grief' }
+
   onEntityExplode (listener: any, event: EntityExplodeEvent) {
     if (
       event.getEntityType() !== EntityType.WITHER &&

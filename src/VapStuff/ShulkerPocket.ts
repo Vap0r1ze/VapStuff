@@ -20,6 +20,8 @@ import { Subscribe } from './EventListener.js'
 
 @Subscribe
 export default class ShulkerPocket extends Module {
+  get name () { return 'Shulker Pocket' }
+
   private shulkerBoxSlots: Record<UUID, number> = {}
   private shulkerBoxOpen: Record<UUID, boolean> = {}
   private shulkerBoxOnCursors: Record<UUID, boolean> = {}

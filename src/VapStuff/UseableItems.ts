@@ -8,6 +8,8 @@ import Module from './Module.js'
 
 @Subscribe
 export default class UseableItems extends Module {
+  get name () { return 'Useable Items' }
+
   private enderChestOpen: Record<UUID, boolean> = {}
 
   onPlayerInteract (listener: any, event: PlayerInteractEvent) {

@@ -30,6 +30,8 @@ const enum Hint {
 
 @Subscribe
 export default class SpawnerDisassembler extends Module {
+  get name () { return 'Spawner Disassembler' }
+
   private readonly PICK_NAME = this.colorText('&#2CDA9DSpawner Disassembler')
   private readonly INFO =
     '&7Once activated, this pickaxe can\n' +

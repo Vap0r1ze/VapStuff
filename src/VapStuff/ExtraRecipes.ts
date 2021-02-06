@@ -19,6 +19,8 @@ export interface Recipe {
 
 @Subscribe
 export default class ExtraRecipes extends Module {
+  get name () { return 'Extra Recipes' }
+
   private trackedMaterials = []
   private recipes: Record<string, Recipe> = {}
   private trackedDrops: Record<string, Item[]> = {}
