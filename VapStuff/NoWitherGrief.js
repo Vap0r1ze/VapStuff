@@ -8,6 +8,7 @@ import EntityType from '../lib/org/bukkit/entity/EntityType.js';
 import { Subscribe } from './EventListener.js';
 import Module from './Module.js';
 let NoWitherGrief = class NoWitherGrief extends Module {
+    get name() { return 'No Wither Grief'; }
     onEntityExplode(listener, event) {
         if (event.getEntityType() !== EntityType.WITHER &&
             event.getEntityType() !== EntityType.WITHER_SKULL)

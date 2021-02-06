@@ -21,6 +21,7 @@ let ShulkerPocket = class ShulkerPocket extends Module {
         this.shulkerBoxOpen = {};
         this.shulkerBoxOnCursors = {};
     }
+    get name() { return 'Shulker Pocket'; }
     onPlayerInteract(listener, event) {
         const player = event.getPlayer();
         const itemInMainHand = player.getInventory().getItemInMainHand();

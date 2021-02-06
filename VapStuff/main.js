@@ -29,13 +29,18 @@ export default class VapStuff extends JsPlugin {
     onEnable() {
         this.modules.forEach(module => {
             module.onEnable();
+            this.log(`Module enabled: \xA7b${module.name}\xA7r`);
         });
-        console.log('[' + this.pluginName + '] Enabled');
+        this.log('All modules enabled');
     }
     onDisable() {
         this.modules.forEach(module => {
             module.onDisable();
+            this.log(`Module disabled: \xA7b${module.name}\xA7r`);
         });
-        console.log('[' + this.pluginName + '] Disabled');
+        this.log('All modules disabled');
+    }
+    log(message) {
+        console.log(`\xA7a[${this.pluginName}]\xA7r ${message}`);
     }
 }

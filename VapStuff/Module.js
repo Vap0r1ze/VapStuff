@@ -7,6 +7,9 @@ export default class Module {
         this.DUMMY_ENCH = Enchantment.WATER_WORKER;
         this.plugin = plugin;
     }
+    get name() {
+        return 'Unnamed Module';
+    }
     onEnable() { }
     onDisable() { }
     // Bukkit Helpers

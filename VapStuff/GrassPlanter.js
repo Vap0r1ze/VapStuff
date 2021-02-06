@@ -10,6 +10,7 @@ import Sound from '../lib/org/bukkit/Sound.js';
 import { Subscribe } from './EventListener.js';
 import Module from './Module.js';
 let GrassPlanter = class GrassPlanter extends Module {
+    get name() { return 'Grass Planter'; }
     onPlayerInteract(listener, event) {
         let itemInMainHand;
         let player;

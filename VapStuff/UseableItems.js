@@ -14,6 +14,7 @@ let UseableItems = class UseableItems extends Module {
         super(...arguments);
         this.enderChestOpen = {};
     }
+    get name() { return 'Useable Items'; }
     onPlayerInteract(listener, event) {
         const player = event.getPlayer();
         const item = event.getItem();

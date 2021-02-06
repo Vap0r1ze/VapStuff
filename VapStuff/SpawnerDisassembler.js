@@ -31,6 +31,7 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
         this.LEVEL_COST = 85;
         this.hintsShown = new Map();
     }
+    get name() { return 'Spawner Disassembler'; }
     // Hooks
     onEnable() {
         for (let i = 0; i < 4 /* MAX_HINT */; i++) {

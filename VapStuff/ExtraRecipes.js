@@ -13,6 +13,7 @@ let ExtraRecipes = class ExtraRecipes extends Module {
         this.recipes = {};
         this.trackedDrops = {};
     }
+    get name() { return 'Extra Recipes'; }
     // API
     addRecipe(id, recipe) {
         const exists = id in this.recipes;
