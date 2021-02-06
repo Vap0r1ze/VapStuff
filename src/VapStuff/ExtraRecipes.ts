@@ -19,21 +19,25 @@ export interface Recipe {
 
 @Subscribe
 export default class ExtraRecipes extends Module {
-  get name () { return 'Extra Recipes' }
+  get name() { return 'Extra Recipes' }
 
   private trackedMaterials = []
+
   private recipes: Record<string, Recipe> = {}
+
   private trackedDrops: Record<string, Item[]> = {}
+
   private scheduleTaskId?: number
 
   // API
-  addRecipe (id: string, recipe: Recipe): boolean {
+  addRecipe(id: string, recipe: Recipe): boolean {
     const exists = id in this.recipes
     this.recipes[id] = recipe
     this.initializeTracked()
     return !exists
   }
-  removeRecipe (id: string): boolean {
+
+  removeRecipe(id: string): boolean {
     const exists = id in this.recipes
     if (exists) {
       delete this.recipes[id]
@@ -43,17 +47,19 @@ export default class ExtraRecipes extends Module {
   }
 
   // Hooks
-  onEnable () {
+  onEnable() {
     this.scheduleTaskId = this.runTaskRepeat(this.scheduleTask.bind(this), 0, 20)
 
     this.initializeTracked()
   }
-  onDisable () {
+
+  onDisable() {
     if (this.scheduleTaskId) {
       this.cancelTask(this.scheduleTaskId)
     }
   }
-  onPlayerDropItem (listener: any, event: PlayerDropItemEvent) {
+
+  onPlayerDropItem(listener: any, event: PlayerDropItemEvent) {
     const drop = event.getItemDrop()
     if (this.trackedMaterials.includes(drop.getItemStack().getType())) {
       const loc = this.serializeLocation(drop.getLocation())
@@ -63,7 +69,7 @@ export default class ExtraRecipes extends Module {
   }
 
   // Internal
-  private initializeTracked () {
+  private initializeTracked() {
     this.trackedMaterials.splice(0, this.trackedMaterials.length)
     for (const recipe of Object.values(this.recipes)) {
       for (const ingr of recipe.ingredients) {
@@ -79,7 +85,8 @@ export default class ExtraRecipes extends Module {
       }
     }
   }
-  private scheduleTask () {
+
+  private scheduleTask() {
     this.trackItems()
     const required: Record<string, {
       ingr: (Item | null)[],
@@ -100,42 +107,39 @@ export default class ExtraRecipes extends Module {
           continue
         }
         for (const drop of drops) {
-          let index = recipe.ingredients.findIndex(e => {
-            return e[0] === drop.getItemStack().getType()
-              && e[1] <= drop.getItemStack().getAmount()
-          })
+          let index = recipe.ingredients.findIndex(e => e[0] === drop.getItemStack().getType()
+              && e[1] <= drop.getItemStack().getAmount())
           if (index > -1) {
             required[recipeName].ingr[index] = drop
           }
           if (recipe.advancedIngredients) {
-            index = recipe.advancedIngredients.findIndex(e => {
-              return e[0] === drop.getItemStack().getType()
-                && e[1](drop.getItemStack())
-            })
+            index = recipe.advancedIngredients.findIndex(e => e[0] === drop.getItemStack().getType()
+                && e[1](drop.getItemStack()))
             if (index > -1) {
               required[recipeName].advIngr[index] = drop
             }
           }
         }
         if (
-          required[recipeName].ingr.every(Boolean) &&
-          required[recipeName].advIngr.every(Boolean)
+          required[recipeName].ingr.every(Boolean)
+          && required[recipeName].advIngr.every(Boolean)
         ) {
-          for (let i = 0; i < required[recipeName].ingr.length; i++) {
+          for (let i = 0; i < required[recipeName].ingr.length; i += 1) {
             const stack = required[recipeName].ingr[i].getItemStack()
             stack.setAmount(Math.max(0, stack.getAmount() - recipe.ingredients[i][1]))
           }
-          for (let i = 0; i < required[recipeName].advIngr.length; i++) {
+          for (let i = 0; i < required[recipeName].advIngr.length; i += 1) {
             const stack = required[recipeName].advIngr[i].getItemStack()
             stack.setAmount(0)
           }
           const result = recipe.createResult()
           where.getWorld().dropItem(where, result)
           if (recipe.sound) {
-            if (this.isSound(recipe.sound))
+            if (this.isSound(recipe.sound)) {
               where.getWorld().playSound(where, recipe.sound, 1, 1)
-            else
+            } else {
               recipe.sound.forEach(sound => { where.getWorld().playSound(where, sound, 1, 1) })
+            }
           }
           if (recipe.postRecipe) {
             recipe.postRecipe(where)
@@ -144,17 +148,19 @@ export default class ExtraRecipes extends Module {
       }
     }
   }
-  private trackItems () {
+
+  private trackItems() {
     for (const [loc, drops] of Object.entries(this.trackedDrops)) {
       this.trackedDrops[loc] = drops.filter(drop => !drop.isDead())
       if (this.trackedDrops[loc].length === 0) {
         delete this.trackedDrops[loc]
       } else {
-        for (let i = 0; i < this.trackedDrops[loc].length; i++) {
+        for (let i = 0; i < this.trackedDrops[loc].length; i += 1) {
           const drop = this.trackedDrops[loc][i]
           const newLoc = this.serializeLocation(drop.getLocation())
           if (newLoc !== loc) {
-            this.trackedDrops[loc].splice(i--, 1)
+            this.trackedDrops[loc].splice(i, 1)
+            i -= 1
             if (!this.trackedDrops[newLoc]) this.trackedDrops[newLoc] = []
             this.trackedDrops[newLoc].push(drop)
           }
@@ -165,7 +171,8 @@ export default class ExtraRecipes extends Module {
       }
     }
   }
-  private serializeLocation (loc: Location) {
+
+  private serializeLocation(loc: Location) {
     return `${loc.getWorld().getName()}[${loc.getBlockX()},${loc.getBlockY()},${loc.getBlockZ()}]`
   }
 }

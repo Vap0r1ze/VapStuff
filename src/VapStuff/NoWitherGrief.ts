@@ -5,21 +5,19 @@ import Module from './Module.js'
 
 @Subscribe
 export default class NoWitherGrief extends Module {
-  get name () { return 'No Wither Grief' }
+  get name() { return 'No Wither Grief' }
 
-  onEntityExplode (listener: any, event: EntityExplodeEvent) {
+  onEntityExplode(listener: any, event: EntityExplodeEvent) {
     if (
-      event.getEntityType() !== EntityType.WITHER &&
-      event.getEntityType() !== EntityType.WITHER_SKULL
-    )
-      return
+      event.getEntityType() !== EntityType.WITHER
+      && event.getEntityType() !== EntityType.WITHER_SKULL
+    ) { return }
     if (
       event
         .getEntity()
         .getWorld()
         .getName() !== 'world'
-    )
-      return
+    ) { return }
     event
       .getEntity()
       .getWorld()

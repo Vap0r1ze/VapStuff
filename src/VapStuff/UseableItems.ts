@@ -8,11 +8,11 @@ import Module from './Module.js'
 
 @Subscribe
 export default class UseableItems extends Module {
-  get name () { return 'Useable Items' }
+  get name() { return 'Useable Items' }
 
   private enderChestOpen: Record<UUID, boolean> = {}
 
-  onPlayerInteract (listener: any, event: PlayerInteractEvent) {
+  onPlayerInteract(listener: any, event: PlayerInteractEvent) {
     const player = event.getPlayer()
     const item = event.getItem()
     const action = event.getAction()
@@ -34,9 +34,12 @@ export default class UseableItems extends Module {
         player.openInventory(echest)
         break
       }
+      default:
+        break
     }
   }
-  onInventoryClose (listener: any, event: InventoryCloseEvent) {
+
+  onInventoryClose(listener: any, event: InventoryCloseEvent) {
     const player = event.getPlayer()
     if (this.enderChestOpen[player.getUniqueId()]) {
       delete this.enderChestOpen[player.getUniqueId()]

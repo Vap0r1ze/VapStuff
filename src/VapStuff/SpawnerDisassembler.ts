@@ -30,31 +30,37 @@ const enum Hint {
 
 @Subscribe
 export default class SpawnerDisassembler extends Module {
-  get name () { return 'Spawner Disassembler' }
+  get name() { return 'Spawner Disassembler' }
 
   private readonly PICK_NAME = this.colorText('&#2CDA9DSpawner Disassembler')
+
   private readonly INFO =
-    '&7Once activated, this pickaxe can\n' +
-    '&7carefully disassemble\n' +
-    '&7a mob spawner without destroying it,\n' +
-    '&7allowing you to collect it.\n' +
-    '&7However, it only works &bonce&7,\n' +
-    '&7so choose carefully.'
+  '&7Once activated, this pickaxe can\n'
+    + '&7carefully disassemble\n'
+    + '&7a mob spawner without destroying it,\n'
+    + '&7allowing you to collect it.\n'
+    + '&7However, it only works &bonce&7,\n'
+    + '&7so choose carefully.'
+
   private readonly CANNOT_USE = 'You cannot use this pickaxe normally.'
+
   private readonly LEARN_MORE = '&8(Hover over this item to learn more)'
+
   private readonly NOW_READY = 'Now you\'re ready to perform &binfusion&r!'
-  private readonly SPAWNER_TEMPLATE = (mobName: string) =>
-    this.colorText(`&b${mobName} Spawner`)
+
+  private readonly SPAWNER_TEMPLATE = (mobName: string) => this.colorText(`&b${mobName} Spawner`)
+
   private readonly SPAWNER_TEST = new RegExp(
-    `^${this.SPAWNER_TEMPLATE('([\\w ]+)')}$`
+    `^${this.SPAWNER_TEMPLATE('([\\w ]+)')}$`,
   )
+
   private readonly LEVEL_COST = 85
 
   private hintsShown: Map<Hint, UUID[]> = new Map()
 
   // Hooks
-  onEnable () {
-    for (let i = 0; i < Hint.MAX_HINT; i++) {
+  onEnable() {
+    for (let i = 0; i < Hint.MAX_HINT; i += 1) {
       this.hintsShown.set(i, [])
     }
 
@@ -63,7 +69,7 @@ export default class SpawnerDisassembler extends Module {
         [Material.PRISMARINE_CRYSTALS, 10],
         [Material.ENDER_EYE, 6],
         [Material.GHAST_TEAR, 2],
-        [Material.NETHER_STAR, 1]
+        [Material.NETHER_STAR, 1],
       ],
       advancedIngredients: [
         [
@@ -73,8 +79,8 @@ export default class SpawnerDisassembler extends Module {
             const meta = item.getItemMeta()
             const isNotDisassembler = meta.getDisplayName() !== this.PICK_NAME
             return isNotBroken && isNotDisassembler
-          }
-        ]
+          },
+        ],
       ],
       checkWorkbench: this.isPrepSimpleAlch.bind(this),
       createResult: () => {
@@ -83,18 +89,18 @@ export default class SpawnerDisassembler extends Module {
         meta.setDisplayName(this.PICK_NAME)
         meta.setLore(
           this.colorText(
-            '&7Status: &8Not Activated\n' +
-              `&7Level Cost: &a${this.LEVEL_COST}\n\n` +
-              this.INFO +
-              '\n\n&8&oRight click to activate'
-          ).split('\n')
+            `${'&7Status: &8Not Activated\n'
+              + `&7Level Cost: &a${this.LEVEL_COST}\n\n`}${
+              this.INFO
+            }\n\n&8&oRight click to activate`,
+          ).split('\n'),
         )
         meta.addItemFlags([ItemFlag.HIDE_ATTRIBUTES])
         result.setItemMeta(meta)
         return result
       },
       sound: [Sound.ITEM_BUCKET_EMPTY, Sound.BLOCK_FIRE_EXTINGUISH],
-      postRecipe (where) {
+      postRecipe(where) {
         const block = where.getBlock()
         const cauldronData = block.getBlockData() as Levelled
         cauldronData.setLevel(0)
@@ -104,14 +110,18 @@ export default class SpawnerDisassembler extends Module {
           case Material.LAVA:
             heatSource.setType(Material.OBSIDIAN)
             break
+          default:
+            break
         }
-      }
+      },
     })
   }
-  onDisable () {
+
+  onDisable() {
     this.plugin.extraRecipes.removeRecipe('spawnerDisassembler')
   }
-  onBlockBreak (listener: any, event: BlockBreakEvent) {
+
+  onBlockBreak(listener: any, event: BlockBreakEvent) {
     const player = event.getPlayer()
     const inv = player.getInventory() as PlayerInventory
     const item = inv.getItemInMainHand()
@@ -133,8 +143,8 @@ export default class SpawnerDisassembler extends Module {
         const spawnerMeta = spawnerItem.getItemMeta()
         spawnerMeta.setDisplayName(
           this.SPAWNER_TEMPLATE(
-            this.capitalizeWords(spawnerState.getCreatureTypeName())
-          )
+            this.capitalizeWords(spawnerState.getCreatureTypeName()),
+          ),
         )
         spawnerItem.setItemMeta(spawnerMeta)
         this.addGlowEffect(spawnerItem)
@@ -143,12 +153,13 @@ export default class SpawnerDisassembler extends Module {
         event.setCancelled(true)
         this.tellPlayer(
           player,
-          `${this.CANNOT_USE} ${this.LEARN_MORE}`
+          `${this.CANNOT_USE} ${this.LEARN_MORE}`,
         )
       }
     }
   }
-  onBlockPlace (listener: any, event: BlockPlaceEvent) {
+
+  onBlockPlace(listener: any, event: BlockPlaceEvent) {
     const block = event.getBlockPlaced()
     if (this.isSpawner(block.getType())) {
       const spawnerName = event
@@ -170,7 +181,7 @@ export default class SpawnerDisassembler extends Module {
         case Material.CAULDRON:
           break
         case Material.REDSTONE_TORCH:
-          for (let i = 0; i < 4; i++) {
+          for (let i = 0; i < 4; i += 1) {
             const dxz = this.rotCCW([0, 1], i)
             const newWhere = where.clone().add(dxz[0], 0, dxz[1])
             if (newWhere.getBlock().getType() === Material.CAULDRON) {
@@ -180,7 +191,7 @@ export default class SpawnerDisassembler extends Module {
           }
           break
         case Material.REDSTONE_WIRE:
-          for (let i = 0; i < 4; i++) {
+          for (let i = 0; i < 4; i += 1) {
             const dxz = this.rotCCW([1, 1], i)
             const newWhere = where.clone().add(dxz[0], 0, dxz[1])
             if (newWhere.getBlock().getType() === Material.CAULDRON) {
@@ -189,23 +200,27 @@ export default class SpawnerDisassembler extends Module {
             }
           }
           break
+        default:
+          break
       }
       const alchBlock = where.getBlock()
       if (alchBlock.getType() !== Material.CAULDRON) return
       this.onSimpleAlchNewMat(alchBlock, event.getPlayer())
     }
   }
-  onPlayerBucketEmpty (listener: any, event: PlayerBucketEmptyEvent) {
+
+  onPlayerBucketEmpty(listener: any, event: PlayerBucketEmptyEvent) {
     const block = event.getBlock()
     this.runTaskLater(() => {
       if (this.isSimpleAlchHeat(block.getType())) {
         const player = event.getPlayer()
         const where = block.getLocation()
-          this.onSimpleAlchNewPrep(where.clone().add(0, 1, 0).getBlock(), player)
+        this.onSimpleAlchNewPrep(where.clone().add(0, 1, 0).getBlock(), player)
       }
     }, 1)
   }
-  onCauldronLevelChange (listener: any, event: CauldronLevelChangeEvent) {
+
+  onCauldronLevelChange(listener: any, event: CauldronLevelChangeEvent) {
     const player = event.getEntity()
     if (!this.isPlayer(player)) return
     const cauldron = event.getBlock()
@@ -215,7 +230,8 @@ export default class SpawnerDisassembler extends Module {
       this.onSimpleAlchNewPrep(cauldron, player)
     }, 1)
   }
-  onPlayerInteract (listener: any, event: PlayerInteractEvent) {
+
+  onPlayerInteract(listener: any, event: PlayerInteractEvent) {
     const player = event.getPlayer()
     const inv = player.getInventory() as PlayerInventory
     const item = inv.getItemInMainHand()
@@ -224,9 +240,9 @@ export default class SpawnerDisassembler extends Module {
     if (!meta) return
     const name = meta.getDisplayName()
     if (
-      name === this.PICK_NAME &&
-      !this.isPickActivated(item) &&
-      this.isRightClick(event.getAction())
+      name === this.PICK_NAME
+      && !this.isPickActivated(item)
+      && this.isRightClick(event.getAction())
     ) {
       event.setCancelled(true)
       const level = player.getLevel()
@@ -236,12 +252,12 @@ export default class SpawnerDisassembler extends Module {
           .playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 1, 1)
         this.tellPlayer(
           player,
-          `You're &aExperience Level &ris not high enough to activate this. ${this.LEARN_MORE}`
+          `You're &aExperience Level &ris not high enough to activate this. ${this.LEARN_MORE}`,
         )
       } else {
         this.smartLvlDecr(player, this.LEVEL_COST)
         meta.setLore(
-          this.colorText('&7Status: &aActivated\n\n' + this.INFO).split('\n')
+          this.colorText(`&7Status: &aActivated\n\n${this.INFO}`).split('\n'),
         )
         item.setItemMeta(meta)
         this.addGlowEffect(item)
@@ -251,12 +267,13 @@ export default class SpawnerDisassembler extends Module {
             player.getLocation(),
             Sound.BLOCK_BEACON_POWER_SELECT,
             1,
-            1
+            1,
           )
       }
     }
   }
-  onEntityDamageByEntity (listener: any, event: EntityDamageByEntityEvent) {
+
+  onEntityDamageByEntity(listener: any, event: EntityDamageByEntityEvent) {
     if (!event.getDamager) return // I have no idea why this happens
     const damager = event.getDamager()
     if (this.isPlayer(damager)) {
@@ -269,25 +286,28 @@ export default class SpawnerDisassembler extends Module {
         event.setCancelled(true)
         this.tellPlayer(
           damager,
-          `${this.CANNOT_USE} ${this.LEARN_MORE}`
+          `${this.CANNOT_USE} ${this.LEARN_MORE}`,
         )
       }
     }
   }
 
   // Internals
-  private isSpawner (mat: Material): boolean {
+  private isSpawner(mat: Material): boolean {
     return mat === Material.SPAWNER
   }
-  private isRightClick (action: Action): boolean {
+
+  private isRightClick(action: Action): boolean {
     return (
       action === Action.RIGHT_CLICK_AIR || action === Action.RIGHT_CLICK_BLOCK
     )
   }
-  private isPickActivated (pick: ItemStack): boolean {
+
+  private isPickActivated(pick: ItemStack): boolean {
     return pick.containsEnchantment(this.DUMMY_ENCH)
   }
-  private handleHint (player: Player, hint: Hint, handler: () => void, childHints?: Hint[]) {
+
+  private handleHint(player: Player, hint: Hint, handler: () => void, childHints?: Hint[]) {
     const shownTo = this.hintsShown.get(hint)
     const uuid = player.getUniqueId()
     if (!shownTo.includes(uuid)) {
@@ -301,7 +321,8 @@ export default class SpawnerDisassembler extends Module {
       handler()
     }
   }
-  private handleHintArea (
+
+  private handleHintArea(
     area: Location,
     radius: number,
     hint: Hint,
@@ -309,30 +330,33 @@ export default class SpawnerDisassembler extends Module {
     childHints?: Hint[],
   ) {
     const players = Array.from(this.plugin.server.getOnlinePlayers())
-      .filter(player => {
-        return player.getWorld() === area.getWorld()
-          && player.getLocation().distanceSquared(area) < radius**2
-      })
+      .filter(player => player.getWorld() === area.getWorld()
+          && player.getLocation().distanceSquared(area) < radius ** 2)
     players.forEach(player => {
       this.handleHint(player, hint, () => { handler(player) }, childHints)
     })
   }
 
   // Simple Alchemy Station
-  private isSimpleAlch (block: Block): boolean {
+  private isSimpleAlch(block: Block): boolean {
     if (block.getType() !== Material.CAULDRON) return false
     const where = block.getLocation()
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 4; i += 1) {
       const dxzDust = this.rotCCW([1, 1], i)
       const dxzTorch = this.rotCCW([0, 1], i)
-      if (where.clone().add(dxzDust[0], 0, dxzDust[1]).getBlock().getType() !== Material.REDSTONE_WIRE)
+      if (where.clone().add(dxzDust[0], 0, dxzDust[1]).getBlock().getType()
+        !== Material.REDSTONE_WIRE) {
         return false
-      if (where.clone().add(dxzTorch[0], 0, dxzTorch[1]).getBlock().getType() !== Material.REDSTONE_TORCH)
+      }
+      if (where.clone().add(dxzTorch[0], 0, dxzTorch[1]).getBlock().getType()
+        !== Material.REDSTONE_TORCH) {
         return false
+      }
     }
     return true
   }
-  private isPrepSimpleAlch (block: Block, ignoreHints = false): boolean {
+
+  private isPrepSimpleAlch(block: Block, ignoreHints = false): boolean {
     if (!this.isSimpleAlch(block)) return false
     const cauldronData = block.getBlockData() as Levelled
     const isLeveled = cauldronData.getLevel() === cauldronData.getMaximumLevel()
@@ -341,23 +365,26 @@ export default class SpawnerDisassembler extends Module {
     if (!ignoreHints) {
       if (isLeveled && this.isSimpleAlchLowHeat(heatSource.getType())) {
         this.handleHintArea(block.getLocation(), 5, Hint.SIMPLE_ALCH_LOW_HEAT, player => {
-          this.tellPlayer(player, `&oHmmm. It seems this &f&oheat source&r&o is not hot enough.`)
+          this.tellPlayer(player, '&oHmmm. It seems this &f&oheat source&r&o is not hot enough.')
         })
       } else if (!isLeveled || !isHeatSource) {
         this.handleHintArea(block.getLocation(), 5, Hint.SIMPLE_ALCH_NO_PREP_CRAFT, player => {
-          this.tellPlayer(player, `&oPsst. You might want to &b&oprepare&r&o your station first.`)
+          this.tellPlayer(player, '&oPsst. You might want to &b&oprepare&r&o your station first.')
         })
       }
     }
     return isLeveled && isHeatSource
   }
-  private isSimpleAlchMat (mat: Material): boolean {
+
+  private isSimpleAlchMat(mat: Material): boolean {
     return [Material.REDSTONE_WIRE, Material.REDSTONE_TORCH, Material.CAULDRON].includes(mat)
   }
-  private isSimpleAlchHeat (mat: Material): boolean {
+
+  private isSimpleAlchHeat(mat: Material): boolean {
     return Material.LAVA === mat
   }
-  private isSimpleAlchLowHeat (mat: Material): boolean {
+
+  private isSimpleAlchLowHeat(mat: Material): boolean {
     return [
       Material.MAGMA_BLOCK,
       Material.FIRE,
@@ -376,7 +403,8 @@ export default class SpawnerDisassembler extends Module {
       Material.BREWING_STAND,
     ].includes(mat)
   }
-  private onSimpleAlchNewMat (block: Block, player: Player) {
+
+  private onSimpleAlchNewMat(block: Block, player: Player) {
     if (this.isSimpleAlch(block)) {
       if (this.isPrepSimpleAlch(block, true)) {
         this.handleHint(player, Hint.SIMPLE_ALCH_PREP, () => {
@@ -384,12 +412,13 @@ export default class SpawnerDisassembler extends Module {
         }, [Hint.SIMPLE_ALCH_MADE])
       } else {
         this.handleHint(player, Hint.SIMPLE_ALCH_MADE, () => {
-          this.tellPlayer(player, `You've just made a &fSimple Alchemy Station&r! Don't forget to &bprepare&r your station!`)
+          this.tellPlayer(player, 'You\'ve just made a &fSimple Alchemy Station&r! Don\'t forget to &bprepare&r your station!')
         })
       }
     }
   }
-  private onSimpleAlchNewPrep (block: Block, player: Player) {
+
+  private onSimpleAlchNewPrep(block: Block, player: Player) {
     if (this.isPrepSimpleAlch(block, true)) {
       this.handleHint(player, Hint.SIMPLE_ALCH_PREP, () => {
         this.tellPlayer(player, `You've just &a&lprepared &ra &fSimple Alchemy Station&r! ${this.NOW_READY}`)

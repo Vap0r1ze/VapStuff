@@ -20,38 +20,39 @@ import { Subscribe } from './EventListener.js'
 
 @Subscribe
 export default class ShulkerPocket extends Module {
-  get name () { return 'Shulker Pocket' }
+  get name() { return 'Shulker Pocket' }
 
   private shulkerBoxSlots: Record<UUID, number> = {}
+
   private shulkerBoxOpen: Record<UUID, boolean> = {}
+
   private shulkerBoxOnCursors: Record<UUID, boolean> = {}
 
-  onPlayerInteract (listener: any, event: PlayerInteractEvent) {
+  onPlayerInteract(listener: any, event: PlayerInteractEvent) {
     const player = event.getPlayer()
     const itemInMainHand = (player.getInventory() as PlayerInventory).getItemInMainHand()
     if (
-      event.getAction() === Action.RIGHT_CLICK_AIR &&
-      itemInMainHand != null &&
-      this.isShulkerBox(itemInMainHand.getType()) &&
-      !this.shulkerBoxOpen[player.getUniqueId()]
+      event.getAction() === Action.RIGHT_CLICK_AIR
+      && itemInMainHand != null
+      && this.isShulkerBox(itemInMainHand.getType())
+      && !this.shulkerBoxOpen[player.getUniqueId()]
     ) {
       this.shulkerBoxOpen[player.getUniqueId()] = true
-      const shulkerBox = (itemInMainHand.getItemMeta() as BlockStateMeta).getBlockState() as ShulkerBox
-      const meta = itemInMainHand.getItemMeta()
-      const title =
-        meta.getDisplayName() == null || meta.getDisplayName() === ''
-          ? itemInMainHand
-              .getType()
-              .name()
-              .split('_')
-              .map(w => w[0] + w.slice(1).toLowerCase())
-              .join(' ')
-          : meta.getDisplayName()
+      const meta = itemInMainHand.getItemMeta() as BlockStateMeta
+      const shulkerBox = meta.getBlockState() as ShulkerBox
+      const title = meta.getDisplayName() == null || meta.getDisplayName() === ''
+        ? itemInMainHand
+          .getType()
+          .name()
+          .split('_')
+          .map(w => w[0] + w.slice(1).toLowerCase())
+          .join(' ')
+        : meta.getDisplayName()
       const inv = Bukkit.createInventory(null, InventoryType.SHULKER_BOX, title)
       inv.setContents(shulkerBox.getInventory().getContents())
       player.openInventory(inv)
       this.shulkerBoxSlots[player.getUniqueId()] = this.toRawSlot(
-        (player.getInventory() as PlayerInventory).getHeldItemSlot()
+        (player.getInventory() as PlayerInventory).getHeldItemSlot(),
       )
       player
         .getWorld()
@@ -61,7 +62,7 @@ export default class ShulkerPocket extends Module {
     }
   }
 
-  onInventoryClose (listener: any, event: InventoryCloseEvent) {
+  onInventoryClose(listener: any, event: InventoryCloseEvent) {
     const player = event.getPlayer()
     if (this.shulkerBoxSlots[player.getUniqueId()]) {
       const items = event.getInventory().getContents()
@@ -76,7 +77,7 @@ export default class ShulkerPocket extends Module {
     }
   }
 
-  onInventoryClick (listener: any, event: InventoryClickEvent) {
+  onInventoryClick(listener: any, event: InventoryClickEvent) {
     const player = event.getWhoClicked()
     if (this.shulkerBoxSlots[player.getUniqueId()]) {
       this.debugLog(event)
@@ -89,9 +90,9 @@ export default class ShulkerPocket extends Module {
       }
 
       if (
-        event.getCursor() != null &&
-        this.isShulkerBox(event.getCursor().getType()) &&
-        this.isInShulkerBox(event.getRawSlot())
+        event.getCursor() != null
+        && this.isShulkerBox(event.getCursor().getType())
+        && this.isInShulkerBox(event.getRawSlot())
       ) {
         event.setCancelled(true)
         return
@@ -104,9 +105,9 @@ export default class ShulkerPocket extends Module {
         if (this.isPickupAction(event.getAction())) {
           this.shulkerBoxOnCursors[player.getUniqueId()] = true
           return
-        } else if (
-          event.getAction() === InventoryAction.DROP_ALL_SLOT ||
-          event.getAction() === InventoryAction.DROP_ONE_SLOT
+        } if (
+          event.getAction() === InventoryAction.DROP_ALL_SLOT
+          || event.getAction() === InventoryAction.DROP_ONE_SLOT
         ) {
           this.dropItem(event.getCurrentItem(), player)
           event.setCurrentItem(null)
@@ -119,30 +120,30 @@ export default class ShulkerPocket extends Module {
 
       if (this.shulkerBoxOnCursors[player.getUniqueId()]) {
         if (
-          event.getAction() === InventoryAction.DROP_ALL_CURSOR ||
-          event.getAction() === InventoryAction.DROP_ONE_CURSOR
+          event.getAction() === InventoryAction.DROP_ALL_CURSOR
+          || event.getAction() === InventoryAction.DROP_ONE_CURSOR
         ) {
           player.closeInventory()
           return
-        } else if (this.isPlaceAction(event.getAction())) {
+        } if (this.isPlaceAction(event.getAction())) {
           newItemSlot = event.getRawSlot()
           delete this.shulkerBoxOnCursors[player.getUniqueId()]
         }
       }
 
       if (
-        event.getClick() === ClickType.NUMBER_KEY &&
-        (event.getAction() === InventoryAction.HOTBAR_SWAP ||
-          event.getAction() === InventoryAction.HOTBAR_MOVE_AND_READD)
+        event.getClick() === ClickType.NUMBER_KEY
+        && (event.getAction() === InventoryAction.HOTBAR_SWAP
+          || event.getAction() === InventoryAction.HOTBAR_MOVE_AND_READD)
       ) {
         if (
-          this.isInShulkerBox(event.getRawSlot()) &&
-          player.getInventory().getItem(event.getHotbarButton()) != null &&
-          this.isShulkerBox(
+          this.isInShulkerBox(event.getRawSlot())
+          && player.getInventory().getItem(event.getHotbarButton()) != null
+          && this.isShulkerBox(
             player
               .getInventory()
               .getItem(event.getHotbarButton())
-              .getType()
+              .getType(),
           )
         ) {
           event.setCancelled(true)
@@ -152,17 +153,17 @@ export default class ShulkerPocket extends Module {
         if (this.shulkerBoxSlots[player.getUniqueId()] === event.getRawSlot()) {
           newItemSlot = this.toRawSlot(event.getHotbarButton())
         } else if (
-          this.shulkerBoxSlots[player.getUniqueId()] ===
-          this.toRawSlot(event.getHotbarButton())
+          this.shulkerBoxSlots[player.getUniqueId()]
+          === this.toRawSlot(event.getHotbarButton())
         ) {
           newItemSlot = event.getRawSlot()
         }
       }
 
       if (
-        event.getAction() === InventoryAction.MOVE_TO_OTHER_INVENTORY &&
-        event.getCurrentItem() != null &&
-        this.isShulkerBox(event.getCurrentItem().getType())
+        event.getAction() === InventoryAction.MOVE_TO_OTHER_INVENTORY
+        && event.getCurrentItem() != null
+        && this.isShulkerBox(event.getCurrentItem().getType())
       ) {
         if (event.getRawSlot() > 53 && event.getRawSlot() < 63) {
           newItemSlot = this.moveItemToSlotRange(9, 36, event)
@@ -171,8 +172,8 @@ export default class ShulkerPocket extends Module {
         }
 
         if (
-          newItemSlot != null &&
-          this.shulkerBoxSlots[player.getUniqueId()] !== event.getRawSlot()
+          newItemSlot != null
+          && this.shulkerBoxSlots[player.getUniqueId()] !== event.getRawSlot()
         ) {
           newItemSlot = null
         }
@@ -186,16 +187,16 @@ export default class ShulkerPocket extends Module {
     }
   }
 
-  onInventoryDrag (listener: any, event: InventoryDragEvent) {
+  onInventoryDrag(listener: any, event: InventoryDragEvent) {
     const player = event.getWhoClicked()
 
     if (
-      this.shulkerBoxSlots[player.getUniqueId()] &&
-      this.isShulkerBox(event.getOldCursor().getType())
+      this.shulkerBoxSlots[player.getUniqueId()]
+      && this.isShulkerBox(event.getOldCursor().getType())
     ) {
       if (
-        this.setToArray(event.getRawSlots()).some(a => a < 27) ||
-        this.setToArray(event.getRawSlots()).length > 1
+        this.setToArray(event.getRawSlots()).some(a => a < 27)
+        || this.setToArray(event.getRawSlots()).length > 1
       ) {
         event.setCancelled(true)
         return
@@ -203,23 +204,23 @@ export default class ShulkerPocket extends Module {
 
       if (this.shulkerBoxOnCursors[player.getUniqueId()]) {
         this.shulkerBoxSlots[player.getUniqueId()] = this.toRawSlot(
-          event.getInventorySlots().toArray()[0]
+          event.getInventorySlots().toArray()[0],
         )
         delete this.shulkerBoxOnCursors[player.getUniqueId()]
       }
     }
   }
 
-  setToArray (set: any) {
+  setToArray(set: any) {
     const n = set.size()
     const arr = []
-    for (let i = 0; i < n; i++) {
+    for (let i = 0; i < n; i += 1) {
       arr.push(set[i])
     }
     return arr
   }
 
-  saveShulkerBox (shulkerbox: ItemStack, items: ItemStack[]) {
+  saveShulkerBox(shulkerbox: ItemStack, items: ItemStack[]) {
     const bsm = shulkerbox.getItemMeta() as BlockStateMeta
     const box = bsm.getBlockState() as ShulkerBox
     box.getInventory().setContents(items)
@@ -227,7 +228,7 @@ export default class ShulkerPocket extends Module {
     shulkerbox.setItemMeta(bsm)
   }
 
-  saveShulkerBoxByPlayer (player: HumanEntity, items: ItemStack[]) {
+  saveShulkerBoxByPlayer(player: HumanEntity, items: ItemStack[]) {
     const shulkerbox = player
       .getInventory()
       .getItem(this.toSlot(this.shulkerBoxSlots[player.getUniqueId()]))
@@ -237,7 +238,7 @@ export default class ShulkerPocket extends Module {
     this.saveShulkerBox(shulkerbox, items)
   }
 
-  isShulkerBox (m: Material): boolean {
+  isShulkerBox(m: Material): boolean {
     switch (m) {
       case Material.SHULKER_BOX:
       case Material.LIGHT_GRAY_SHULKER_BOX:
@@ -262,46 +263,46 @@ export default class ShulkerPocket extends Module {
     }
   }
 
-  isPlaceAction (action: InventoryAction): boolean {
+  isPlaceAction(action: InventoryAction): boolean {
     return (
-      action === InventoryAction.PLACE_ALL ||
-      action === InventoryAction.PLACE_ONE ||
-      action === InventoryAction.PLACE_SOME ||
-      action === InventoryAction.SWAP_WITH_CURSOR
+      action === InventoryAction.PLACE_ALL
+      || action === InventoryAction.PLACE_ONE
+      || action === InventoryAction.PLACE_SOME
+      || action === InventoryAction.SWAP_WITH_CURSOR
     )
   }
 
-  isPickupAction (action: InventoryAction): boolean {
+  isPickupAction(action: InventoryAction): boolean {
     return (
-      action === InventoryAction.PICKUP_ALL ||
-      action === InventoryAction.PICKUP_HALF ||
-      action === InventoryAction.PICKUP_ONE ||
-      action === InventoryAction.PICKUP_SOME ||
-      action === InventoryAction.SWAP_WITH_CURSOR
+      action === InventoryAction.PICKUP_ALL
+      || action === InventoryAction.PICKUP_HALF
+      || action === InventoryAction.PICKUP_ONE
+      || action === InventoryAction.PICKUP_SOME
+      || action === InventoryAction.SWAP_WITH_CURSOR
     )
   }
 
-  isInShulkerBox (rawSlot: number): boolean {
+  isInShulkerBox(rawSlot: number): boolean {
     return rawSlot >= 0 && rawSlot < 27
   }
 
-  toRawSlot (slot: number): number {
+  toRawSlot(slot: number): number {
     return slot >= 0 && slot < 9 ? slot + 54 : slot + 18
   }
 
-  toSlot (rawSlot: number): number {
+  toSlot(rawSlot: number): number {
     return rawSlot >= 54 ? rawSlot - 54 : rawSlot - 18
   }
 
-  moveItemToSlotRange (
+  moveItemToSlotRange(
     rangeMin: number,
     rangeMax: number,
-    event: InventoryClickEvent
+    event: InventoryClickEvent,
   ): number {
-    for (let i = rangeMin; i < rangeMax; i++) {
+    for (let i = rangeMin; i < rangeMax; i += 1) {
       if (
-        event.getClickedInventory().getItem(i) === null ||
-        event
+        event.getClickedInventory().getItem(i) === null
+        || event
           .getClickedInventory()
           .getItem(i)
           .getType() === Material.AIR
@@ -314,18 +315,18 @@ export default class ShulkerPocket extends Module {
     return null
   }
 
-  dropItem (itemStack: ItemStack, player: HumanEntity) {
+  dropItem(itemStack: ItemStack, player: HumanEntity) {
     const item = player.getWorld().dropItem(player.getEyeLocation(), itemStack)
     item.setVelocity(
       player
         .getLocation()
         .getDirection()
-        .multiply(1 / 4)
+        .multiply(1 / 4),
     )
     item.setPickupDelay(40)
   }
 
-  debugLog (event: PlayerInteractEvent | InventoryClickEvent) {
+  debugLog(event: PlayerInteractEvent | InventoryClickEvent) {
     if (Config.DEBUG) {
       console.log(event.getAction())
       console.log(`Cursor: [${Object.keys(this.shulkerBoxOnCursors).join(', ')}]`)
@@ -333,7 +334,7 @@ export default class ShulkerPocket extends Module {
       console.log(
         `Slots: {${Array.from(Object.entries(this.shulkerBoxSlots))
           .map(e => `'${e[0]}': ${e[1]}`)
-          .join(', ')}}`
+          .join(', ')}}`,
       )
     }
   }

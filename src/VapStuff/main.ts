@@ -11,9 +11,13 @@ export default class VapStuff extends JsPlugin {
   extraRecipes = new ExtraRecipes(this)
 
   useableItems = new UseableItems(this)
+
   shulkerPocket = new ShulkerPocket(this)
+
   grassPlanter = new GrassPlanter(this)
+
   spawnerDisassembler = new SpawnerDisassembler(this)
+
   noWitherGrief = new NoWitherGrief(this)
 
   modules: Module[] = [
@@ -25,11 +29,11 @@ export default class VapStuff extends JsPlugin {
     this.noWitherGrief,
   ]
 
-  onLoad () {
-    console.log('[' + this.pluginName + '] Loaded')
+  onLoad() {
+    console.log(`[${this.pluginName}] Loaded`)
   }
 
-  onEnable () {
+  onEnable() {
     this.modules.forEach(module => {
       module.onEnable()
       this.log(`Module enabled: \xA7b${module.name}\xA7r`)
@@ -38,7 +42,7 @@ export default class VapStuff extends JsPlugin {
     this.log('All modules enabled')
   }
 
-  onDisable () {
+  onDisable() {
     this.modules.forEach(module => {
       module.onDisable()
       this.log(`Module disabled: \xA7b${module.name}\xA7r`)
@@ -47,7 +51,7 @@ export default class VapStuff extends JsPlugin {
     this.log('All modules disabled')
   }
 
-  log (message: string) {
+  log(message: string) {
     console.log(`\xA7a[${this.pluginName}]\xA7r ${message}`)
   }
 }
