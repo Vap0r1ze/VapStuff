@@ -1,0 +1,4 @@
+[submodule "src/libs"]
+	path = src/libs
+	url = https://github.com/Vap0r1ze/ScriptableMC-Engine
+	branch = libs
