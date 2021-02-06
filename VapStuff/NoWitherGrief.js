@@ -10,14 +10,16 @@ import Module from './Module.js';
 let NoWitherGrief = class NoWitherGrief extends Module {
     get name() { return 'No Wither Grief'; }
     onEntityExplode(listener, event) {
-        if (event.getEntityType() !== EntityType.WITHER &&
-            event.getEntityType() !== EntityType.WITHER_SKULL)
+        if (event.getEntityType() !== EntityType.WITHER
+            && event.getEntityType() !== EntityType.WITHER_SKULL) {
             return;
+        }
         if (event
             .getEntity()
             .getWorld()
-            .getName() !== 'world')
+            .getName() !== 'world') {
             return;
+        }
         event
             .getEntity()
             .getWorld()

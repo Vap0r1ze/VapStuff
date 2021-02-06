@@ -42,13 +42,11 @@ export default class Module {
     colorText(text) {
         return text
             .replace(/&([0-9a-fklmnor])/g, '\xA7$1')
-            .replace(/&#([0-9a-f]{6})/gi, (match, hex) => {
-            return this.hexChatColor(hex);
-        })
+            .replace(/&#([0-9a-f]{6})/gi, (match, hex) => this.hexChatColor(hex))
             .replace(/&&/g, '&');
     }
     hexChatColor(hex) {
-        return '\xA7x' + [...hex].map(c => `\xA7${c}`).join('');
+        return `\xA7x${[...hex].map(c => `\xA7${c}`).join('')}`;
     }
     capitalize(text) {
         return text[0].toUpperCase() + text.slice(1);

@@ -25,13 +25,13 @@ let ShulkerPocket = class ShulkerPocket extends Module {
     onPlayerInteract(listener, event) {
         const player = event.getPlayer();
         const itemInMainHand = player.getInventory().getItemInMainHand();
-        if (event.getAction() === Action.RIGHT_CLICK_AIR &&
-            itemInMainHand != null &&
-            this.isShulkerBox(itemInMainHand.getType()) &&
-            !this.shulkerBoxOpen[player.getUniqueId()]) {
+        if (event.getAction() === Action.RIGHT_CLICK_AIR
+            && itemInMainHand != null
+            && this.isShulkerBox(itemInMainHand.getType())
+            && !this.shulkerBoxOpen[player.getUniqueId()]) {
             this.shulkerBoxOpen[player.getUniqueId()] = true;
-            const shulkerBox = itemInMainHand.getItemMeta().getBlockState();
             const meta = itemInMainHand.getItemMeta();
+            const shulkerBox = meta.getBlockState();
             const title = meta.getDisplayName() == null || meta.getDisplayName() === ''
                 ? itemInMainHand
                     .getType()
@@ -73,9 +73,9 @@ let ShulkerPocket = class ShulkerPocket extends Module {
                 event.setCancelled(true);
                 return;
             }
-            if (event.getCursor() != null &&
-                this.isShulkerBox(event.getCursor().getType()) &&
-                this.isInShulkerBox(event.getRawSlot())) {
+            if (event.getCursor() != null
+                && this.isShulkerBox(event.getCursor().getType())
+                && this.isInShulkerBox(event.getRawSlot())) {
                 event.setCancelled(true);
                 return;
             }
@@ -86,8 +86,8 @@ let ShulkerPocket = class ShulkerPocket extends Module {
                     this.shulkerBoxOnCursors[player.getUniqueId()] = true;
                     return;
                 }
-                else if (event.getAction() === InventoryAction.DROP_ALL_SLOT ||
-                    event.getAction() === InventoryAction.DROP_ONE_SLOT) {
+                if (event.getAction() === InventoryAction.DROP_ALL_SLOT
+                    || event.getAction() === InventoryAction.DROP_ONE_SLOT) {
                     this.dropItem(event.getCurrentItem(), player);
                     event.setCurrentItem(null);
                     player.closeInventory();
@@ -96,22 +96,22 @@ let ShulkerPocket = class ShulkerPocket extends Module {
             }
             let newItemSlot;
             if (this.shulkerBoxOnCursors[player.getUniqueId()]) {
-                if (event.getAction() === InventoryAction.DROP_ALL_CURSOR ||
-                    event.getAction() === InventoryAction.DROP_ONE_CURSOR) {
+                if (event.getAction() === InventoryAction.DROP_ALL_CURSOR
+                    || event.getAction() === InventoryAction.DROP_ONE_CURSOR) {
                     player.closeInventory();
                     return;
                 }
-                else if (this.isPlaceAction(event.getAction())) {
+                if (this.isPlaceAction(event.getAction())) {
                     newItemSlot = event.getRawSlot();
                     delete this.shulkerBoxOnCursors[player.getUniqueId()];
                 }
             }
-            if (event.getClick() === ClickType.NUMBER_KEY &&
-                (event.getAction() === InventoryAction.HOTBAR_SWAP ||
-                    event.getAction() === InventoryAction.HOTBAR_MOVE_AND_READD)) {
-                if (this.isInShulkerBox(event.getRawSlot()) &&
-                    player.getInventory().getItem(event.getHotbarButton()) != null &&
-                    this.isShulkerBox(player
+            if (event.getClick() === ClickType.NUMBER_KEY
+                && (event.getAction() === InventoryAction.HOTBAR_SWAP
+                    || event.getAction() === InventoryAction.HOTBAR_MOVE_AND_READD)) {
+                if (this.isInShulkerBox(event.getRawSlot())
+                    && player.getInventory().getItem(event.getHotbarButton()) != null
+                    && this.isShulkerBox(player
                         .getInventory()
                         .getItem(event.getHotbarButton())
                         .getType())) {
@@ -121,22 +121,22 @@ let ShulkerPocket = class ShulkerPocket extends Module {
                 if (this.shulkerBoxSlots[player.getUniqueId()] === event.getRawSlot()) {
                     newItemSlot = this.toRawSlot(event.getHotbarButton());
                 }
-                else if (this.shulkerBoxSlots[player.getUniqueId()] ===
-                    this.toRawSlot(event.getHotbarButton())) {
+                else if (this.shulkerBoxSlots[player.getUniqueId()]
+                    === this.toRawSlot(event.getHotbarButton())) {
                     newItemSlot = event.getRawSlot();
                 }
             }
-            if (event.getAction() === InventoryAction.MOVE_TO_OTHER_INVENTORY &&
-                event.getCurrentItem() != null &&
-                this.isShulkerBox(event.getCurrentItem().getType())) {
+            if (event.getAction() === InventoryAction.MOVE_TO_OTHER_INVENTORY
+                && event.getCurrentItem() != null
+                && this.isShulkerBox(event.getCurrentItem().getType())) {
                 if (event.getRawSlot() > 53 && event.getRawSlot() < 63) {
                     newItemSlot = this.moveItemToSlotRange(9, 36, event);
                 }
                 else if (event.getRawSlot() > 26 && event.getRawSlot() < 54) {
                     newItemSlot = this.moveItemToSlotRange(0, 9, event);
                 }
-                if (newItemSlot != null &&
-                    this.shulkerBoxSlots[player.getUniqueId()] !== event.getRawSlot()) {
+                if (newItemSlot != null
+                    && this.shulkerBoxSlots[player.getUniqueId()] !== event.getRawSlot()) {
                     newItemSlot = null;
                 }
                 event.setCancelled(true);
@@ -148,10 +148,10 @@ let ShulkerPocket = class ShulkerPocket extends Module {
     }
     onInventoryDrag(listener, event) {
         const player = event.getWhoClicked();
-        if (this.shulkerBoxSlots[player.getUniqueId()] &&
-            this.isShulkerBox(event.getOldCursor().getType())) {
-            if (this.setToArray(event.getRawSlots()).some(a => a < 27) ||
-                this.setToArray(event.getRawSlots()).length > 1) {
+        if (this.shulkerBoxSlots[player.getUniqueId()]
+            && this.isShulkerBox(event.getOldCursor().getType())) {
+            if (this.setToArray(event.getRawSlots()).some(a => a < 27)
+                || this.setToArray(event.getRawSlots()).length > 1) {
                 event.setCancelled(true);
                 return;
             }
@@ -164,7 +164,7 @@ let ShulkerPocket = class ShulkerPocket extends Module {
     setToArray(set) {
         const n = set.size();
         const arr = [];
-        for (let i = 0; i < n; i++) {
+        for (let i = 0; i < n; i += 1) {
             arr.push(set[i]);
         }
         return arr;
@@ -210,17 +210,17 @@ let ShulkerPocket = class ShulkerPocket extends Module {
         }
     }
     isPlaceAction(action) {
-        return (action === InventoryAction.PLACE_ALL ||
-            action === InventoryAction.PLACE_ONE ||
-            action === InventoryAction.PLACE_SOME ||
-            action === InventoryAction.SWAP_WITH_CURSOR);
+        return (action === InventoryAction.PLACE_ALL
+            || action === InventoryAction.PLACE_ONE
+            || action === InventoryAction.PLACE_SOME
+            || action === InventoryAction.SWAP_WITH_CURSOR);
     }
     isPickupAction(action) {
-        return (action === InventoryAction.PICKUP_ALL ||
-            action === InventoryAction.PICKUP_HALF ||
-            action === InventoryAction.PICKUP_ONE ||
-            action === InventoryAction.PICKUP_SOME ||
-            action === InventoryAction.SWAP_WITH_CURSOR);
+        return (action === InventoryAction.PICKUP_ALL
+            || action === InventoryAction.PICKUP_HALF
+            || action === InventoryAction.PICKUP_ONE
+            || action === InventoryAction.PICKUP_SOME
+            || action === InventoryAction.SWAP_WITH_CURSOR);
     }
     isInShulkerBox(rawSlot) {
         return rawSlot >= 0 && rawSlot < 27;
@@ -232,9 +232,9 @@ let ShulkerPocket = class ShulkerPocket extends Module {
         return rawSlot >= 54 ? rawSlot - 54 : rawSlot - 18;
     }
     moveItemToSlotRange(rangeMin, rangeMax, event) {
-        for (let i = rangeMin; i < rangeMax; i++) {
-            if (event.getClickedInventory().getItem(i) === null ||
-                event
+        for (let i = rangeMin; i < rangeMax; i += 1) {
+            if (event.getClickedInventory().getItem(i) === null
+                || event
                     .getClickedInventory()
                     .getItem(i)
                     .getType() === Material.AIR) {

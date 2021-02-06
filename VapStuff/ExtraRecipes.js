@@ -84,40 +84,38 @@ let ExtraRecipes = class ExtraRecipes extends Module {
                     continue;
                 }
                 for (const drop of drops) {
-                    let index = recipe.ingredients.findIndex(e => {
-                        return e[0] === drop.getItemStack().getType()
-                            && e[1] <= drop.getItemStack().getAmount();
-                    });
+                    let index = recipe.ingredients.findIndex(e => e[0] === drop.getItemStack().getType()
+                        && e[1] <= drop.getItemStack().getAmount());
                     if (index > -1) {
                         required[recipeName].ingr[index] = drop;
                     }
                     if (recipe.advancedIngredients) {
-                        index = recipe.advancedIngredients.findIndex(e => {
-                            return e[0] === drop.getItemStack().getType()
-                                && e[1](drop.getItemStack());
-                        });
+                        index = recipe.advancedIngredients.findIndex(e => e[0] === drop.getItemStack().getType()
+                            && e[1](drop.getItemStack()));
                         if (index > -1) {
                             required[recipeName].advIngr[index] = drop;
                         }
                     }
                 }
-                if (required[recipeName].ingr.every(Boolean) &&
-                    required[recipeName].advIngr.every(Boolean)) {
-                    for (let i = 0; i < required[recipeName].ingr.length; i++) {
+                if (required[recipeName].ingr.every(Boolean)
+                    && required[recipeName].advIngr.every(Boolean)) {
+                    for (let i = 0; i < required[recipeName].ingr.length; i += 1) {
                         const stack = required[recipeName].ingr[i].getItemStack();
                         stack.setAmount(Math.max(0, stack.getAmount() - recipe.ingredients[i][1]));
                     }
-                    for (let i = 0; i < required[recipeName].advIngr.length; i++) {
+                    for (let i = 0; i < required[recipeName].advIngr.length; i += 1) {
                         const stack = required[recipeName].advIngr[i].getItemStack();
                         stack.setAmount(0);
                     }
                     const result = recipe.createResult();
                     where.getWorld().dropItem(where, result);
                     if (recipe.sound) {
-                        if (this.isSound(recipe.sound))
+                        if (this.isSound(recipe.sound)) {
                             where.getWorld().playSound(where, recipe.sound, 1, 1);
-                        else
+                        }
+                        else {
                             recipe.sound.forEach(sound => { where.getWorld().playSound(where, sound, 1, 1); });
+                        }
                     }
                     if (recipe.postRecipe) {
                         recipe.postRecipe(where);
@@ -133,11 +131,12 @@ let ExtraRecipes = class ExtraRecipes extends Module {
                 delete this.trackedDrops[loc];
             }
             else {
-                for (let i = 0; i < this.trackedDrops[loc].length; i++) {
+                for (let i = 0; i < this.trackedDrops[loc].length; i += 1) {
                     const drop = this.trackedDrops[loc][i];
                     const newLoc = this.serializeLocation(drop.getLocation());
                     if (newLoc !== loc) {
-                        this.trackedDrops[loc].splice(i--, 1);
+                        this.trackedDrops[loc].splice(i, 1);
+                        i -= 1;
                         if (!this.trackedDrops[newLoc])
                             this.trackedDrops[newLoc] = [];
                         this.trackedDrops[newLoc].push(drop);

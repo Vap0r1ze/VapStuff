@@ -12,12 +12,12 @@ import Module from './Module.js';
 let GrassPlanter = class GrassPlanter extends Module {
     get name() { return 'Grass Planter'; }
     onPlayerInteract(listener, event) {
-        let itemInMainHand;
-        let player;
-        if (event.getAction() === Action.RIGHT_CLICK_BLOCK &&
-            (itemInMainHand = (player = event.getPlayer()).getInventory().getItemInMainHand()) !=
-                null &&
-            itemInMainHand.getType() === Material.WHEAT_SEEDS) {
+        const player = event.getPlayer();
+        const inv = player.getInventory();
+        const itemInMainHand = inv.getItemInMainHand();
+        if (event.getAction() === Action.RIGHT_CLICK_BLOCK
+            && itemInMainHand != null
+            && itemInMainHand.getType() === Material.WHEAT_SEEDS) {
             const seedCount = itemInMainHand.getAmount();
             if (seedCount < 3)
                 return;

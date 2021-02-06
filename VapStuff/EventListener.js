@@ -229,462 +229,690 @@ import WorldUnloadEvent from '../lib/org/bukkit/event/world/WorldUnloadEvent.js'
 export function Subscribe(Constructor) {
     return class SubscriberModule extends Constructor {
         onEnable() {
-            if (this.onBlockBreak)
+            if (this.onBlockBreak) {
                 this.plugin.registerEvent(BlockBreakEvent, this.onBlockBreak.bind(this));
-            if (this.onBlockBurn)
+            }
+            if (this.onBlockBurn) {
                 this.plugin.registerEvent(BlockBurnEvent, this.onBlockBurn.bind(this));
-            if (this.onBlockCanBuild)
+            }
+            if (this.onBlockCanBuild) {
                 this.plugin.registerEvent(BlockCanBuildEvent, this.onBlockCanBuild.bind(this));
-            if (this.onBlockCook)
+            }
+            if (this.onBlockCook) {
                 this.plugin.registerEvent(BlockCookEvent, this.onBlockCook.bind(this));
-            if (this.onBlockDamage)
+            }
+            if (this.onBlockDamage) {
                 this.plugin.registerEvent(BlockDamageEvent, this.onBlockDamage.bind(this));
-            if (this.onBlockDispenseArmor)
+            }
+            if (this.onBlockDispenseArmor) {
                 this.plugin.registerEvent(BlockDispenseArmorEvent, this.onBlockDispenseArmor.bind(this));
-            if (this.onBlockDispense)
+            }
+            if (this.onBlockDispense) {
                 this.plugin.registerEvent(BlockDispenseEvent, this.onBlockDispense.bind(this));
-            if (this.onBlockDropItem)
+            }
+            if (this.onBlockDropItem) {
                 this.plugin.registerEvent(BlockDropItemEvent, this.onBlockDropItem.bind(this));
-            if (this.onBlock)
+            }
+            if (this.onBlock) {
                 this.plugin.registerEvent(BlockEvent, this.onBlock.bind(this));
-            if (this.onBlockExp)
+            }
+            if (this.onBlockExp) {
                 this.plugin.registerEvent(BlockExpEvent, this.onBlockExp.bind(this));
-            if (this.onBlockExplode)
+            }
+            if (this.onBlockExplode) {
                 this.plugin.registerEvent(BlockExplodeEvent, this.onBlockExplode.bind(this));
-            if (this.onBlockFade)
+            }
+            if (this.onBlockFade) {
                 this.plugin.registerEvent(BlockFadeEvent, this.onBlockFade.bind(this));
-            if (this.onBlockFertilize)
+            }
+            if (this.onBlockFertilize) {
                 this.plugin.registerEvent(BlockFertilizeEvent, this.onBlockFertilize.bind(this));
-            if (this.onBlockForm)
+            }
+            if (this.onBlockForm) {
                 this.plugin.registerEvent(BlockFormEvent, this.onBlockForm.bind(this));
-            if (this.onBlockFromTo)
+            }
+            if (this.onBlockFromTo) {
                 this.plugin.registerEvent(BlockFromToEvent, this.onBlockFromTo.bind(this));
-            if (this.onBlockGrow)
+            }
+            if (this.onBlockGrow) {
                 this.plugin.registerEvent(BlockGrowEvent, this.onBlockGrow.bind(this));
-            if (this.onBlockIgnite)
+            }
+            if (this.onBlockIgnite) {
                 this.plugin.registerEvent(BlockIgniteEvent, this.onBlockIgnite.bind(this));
-            if (this.onBlockMultiPlace)
+            }
+            if (this.onBlockMultiPlace) {
                 this.plugin.registerEvent(BlockMultiPlaceEvent, this.onBlockMultiPlace.bind(this));
-            if (this.onBlockPhysics)
+            }
+            if (this.onBlockPhysics) {
                 this.plugin.registerEvent(BlockPhysicsEvent, this.onBlockPhysics.bind(this));
-            if (this.onBlockPiston)
+            }
+            if (this.onBlockPiston) {
                 this.plugin.registerEvent(BlockPistonEvent, this.onBlockPiston.bind(this));
-            if (this.onBlockPistonExtend)
+            }
+            if (this.onBlockPistonExtend) {
                 this.plugin.registerEvent(BlockPistonExtendEvent, this.onBlockPistonExtend.bind(this));
-            if (this.onBlockPistonRetract)
+            }
+            if (this.onBlockPistonRetract) {
                 this.plugin.registerEvent(BlockPistonRetractEvent, this.onBlockPistonRetract.bind(this));
-            if (this.onBlockPlace)
+            }
+            if (this.onBlockPlace) {
                 this.plugin.registerEvent(BlockPlaceEvent, this.onBlockPlace.bind(this));
-            if (this.onBlockRedstone)
+            }
+            if (this.onBlockRedstone) {
                 this.plugin.registerEvent(BlockRedstoneEvent, this.onBlockRedstone.bind(this));
-            if (this.onBlockShearEntity)
+            }
+            if (this.onBlockShearEntity) {
                 this.plugin.registerEvent(BlockShearEntityEvent, this.onBlockShearEntity.bind(this));
-            if (this.onBlockSpread)
+            }
+            if (this.onBlockSpread) {
                 this.plugin.registerEvent(BlockSpreadEvent, this.onBlockSpread.bind(this));
-            if (this.onCauldronLevelChange)
+            }
+            if (this.onCauldronLevelChange) {
                 this.plugin.registerEvent(CauldronLevelChangeEvent, this.onCauldronLevelChange.bind(this));
-            if (this.onEntityBlockForm)
+            }
+            if (this.onEntityBlockForm) {
                 this.plugin.registerEvent(EntityBlockFormEvent, this.onEntityBlockForm.bind(this));
-            if (this.onFluidLevelChange)
+            }
+            if (this.onFluidLevelChange) {
                 this.plugin.registerEvent(FluidLevelChangeEvent, this.onFluidLevelChange.bind(this));
-            if (this.onLeavesDecay)
+            }
+            if (this.onLeavesDecay) {
                 this.plugin.registerEvent(LeavesDecayEvent, this.onLeavesDecay.bind(this));
-            if (this.onMoistureChange)
+            }
+            if (this.onMoistureChange) {
                 this.plugin.registerEvent(MoistureChangeEvent, this.onMoistureChange.bind(this));
-            if (this.onNotePlay)
+            }
+            if (this.onNotePlay) {
                 this.plugin.registerEvent(NotePlayEvent, this.onNotePlay.bind(this));
-            if (this.onSignChange)
+            }
+            if (this.onSignChange) {
                 this.plugin.registerEvent(SignChangeEvent, this.onSignChange.bind(this));
-            if (this.onSpongeAbsorb)
+            }
+            if (this.onSpongeAbsorb) {
                 this.plugin.registerEvent(SpongeAbsorbEvent, this.onSpongeAbsorb.bind(this));
-            if (this.onEnchantItem)
+            }
+            if (this.onEnchantItem) {
                 this.plugin.registerEvent(EnchantItemEvent, this.onEnchantItem.bind(this));
-            if (this.onPrepareItemEnchant)
+            }
+            if (this.onPrepareItemEnchant) {
                 this.plugin.registerEvent(PrepareItemEnchantEvent, this.onPrepareItemEnchant.bind(this));
-            if (this.onAreaEffectCloudApply)
+            }
+            if (this.onAreaEffectCloudApply) {
                 this.plugin.registerEvent(AreaEffectCloudApplyEvent, this.onAreaEffectCloudApply.bind(this));
-            if (this.onBatToggleSleep)
+            }
+            if (this.onBatToggleSleep) {
                 this.plugin.registerEvent(BatToggleSleepEvent, this.onBatToggleSleep.bind(this));
-            if (this.onCreatureSpawn)
+            }
+            if (this.onCreatureSpawn) {
                 this.plugin.registerEvent(CreatureSpawnEvent, this.onCreatureSpawn.bind(this));
-            if (this.onCreeperPower)
+            }
+            if (this.onCreeperPower) {
                 this.plugin.registerEvent(CreeperPowerEvent, this.onCreeperPower.bind(this));
-            if (this.onEnderDragonChangePhase)
+            }
+            if (this.onEnderDragonChangePhase) {
                 this.plugin.registerEvent(EnderDragonChangePhaseEvent, this.onEnderDragonChangePhase.bind(this));
-            if (this.onEntityAirChange)
+            }
+            if (this.onEntityAirChange) {
                 this.plugin.registerEvent(EntityAirChangeEvent, this.onEntityAirChange.bind(this));
-            if (this.onEntityBreakDoor)
+            }
+            if (this.onEntityBreakDoor) {
                 this.plugin.registerEvent(EntityBreakDoorEvent, this.onEntityBreakDoor.bind(this));
-            if (this.onEntityBreed)
+            }
+            if (this.onEntityBreed) {
                 this.plugin.registerEvent(EntityBreedEvent, this.onEntityBreed.bind(this));
-            if (this.onEntityChangeBlock)
+            }
+            if (this.onEntityChangeBlock) {
                 this.plugin.registerEvent(EntityChangeBlockEvent, this.onEntityChangeBlock.bind(this));
-            if (this.onEntityCombustByBlock)
+            }
+            if (this.onEntityCombustByBlock) {
                 this.plugin.registerEvent(EntityCombustByBlockEvent, this.onEntityCombustByBlock.bind(this));
-            if (this.onEntityCombustByEntity)
+            }
+            if (this.onEntityCombustByEntity) {
                 this.plugin.registerEvent(EntityCombustByEntityEvent, this.onEntityCombustByEntity.bind(this));
-            if (this.onEntityCombust)
+            }
+            if (this.onEntityCombust) {
                 this.plugin.registerEvent(EntityCombustEvent, this.onEntityCombust.bind(this));
-            if (this.onEntityCreatePortal)
+            }
+            if (this.onEntityCreatePortal) {
                 this.plugin.registerEvent(EntityCreatePortalEvent, this.onEntityCreatePortal.bind(this));
-            if (this.onEntityDamageByBlock)
+            }
+            if (this.onEntityDamageByBlock) {
                 this.plugin.registerEvent(EntityDamageByBlockEvent, this.onEntityDamageByBlock.bind(this));
-            if (this.onEntityDamageByEntity)
+            }
+            if (this.onEntityDamageByEntity) {
                 this.plugin.registerEvent(EntityDamageByEntityEvent, this.onEntityDamageByEntity.bind(this));
-            if (this.onEntityDamage)
+            }
+            if (this.onEntityDamage) {
                 this.plugin.registerEvent(EntityDamageEvent, this.onEntityDamage.bind(this));
-            if (this.onEntityDeath)
+            }
+            if (this.onEntityDeath) {
                 this.plugin.registerEvent(EntityDeathEvent, this.onEntityDeath.bind(this));
-            if (this.onEntityDropItem)
+            }
+            if (this.onEntityDropItem) {
                 this.plugin.registerEvent(EntityDropItemEvent, this.onEntityDropItem.bind(this));
-            if (this.onEntityEnterBlock)
+            }
+            if (this.onEntityEnterBlock) {
                 this.plugin.registerEvent(EntityEnterBlockEvent, this.onEntityEnterBlock.bind(this));
-            if (this.onEntity)
+            }
+            if (this.onEntity) {
                 this.plugin.registerEvent(EntityEvent, this.onEntity.bind(this));
-            if (this.onEntityExplode)
+            }
+            if (this.onEntityExplode) {
                 this.plugin.registerEvent(EntityExplodeEvent, this.onEntityExplode.bind(this));
-            if (this.onEntityInteract)
+            }
+            if (this.onEntityInteract) {
                 this.plugin.registerEvent(EntityInteractEvent, this.onEntityInteract.bind(this));
-            if (this.onEntityPickupItem)
+            }
+            if (this.onEntityPickupItem) {
                 this.plugin.registerEvent(EntityPickupItemEvent, this.onEntityPickupItem.bind(this));
-            if (this.onEntityPlace)
+            }
+            if (this.onEntityPlace) {
                 this.plugin.registerEvent(EntityPlaceEvent, this.onEntityPlace.bind(this));
-            if (this.onEntityPortalEnter)
+            }
+            if (this.onEntityPortalEnter) {
                 this.plugin.registerEvent(EntityPortalEnterEvent, this.onEntityPortalEnter.bind(this));
-            if (this.onEntityPortal)
+            }
+            if (this.onEntityPortal) {
                 this.plugin.registerEvent(EntityPortalEvent, this.onEntityPortal.bind(this));
-            if (this.onEntityPortalExit)
+            }
+            if (this.onEntityPortalExit) {
                 this.plugin.registerEvent(EntityPortalExitEvent, this.onEntityPortalExit.bind(this));
-            if (this.onEntityPoseChange)
+            }
+            if (this.onEntityPoseChange) {
                 this.plugin.registerEvent(EntityPoseChangeEvent, this.onEntityPoseChange.bind(this));
-            if (this.onEntityPotionEffect)
+            }
+            if (this.onEntityPotionEffect) {
                 this.plugin.registerEvent(EntityPotionEffectEvent, this.onEntityPotionEffect.bind(this));
-            if (this.onEntityRegainHealth)
+            }
+            if (this.onEntityRegainHealth) {
                 this.plugin.registerEvent(EntityRegainHealthEvent, this.onEntityRegainHealth.bind(this));
-            if (this.onEntityResurrect)
+            }
+            if (this.onEntityResurrect) {
                 this.plugin.registerEvent(EntityResurrectEvent, this.onEntityResurrect.bind(this));
-            if (this.onEntityShootBow)
+            }
+            if (this.onEntityShootBow) {
                 this.plugin.registerEvent(EntityShootBowEvent, this.onEntityShootBow.bind(this));
-            if (this.onEntitySpawn)
+            }
+            if (this.onEntitySpawn) {
                 this.plugin.registerEvent(EntitySpawnEvent, this.onEntitySpawn.bind(this));
-            if (this.onEntityTame)
+            }
+            if (this.onEntityTame) {
                 this.plugin.registerEvent(EntityTameEvent, this.onEntityTame.bind(this));
-            if (this.onEntityTarget)
+            }
+            if (this.onEntityTarget) {
                 this.plugin.registerEvent(EntityTargetEvent, this.onEntityTarget.bind(this));
-            if (this.onEntityTargetLivingEntity)
+            }
+            if (this.onEntityTargetLivingEntity) {
                 this.plugin.registerEvent(EntityTargetLivingEntityEvent, this.onEntityTargetLivingEntity.bind(this));
-            if (this.onEntityTeleport)
+            }
+            if (this.onEntityTeleport) {
                 this.plugin.registerEvent(EntityTeleportEvent, this.onEntityTeleport.bind(this));
-            if (this.onEntityToggleGlide)
+            }
+            if (this.onEntityToggleGlide) {
                 this.plugin.registerEvent(EntityToggleGlideEvent, this.onEntityToggleGlide.bind(this));
-            if (this.onEntityToggleSwim)
+            }
+            if (this.onEntityToggleSwim) {
                 this.plugin.registerEvent(EntityToggleSwimEvent, this.onEntityToggleSwim.bind(this));
-            if (this.onEntityTransform)
+            }
+            if (this.onEntityTransform) {
                 this.plugin.registerEvent(EntityTransformEvent, this.onEntityTransform.bind(this));
-            if (this.onEntityUnleash)
+            }
+            if (this.onEntityUnleash) {
                 this.plugin.registerEvent(EntityUnleashEvent, this.onEntityUnleash.bind(this));
-            if (this.onExpBottle)
+            }
+            if (this.onExpBottle) {
                 this.plugin.registerEvent(ExpBottleEvent, this.onExpBottle.bind(this));
-            if (this.onExplosionPrime)
+            }
+            if (this.onExplosionPrime) {
                 this.plugin.registerEvent(ExplosionPrimeEvent, this.onExplosionPrime.bind(this));
-            if (this.onFireworkExplode)
+            }
+            if (this.onFireworkExplode) {
                 this.plugin.registerEvent(FireworkExplodeEvent, this.onFireworkExplode.bind(this));
-            if (this.onFoodLevelChange)
+            }
+            if (this.onFoodLevelChange) {
                 this.plugin.registerEvent(FoodLevelChangeEvent, this.onFoodLevelChange.bind(this));
-            if (this.onHorseJump)
+            }
+            if (this.onHorseJump) {
                 this.plugin.registerEvent(HorseJumpEvent, this.onHorseJump.bind(this));
-            if (this.onItemDespawn)
+            }
+            if (this.onItemDespawn) {
                 this.plugin.registerEvent(ItemDespawnEvent, this.onItemDespawn.bind(this));
-            if (this.onItemMerge)
+            }
+            if (this.onItemMerge) {
                 this.plugin.registerEvent(ItemMergeEvent, this.onItemMerge.bind(this));
-            if (this.onItemSpawn)
+            }
+            if (this.onItemSpawn) {
                 this.plugin.registerEvent(ItemSpawnEvent, this.onItemSpawn.bind(this));
-            if (this.onLingeringPotionSplash)
+            }
+            if (this.onLingeringPotionSplash) {
                 this.plugin.registerEvent(LingeringPotionSplashEvent, this.onLingeringPotionSplash.bind(this));
-            if (this.onPigZap)
+            }
+            if (this.onPigZap) {
                 this.plugin.registerEvent(PigZapEvent, this.onPigZap.bind(this));
-            if (this.onPigZombieAnger)
+            }
+            if (this.onPigZombieAnger) {
                 this.plugin.registerEvent(PigZombieAngerEvent, this.onPigZombieAnger.bind(this));
-            if (this.onPlayerDeath)
+            }
+            if (this.onPlayerDeath) {
                 this.plugin.registerEvent(PlayerDeathEvent, this.onPlayerDeath.bind(this));
-            if (this.onPlayerLeashEntity)
+            }
+            if (this.onPlayerLeashEntity) {
                 this.plugin.registerEvent(PlayerLeashEntityEvent, this.onPlayerLeashEntity.bind(this));
-            if (this.onPotionSplash)
+            }
+            if (this.onPotionSplash) {
                 this.plugin.registerEvent(PotionSplashEvent, this.onPotionSplash.bind(this));
-            if (this.onProjectileHit)
+            }
+            if (this.onProjectileHit) {
                 this.plugin.registerEvent(ProjectileHitEvent, this.onProjectileHit.bind(this));
-            if (this.onProjectileLaunch)
+            }
+            if (this.onProjectileLaunch) {
                 this.plugin.registerEvent(ProjectileLaunchEvent, this.onProjectileLaunch.bind(this));
-            if (this.onSheepDyeWool)
+            }
+            if (this.onSheepDyeWool) {
                 this.plugin.registerEvent(SheepDyeWoolEvent, this.onSheepDyeWool.bind(this));
-            if (this.onSheepRegrowWool)
+            }
+            if (this.onSheepRegrowWool) {
                 this.plugin.registerEvent(SheepRegrowWoolEvent, this.onSheepRegrowWool.bind(this));
-            if (this.onSlimeSplit)
+            }
+            if (this.onSlimeSplit) {
                 this.plugin.registerEvent(SlimeSplitEvent, this.onSlimeSplit.bind(this));
-            if (this.onSpawnerSpawn)
+            }
+            if (this.onSpawnerSpawn) {
                 this.plugin.registerEvent(SpawnerSpawnEvent, this.onSpawnerSpawn.bind(this));
-            if (this.onVillagerAcquireTrade)
+            }
+            if (this.onVillagerAcquireTrade) {
                 this.plugin.registerEvent(VillagerAcquireTradeEvent, this.onVillagerAcquireTrade.bind(this));
-            if (this.onVillagerCareerChange)
+            }
+            if (this.onVillagerCareerChange) {
                 this.plugin.registerEvent(VillagerCareerChangeEvent, this.onVillagerCareerChange.bind(this));
-            if (this.onVillagerReplenishTrade)
+            }
+            if (this.onVillagerReplenishTrade) {
                 this.plugin.registerEvent(VillagerReplenishTradeEvent, this.onVillagerReplenishTrade.bind(this));
-            if (this.onHangingBreakByEntity)
+            }
+            if (this.onHangingBreakByEntity) {
                 this.plugin.registerEvent(HangingBreakByEntityEvent, this.onHangingBreakByEntity.bind(this));
-            if (this.onHangingBreak)
+            }
+            if (this.onHangingBreak) {
                 this.plugin.registerEvent(HangingBreakEvent, this.onHangingBreak.bind(this));
-            if (this.onHanging)
+            }
+            if (this.onHanging) {
                 this.plugin.registerEvent(HangingEvent, this.onHanging.bind(this));
-            if (this.onHangingPlace)
+            }
+            if (this.onHangingPlace) {
                 this.plugin.registerEvent(HangingPlaceEvent, this.onHangingPlace.bind(this));
-            if (this.onBrew)
+            }
+            if (this.onBrew) {
                 this.plugin.registerEvent(BrewEvent, this.onBrew.bind(this));
-            if (this.onBrewingStandFuel)
+            }
+            if (this.onBrewingStandFuel) {
                 this.plugin.registerEvent(BrewingStandFuelEvent, this.onBrewingStandFuel.bind(this));
-            if (this.onCraftItem)
+            }
+            if (this.onCraftItem) {
                 this.plugin.registerEvent(CraftItemEvent, this.onCraftItem.bind(this));
-            if (this.onFurnaceBurn)
+            }
+            if (this.onFurnaceBurn) {
                 this.plugin.registerEvent(FurnaceBurnEvent, this.onFurnaceBurn.bind(this));
-            if (this.onFurnaceExtract)
+            }
+            if (this.onFurnaceExtract) {
                 this.plugin.registerEvent(FurnaceExtractEvent, this.onFurnaceExtract.bind(this));
-            if (this.onFurnaceSmelt)
+            }
+            if (this.onFurnaceSmelt) {
                 this.plugin.registerEvent(FurnaceSmeltEvent, this.onFurnaceSmelt.bind(this));
-            if (this.onInventoryClick)
+            }
+            if (this.onInventoryClick) {
                 this.plugin.registerEvent(InventoryClickEvent, this.onInventoryClick.bind(this));
-            if (this.onInventoryClose)
+            }
+            if (this.onInventoryClose) {
                 this.plugin.registerEvent(InventoryCloseEvent, this.onInventoryClose.bind(this));
-            if (this.onInventoryCreative)
+            }
+            if (this.onInventoryCreative) {
                 this.plugin.registerEvent(InventoryCreativeEvent, this.onInventoryCreative.bind(this));
-            if (this.onInventoryDrag)
+            }
+            if (this.onInventoryDrag) {
                 this.plugin.registerEvent(InventoryDragEvent, this.onInventoryDrag.bind(this));
-            if (this.onInventory)
+            }
+            if (this.onInventory) {
                 this.plugin.registerEvent(InventoryEvent, this.onInventory.bind(this));
-            if (this.onInventoryInteract)
+            }
+            if (this.onInventoryInteract) {
                 this.plugin.registerEvent(InventoryInteractEvent, this.onInventoryInteract.bind(this));
-            if (this.onInventoryMoveItem)
+            }
+            if (this.onInventoryMoveItem) {
                 this.plugin.registerEvent(InventoryMoveItemEvent, this.onInventoryMoveItem.bind(this));
-            if (this.onInventoryOpen)
+            }
+            if (this.onInventoryOpen) {
                 this.plugin.registerEvent(InventoryOpenEvent, this.onInventoryOpen.bind(this));
-            if (this.onInventoryPickupItem)
+            }
+            if (this.onInventoryPickupItem) {
                 this.plugin.registerEvent(InventoryPickupItemEvent, this.onInventoryPickupItem.bind(this));
-            if (this.onPrepareAnvil)
+            }
+            if (this.onPrepareAnvil) {
                 this.plugin.registerEvent(PrepareAnvilEvent, this.onPrepareAnvil.bind(this));
-            if (this.onPrepareItemCraft)
+            }
+            if (this.onPrepareItemCraft) {
                 this.plugin.registerEvent(PrepareItemCraftEvent, this.onPrepareItemCraft.bind(this));
-            if (this.onTradeSelect)
+            }
+            if (this.onTradeSelect) {
                 this.plugin.registerEvent(TradeSelectEvent, this.onTradeSelect.bind(this));
-            if (this.onAsyncPlayerChat)
+            }
+            if (this.onAsyncPlayerChat) {
                 this.plugin.registerEvent(AsyncPlayerChatEvent, this.onAsyncPlayerChat.bind(this));
-            if (this.onAsyncPlayerPreLogin)
+            }
+            if (this.onAsyncPlayerPreLogin) {
                 this.plugin.registerEvent(AsyncPlayerPreLoginEvent, this.onAsyncPlayerPreLogin.bind(this));
-            if (this.onPlayerAdvancementDone)
+            }
+            if (this.onPlayerAdvancementDone) {
                 this.plugin.registerEvent(PlayerAdvancementDoneEvent, this.onPlayerAdvancementDone.bind(this));
-            if (this.onPlayerAnimation)
+            }
+            if (this.onPlayerAnimation) {
                 this.plugin.registerEvent(PlayerAnimationEvent, this.onPlayerAnimation.bind(this));
-            if (this.onPlayerArmorStandManipulate)
+            }
+            if (this.onPlayerArmorStandManipulate) {
                 this.plugin.registerEvent(PlayerArmorStandManipulateEvent, this.onPlayerArmorStandManipulate.bind(this));
-            if (this.onPlayerBedEnter)
+            }
+            if (this.onPlayerBedEnter) {
                 this.plugin.registerEvent(PlayerBedEnterEvent, this.onPlayerBedEnter.bind(this));
-            if (this.onPlayerBedLeave)
+            }
+            if (this.onPlayerBedLeave) {
                 this.plugin.registerEvent(PlayerBedLeaveEvent, this.onPlayerBedLeave.bind(this));
-            if (this.onPlayerBucketEmpty)
+            }
+            if (this.onPlayerBucketEmpty) {
                 this.plugin.registerEvent(PlayerBucketEmptyEvent, this.onPlayerBucketEmpty.bind(this));
-            if (this.onPlayerBucket)
+            }
+            if (this.onPlayerBucket) {
                 this.plugin.registerEvent(PlayerBucketEvent, this.onPlayerBucket.bind(this));
-            if (this.onPlayerBucketFill)
+            }
+            if (this.onPlayerBucketFill) {
                 this.plugin.registerEvent(PlayerBucketFillEvent, this.onPlayerBucketFill.bind(this));
-            if (this.onPlayerChangedMainHand)
+            }
+            if (this.onPlayerChangedMainHand) {
                 this.plugin.registerEvent(PlayerChangedMainHandEvent, this.onPlayerChangedMainHand.bind(this));
-            if (this.onPlayerChangedWorld)
+            }
+            if (this.onPlayerChangedWorld) {
                 this.plugin.registerEvent(PlayerChangedWorldEvent, this.onPlayerChangedWorld.bind(this));
-            if (this.onPlayerChannel)
+            }
+            if (this.onPlayerChannel) {
                 this.plugin.registerEvent(PlayerChannelEvent, this.onPlayerChannel.bind(this));
-            if (this.onPlayerChat)
+            }
+            if (this.onPlayerChat) {
                 this.plugin.registerEvent(PlayerChatEvent, this.onPlayerChat.bind(this));
-            if (this.onPlayerChatTabComplete)
+            }
+            if (this.onPlayerChatTabComplete) {
                 this.plugin.registerEvent(PlayerChatTabCompleteEvent, this.onPlayerChatTabComplete.bind(this));
-            if (this.onPlayerCommandPreprocess)
+            }
+            if (this.onPlayerCommandPreprocess) {
                 this.plugin.registerEvent(PlayerCommandPreprocessEvent, this.onPlayerCommandPreprocess.bind(this));
-            if (this.onPlayerCommandSend)
+            }
+            if (this.onPlayerCommandSend) {
                 this.plugin.registerEvent(PlayerCommandSendEvent, this.onPlayerCommandSend.bind(this));
-            if (this.onPlayerDropItem)
+            }
+            if (this.onPlayerDropItem) {
                 this.plugin.registerEvent(PlayerDropItemEvent, this.onPlayerDropItem.bind(this));
-            if (this.onPlayerEditBook)
+            }
+            if (this.onPlayerEditBook) {
                 this.plugin.registerEvent(PlayerEditBookEvent, this.onPlayerEditBook.bind(this));
-            if (this.onPlayerEggThrow)
+            }
+            if (this.onPlayerEggThrow) {
                 this.plugin.registerEvent(PlayerEggThrowEvent, this.onPlayerEggThrow.bind(this));
-            if (this.onPlayer)
+            }
+            if (this.onPlayer) {
                 this.plugin.registerEvent(PlayerEvent, this.onPlayer.bind(this));
-            if (this.onPlayerExpChange)
+            }
+            if (this.onPlayerExpChange) {
                 this.plugin.registerEvent(PlayerExpChangeEvent, this.onPlayerExpChange.bind(this));
-            if (this.onPlayerFish)
+            }
+            if (this.onPlayerFish) {
                 this.plugin.registerEvent(PlayerFishEvent, this.onPlayerFish.bind(this));
-            if (this.onPlayerGameModeChange)
+            }
+            if (this.onPlayerGameModeChange) {
                 this.plugin.registerEvent(PlayerGameModeChangeEvent, this.onPlayerGameModeChange.bind(this));
-            if (this.onPlayerInteractAtEntity)
+            }
+            if (this.onPlayerInteractAtEntity) {
                 this.plugin.registerEvent(PlayerInteractAtEntityEvent, this.onPlayerInteractAtEntity.bind(this));
-            if (this.onPlayerInteractEntity)
+            }
+            if (this.onPlayerInteractEntity) {
                 this.plugin.registerEvent(PlayerInteractEntityEvent, this.onPlayerInteractEntity.bind(this));
-            if (this.onPlayerInteract)
+            }
+            if (this.onPlayerInteract) {
                 this.plugin.registerEvent(PlayerInteractEvent, this.onPlayerInteract.bind(this));
-            if (this.onPlayerItemBreak)
+            }
+            if (this.onPlayerItemBreak) {
                 this.plugin.registerEvent(PlayerItemBreakEvent, this.onPlayerItemBreak.bind(this));
-            if (this.onPlayerItemConsume)
+            }
+            if (this.onPlayerItemConsume) {
                 this.plugin.registerEvent(PlayerItemConsumeEvent, this.onPlayerItemConsume.bind(this));
-            if (this.onPlayerItemDamage)
+            }
+            if (this.onPlayerItemDamage) {
                 this.plugin.registerEvent(PlayerItemDamageEvent, this.onPlayerItemDamage.bind(this));
-            if (this.onPlayerItemHeld)
+            }
+            if (this.onPlayerItemHeld) {
                 this.plugin.registerEvent(PlayerItemHeldEvent, this.onPlayerItemHeld.bind(this));
-            if (this.onPlayerItemMend)
+            }
+            if (this.onPlayerItemMend) {
                 this.plugin.registerEvent(PlayerItemMendEvent, this.onPlayerItemMend.bind(this));
-            if (this.onPlayerJoin)
+            }
+            if (this.onPlayerJoin) {
                 this.plugin.registerEvent(PlayerJoinEvent, this.onPlayerJoin.bind(this));
-            if (this.onPlayerKick)
+            }
+            if (this.onPlayerKick) {
                 this.plugin.registerEvent(PlayerKickEvent, this.onPlayerKick.bind(this));
-            if (this.onPlayerLevelChange)
+            }
+            if (this.onPlayerLevelChange) {
                 this.plugin.registerEvent(PlayerLevelChangeEvent, this.onPlayerLevelChange.bind(this));
-            if (this.onPlayerLocaleChange)
+            }
+            if (this.onPlayerLocaleChange) {
                 this.plugin.registerEvent(PlayerLocaleChangeEvent, this.onPlayerLocaleChange.bind(this));
-            if (this.onPlayerLogin)
+            }
+            if (this.onPlayerLogin) {
                 this.plugin.registerEvent(PlayerLoginEvent, this.onPlayerLogin.bind(this));
-            if (this.onPlayerMove)
+            }
+            if (this.onPlayerMove) {
                 this.plugin.registerEvent(PlayerMoveEvent, this.onPlayerMove.bind(this));
-            if (this.onPlayerPickupArrow)
+            }
+            if (this.onPlayerPickupArrow) {
                 this.plugin.registerEvent(PlayerPickupArrowEvent, this.onPlayerPickupArrow.bind(this));
-            if (this.onPlayerPickupItem)
+            }
+            if (this.onPlayerPickupItem) {
                 this.plugin.registerEvent(PlayerPickupItemEvent, this.onPlayerPickupItem.bind(this));
-            if (this.onPlayerPortal)
+            }
+            if (this.onPlayerPortal) {
                 this.plugin.registerEvent(PlayerPortalEvent, this.onPlayerPortal.bind(this));
-            if (this.onPlayerPreLogin)
+            }
+            if (this.onPlayerPreLogin) {
                 this.plugin.registerEvent(PlayerPreLoginEvent, this.onPlayerPreLogin.bind(this));
-            if (this.onPlayerQuit)
+            }
+            if (this.onPlayerQuit) {
                 this.plugin.registerEvent(PlayerQuitEvent, this.onPlayerQuit.bind(this));
-            if (this.onPlayerRecipeDiscover)
+            }
+            if (this.onPlayerRecipeDiscover) {
                 this.plugin.registerEvent(PlayerRecipeDiscoverEvent, this.onPlayerRecipeDiscover.bind(this));
-            if (this.onPlayerRegisterChannel)
+            }
+            if (this.onPlayerRegisterChannel) {
                 this.plugin.registerEvent(PlayerRegisterChannelEvent, this.onPlayerRegisterChannel.bind(this));
-            if (this.onPlayerResourcePackStatus)
+            }
+            if (this.onPlayerResourcePackStatus) {
                 this.plugin.registerEvent(PlayerResourcePackStatusEvent, this.onPlayerResourcePackStatus.bind(this));
-            if (this.onPlayerRespawn)
+            }
+            if (this.onPlayerRespawn) {
                 this.plugin.registerEvent(PlayerRespawnEvent, this.onPlayerRespawn.bind(this));
-            if (this.onPlayerRiptide)
+            }
+            if (this.onPlayerRiptide) {
                 this.plugin.registerEvent(PlayerRiptideEvent, this.onPlayerRiptide.bind(this));
-            if (this.onPlayerShearEntity)
+            }
+            if (this.onPlayerShearEntity) {
                 this.plugin.registerEvent(PlayerShearEntityEvent, this.onPlayerShearEntity.bind(this));
-            if (this.onPlayerStatisticIncrement)
+            }
+            if (this.onPlayerStatisticIncrement) {
                 this.plugin.registerEvent(PlayerStatisticIncrementEvent, this.onPlayerStatisticIncrement.bind(this));
-            if (this.onPlayerSwapHandItems)
+            }
+            if (this.onPlayerSwapHandItems) {
                 this.plugin.registerEvent(PlayerSwapHandItemsEvent, this.onPlayerSwapHandItems.bind(this));
-            if (this.onPlayerTakeLecternBook)
+            }
+            if (this.onPlayerTakeLecternBook) {
                 this.plugin.registerEvent(PlayerTakeLecternBookEvent, this.onPlayerTakeLecternBook.bind(this));
-            if (this.onPlayerTeleport)
+            }
+            if (this.onPlayerTeleport) {
                 this.plugin.registerEvent(PlayerTeleportEvent, this.onPlayerTeleport.bind(this));
-            if (this.onPlayerToggleFlight)
+            }
+            if (this.onPlayerToggleFlight) {
                 this.plugin.registerEvent(PlayerToggleFlightEvent, this.onPlayerToggleFlight.bind(this));
-            if (this.onPlayerToggleSneak)
+            }
+            if (this.onPlayerToggleSneak) {
                 this.plugin.registerEvent(PlayerToggleSneakEvent, this.onPlayerToggleSneak.bind(this));
-            if (this.onPlayerToggleSprint)
+            }
+            if (this.onPlayerToggleSprint) {
                 this.plugin.registerEvent(PlayerToggleSprintEvent, this.onPlayerToggleSprint.bind(this));
-            if (this.onPlayerUnleashEntity)
+            }
+            if (this.onPlayerUnleashEntity) {
                 this.plugin.registerEvent(PlayerUnleashEntityEvent, this.onPlayerUnleashEntity.bind(this));
-            if (this.onPlayerUnregisterChannel)
+            }
+            if (this.onPlayerUnregisterChannel) {
                 this.plugin.registerEvent(PlayerUnregisterChannelEvent, this.onPlayerUnregisterChannel.bind(this));
-            if (this.onPlayerVelocity)
+            }
+            if (this.onPlayerVelocity) {
                 this.plugin.registerEvent(PlayerVelocityEvent, this.onPlayerVelocity.bind(this));
-            if (this.onRaid)
+            }
+            if (this.onRaid) {
                 this.plugin.registerEvent(RaidEvent, this.onRaid.bind(this));
-            if (this.onRaidFinish)
+            }
+            if (this.onRaidFinish) {
                 this.plugin.registerEvent(RaidFinishEvent, this.onRaidFinish.bind(this));
-            if (this.onRaidSpawnWave)
+            }
+            if (this.onRaidSpawnWave) {
                 this.plugin.registerEvent(RaidSpawnWaveEvent, this.onRaidSpawnWave.bind(this));
-            if (this.onRaidStop)
+            }
+            if (this.onRaidStop) {
                 this.plugin.registerEvent(RaidStopEvent, this.onRaidStop.bind(this));
-            if (this.onRaidTrigger)
+            }
+            if (this.onRaidTrigger) {
                 this.plugin.registerEvent(RaidTriggerEvent, this.onRaidTrigger.bind(this));
-            if (this.onBroadcastMessage)
+            }
+            if (this.onBroadcastMessage) {
                 this.plugin.registerEvent(BroadcastMessageEvent, this.onBroadcastMessage.bind(this));
-            if (this.onMapInitialize)
+            }
+            if (this.onMapInitialize) {
                 this.plugin.registerEvent(MapInitializeEvent, this.onMapInitialize.bind(this));
-            if (this.onPluginDisable)
+            }
+            if (this.onPluginDisable) {
                 this.plugin.registerEvent(PluginDisableEvent, this.onPluginDisable.bind(this));
-            if (this.onPluginEnable)
+            }
+            if (this.onPluginEnable) {
                 this.plugin.registerEvent(PluginEnableEvent, this.onPluginEnable.bind(this));
-            if (this.onPlugin)
+            }
+            if (this.onPlugin) {
                 this.plugin.registerEvent(PluginEvent, this.onPlugin.bind(this));
-            if (this.onRemoteServerCommand)
+            }
+            if (this.onRemoteServerCommand) {
                 this.plugin.registerEvent(RemoteServerCommandEvent, this.onRemoteServerCommand.bind(this));
-            if (this.onServerCommand)
+            }
+            if (this.onServerCommand) {
                 this.plugin.registerEvent(ServerCommandEvent, this.onServerCommand.bind(this));
-            if (this.onServer)
+            }
+            if (this.onServer) {
                 this.plugin.registerEvent(ServerEvent, this.onServer.bind(this));
-            if (this.onServerListPing)
+            }
+            if (this.onServerListPing) {
                 this.plugin.registerEvent(ServerListPingEvent, this.onServerListPing.bind(this));
-            if (this.onServerLoad)
+            }
+            if (this.onServerLoad) {
                 this.plugin.registerEvent(ServerLoadEvent, this.onServerLoad.bind(this));
-            if (this.onService)
+            }
+            if (this.onService) {
                 this.plugin.registerEvent(ServiceEvent, this.onService.bind(this));
-            if (this.onServiceRegister)
+            }
+            if (this.onServiceRegister) {
                 this.plugin.registerEvent(ServiceRegisterEvent, this.onServiceRegister.bind(this));
-            if (this.onServiceUnregister)
+            }
+            if (this.onServiceUnregister) {
                 this.plugin.registerEvent(ServiceUnregisterEvent, this.onServiceUnregister.bind(this));
-            if (this.onTabComplete)
+            }
+            if (this.onTabComplete) {
                 this.plugin.registerEvent(TabCompleteEvent, this.onTabComplete.bind(this));
-            if (this.onVehicleBlockCollision)
+            }
+            if (this.onVehicleBlockCollision) {
                 this.plugin.registerEvent(VehicleBlockCollisionEvent, this.onVehicleBlockCollision.bind(this));
-            if (this.onVehicleCollision)
+            }
+            if (this.onVehicleCollision) {
                 this.plugin.registerEvent(VehicleCollisionEvent, this.onVehicleCollision.bind(this));
-            if (this.onVehicleCreate)
+            }
+            if (this.onVehicleCreate) {
                 this.plugin.registerEvent(VehicleCreateEvent, this.onVehicleCreate.bind(this));
-            if (this.onVehicleDamage)
+            }
+            if (this.onVehicleDamage) {
                 this.plugin.registerEvent(VehicleDamageEvent, this.onVehicleDamage.bind(this));
-            if (this.onVehicleDestroy)
+            }
+            if (this.onVehicleDestroy) {
                 this.plugin.registerEvent(VehicleDestroyEvent, this.onVehicleDestroy.bind(this));
-            if (this.onVehicleEnter)
+            }
+            if (this.onVehicleEnter) {
                 this.plugin.registerEvent(VehicleEnterEvent, this.onVehicleEnter.bind(this));
-            if (this.onVehicleEntityCollision)
+            }
+            if (this.onVehicleEntityCollision) {
                 this.plugin.registerEvent(VehicleEntityCollisionEvent, this.onVehicleEntityCollision.bind(this));
-            if (this.onVehicle)
+            }
+            if (this.onVehicle) {
                 this.plugin.registerEvent(VehicleEvent, this.onVehicle.bind(this));
-            if (this.onVehicleExit)
+            }
+            if (this.onVehicleExit) {
                 this.plugin.registerEvent(VehicleExitEvent, this.onVehicleExit.bind(this));
-            if (this.onVehicleMove)
+            }
+            if (this.onVehicleMove) {
                 this.plugin.registerEvent(VehicleMoveEvent, this.onVehicleMove.bind(this));
-            if (this.onVehicleUpdate)
+            }
+            if (this.onVehicleUpdate) {
                 this.plugin.registerEvent(VehicleUpdateEvent, this.onVehicleUpdate.bind(this));
-            if (this.onLightningStrike)
+            }
+            if (this.onLightningStrike) {
                 this.plugin.registerEvent(LightningStrikeEvent, this.onLightningStrike.bind(this));
-            if (this.onThunderChange)
+            }
+            if (this.onThunderChange) {
                 this.plugin.registerEvent(ThunderChangeEvent, this.onThunderChange.bind(this));
-            if (this.onWeatherChange)
+            }
+            if (this.onWeatherChange) {
                 this.plugin.registerEvent(WeatherChangeEvent, this.onWeatherChange.bind(this));
-            if (this.onWeather)
+            }
+            if (this.onWeather) {
                 this.plugin.registerEvent(WeatherEvent, this.onWeather.bind(this));
-            if (this.onChunk)
+            }
+            if (this.onChunk) {
                 this.plugin.registerEvent(ChunkEvent, this.onChunk.bind(this));
-            if (this.onChunkLoad)
+            }
+            if (this.onChunkLoad) {
                 this.plugin.registerEvent(ChunkLoadEvent, this.onChunkLoad.bind(this));
-            if (this.onChunkPopulate)
+            }
+            if (this.onChunkPopulate) {
                 this.plugin.registerEvent(ChunkPopulateEvent, this.onChunkPopulate.bind(this));
-            if (this.onChunkUnload)
+            }
+            if (this.onChunkUnload) {
                 this.plugin.registerEvent(ChunkUnloadEvent, this.onChunkUnload.bind(this));
-            if (this.onPortalCreate)
+            }
+            if (this.onPortalCreate) {
                 this.plugin.registerEvent(PortalCreateEvent, this.onPortalCreate.bind(this));
-            if (this.onSpawnChange)
+            }
+            if (this.onSpawnChange) {
                 this.plugin.registerEvent(SpawnChangeEvent, this.onSpawnChange.bind(this));
-            if (this.onStructureGrow)
+            }
+            if (this.onStructureGrow) {
                 this.plugin.registerEvent(StructureGrowEvent, this.onStructureGrow.bind(this));
-            if (this.onTimeSkip)
+            }
+            if (this.onTimeSkip) {
                 this.plugin.registerEvent(TimeSkipEvent, this.onTimeSkip.bind(this));
-            if (this.onWorld)
+            }
+            if (this.onWorld) {
                 this.plugin.registerEvent(WorldEvent, this.onWorld.bind(this));
-            if (this.onWorldInit)
+            }
+            if (this.onWorldInit) {
                 this.plugin.registerEvent(WorldInitEvent, this.onWorldInit.bind(this));
-            if (this.onWorldLoad)
+            }
+            if (this.onWorldLoad) {
                 this.plugin.registerEvent(WorldLoadEvent, this.onWorldLoad.bind(this));
-            if (this.onWorldSave)
+            }
+            if (this.onWorldSave) {
                 this.plugin.registerEvent(WorldSaveEvent, this.onWorldSave.bind(this));
-            if (this.onWorldUnload)
+            }
+            if (this.onWorldUnload) {
                 this.plugin.registerEvent(WorldUnloadEvent, this.onWorldUnload.bind(this));
+            }
             Constructor.prototype.onEnable.call(this);
         }
     };

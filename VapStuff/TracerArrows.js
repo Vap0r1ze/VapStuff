@@ -6,8 +6,9 @@ export default class TracerArrows extends Module {
         if (!this.isPlayer(shooter))
             return;
         const proj = event.getProjectile();
-        if (!this.isProjectile(proj))
+        if (!this.isProjectile(proj)) {
             proj.getLocation();
+        }
     }
     isProjectile(entity) {
         return entity instanceof Projectile.$javaClass;

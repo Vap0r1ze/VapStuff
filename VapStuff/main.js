@@ -24,7 +24,7 @@ export default class VapStuff extends JsPlugin {
         ];
     }
     onLoad() {
-        console.log('[' + this.pluginName + '] Loaded');
+        console.log(`[${this.pluginName}] Loaded`);
     }
     onEnable() {
         this.modules.forEach(module => {

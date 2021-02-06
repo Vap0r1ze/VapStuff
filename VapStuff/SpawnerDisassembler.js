@@ -17,12 +17,12 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
     constructor() {
         super(...arguments);
         this.PICK_NAME = this.colorText('&#2CDA9DSpawner Disassembler');
-        this.INFO = '&7Once activated, this pickaxe can\n' +
-            '&7carefully disassemble\n' +
-            '&7a mob spawner without destroying it,\n' +
-            '&7allowing you to collect it.\n' +
-            '&7However, it only works &bonce&7,\n' +
-            '&7so choose carefully.';
+        this.INFO = '&7Once activated, this pickaxe can\n'
+            + '&7carefully disassemble\n'
+            + '&7a mob spawner without destroying it,\n'
+            + '&7allowing you to collect it.\n'
+            + '&7However, it only works &bonce&7,\n'
+            + '&7so choose carefully.';
         this.CANNOT_USE = 'You cannot use this pickaxe normally.';
         this.LEARN_MORE = '&8(Hover over this item to learn more)';
         this.NOW_READY = 'Now you\'re ready to perform &binfusion&r!';
@@ -34,7 +34,7 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
     get name() { return 'Spawner Disassembler'; }
     // Hooks
     onEnable() {
-        for (let i = 0; i < 4 /* MAX_HINT */; i++) {
+        for (let i = 0; i < 4 /* MAX_HINT */; i += 1) {
             this.hintsShown.set(i, []);
         }
         this.plugin.extraRecipes.addRecipe('spawnerDisassembler', {
@@ -42,7 +42,7 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
                 [Material.PRISMARINE_CRYSTALS, 10],
                 [Material.ENDER_EYE, 6],
                 [Material.GHAST_TEAR, 2],
-                [Material.NETHER_STAR, 1]
+                [Material.NETHER_STAR, 1],
             ],
             advancedIngredients: [
                 [
@@ -52,18 +52,16 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
                         const meta = item.getItemMeta();
                         const isNotDisassembler = meta.getDisplayName() !== this.PICK_NAME;
                         return isNotBroken && isNotDisassembler;
-                    }
-                ]
+                    },
+                ],
             ],
             checkWorkbench: this.isPrepSimpleAlch.bind(this),
             createResult: () => {
                 const result = new ItemStack(Material.NETHERITE_PICKAXE);
                 const meta = result.getItemMeta();
                 meta.setDisplayName(this.PICK_NAME);
-                meta.setLore(this.colorText('&7Status: &8Not Activated\n' +
-                    `&7Level Cost: &a${this.LEVEL_COST}\n\n` +
-                    this.INFO +
-                    '\n\n&8&oRight click to activate').split('\n'));
+                meta.setLore(this.colorText(`${'&7Status: &8Not Activated\n'
+                    + `&7Level Cost: &a${this.LEVEL_COST}\n\n`}${this.INFO}\n\n&8&oRight click to activate`).split('\n'));
                 meta.addItemFlags([ItemFlag.HIDE_ATTRIBUTES]);
                 result.setItemMeta(meta);
                 return result;
@@ -79,8 +77,10 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
                     case Material.LAVA:
                         heatSource.setType(Material.OBSIDIAN);
                         break;
+                    default:
+                        break;
                 }
-            }
+            },
         });
     }
     onDisable() {
@@ -142,7 +142,7 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
                 case Material.CAULDRON:
                     break;
                 case Material.REDSTONE_TORCH:
-                    for (let i = 0; i < 4; i++) {
+                    for (let i = 0; i < 4; i += 1) {
                         const dxz = this.rotCCW([0, 1], i);
                         const newWhere = where.clone().add(dxz[0], 0, dxz[1]);
                         if (newWhere.getBlock().getType() === Material.CAULDRON) {
@@ -152,7 +152,7 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
                     }
                     break;
                 case Material.REDSTONE_WIRE:
-                    for (let i = 0; i < 4; i++) {
+                    for (let i = 0; i < 4; i += 1) {
                         const dxz = this.rotCCW([1, 1], i);
                         const newWhere = where.clone().add(dxz[0], 0, dxz[1]);
                         if (newWhere.getBlock().getType() === Material.CAULDRON) {
@@ -160,6 +160,8 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
                             break;
                         }
                     }
+                    break;
+                default:
                     break;
             }
             const alchBlock = where.getBlock();
@@ -200,9 +202,9 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
         if (!meta)
             return;
         const name = meta.getDisplayName();
-        if (name === this.PICK_NAME &&
-            !this.isPickActivated(item) &&
-            this.isRightClick(event.getAction())) {
+        if (name === this.PICK_NAME
+            && !this.isPickActivated(item)
+            && this.isRightClick(event.getAction())) {
             event.setCancelled(true);
             const level = player.getLevel();
             if (level < this.LEVEL_COST) {
@@ -213,7 +215,7 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
             }
             else {
                 this.smartLvlDecr(player, this.LEVEL_COST);
-                meta.setLore(this.colorText('&7Status: &aActivated\n\n' + this.INFO).split('\n'));
+                meta.setLore(this.colorText(`&7Status: &aActivated\n\n${this.INFO}`).split('\n'));
                 item.setItemMeta(meta);
                 this.addGlowEffect(item);
                 player
@@ -266,10 +268,8 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
     }
     handleHintArea(area, radius, hint, handler, childHints) {
         const players = Array.from(this.plugin.server.getOnlinePlayers())
-            .filter(player => {
-            return player.getWorld() === area.getWorld()
-                && player.getLocation().distanceSquared(area) < radius ** 2;
-        });
+            .filter(player => player.getWorld() === area.getWorld()
+            && player.getLocation().distanceSquared(area) < radius ** 2);
         players.forEach(player => {
             this.handleHint(player, hint, () => { handler(player); }, childHints);
         });
@@ -279,13 +279,17 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
         if (block.getType() !== Material.CAULDRON)
             return false;
         const where = block.getLocation();
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 4; i += 1) {
             const dxzDust = this.rotCCW([1, 1], i);
             const dxzTorch = this.rotCCW([0, 1], i);
-            if (where.clone().add(dxzDust[0], 0, dxzDust[1]).getBlock().getType() !== Material.REDSTONE_WIRE)
+            if (where.clone().add(dxzDust[0], 0, dxzDust[1]).getBlock().getType()
+                !== Material.REDSTONE_WIRE) {
                 return false;
-            if (where.clone().add(dxzTorch[0], 0, dxzTorch[1]).getBlock().getType() !== Material.REDSTONE_TORCH)
+            }
+            if (where.clone().add(dxzTorch[0], 0, dxzTorch[1]).getBlock().getType()
+                !== Material.REDSTONE_TORCH) {
                 return false;
+            }
         }
         return true;
     }
@@ -299,12 +303,12 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
         if (!ignoreHints) {
             if (isLeveled && this.isSimpleAlchLowHeat(heatSource.getType())) {
                 this.handleHintArea(block.getLocation(), 5, 3 /* SIMPLE_ALCH_LOW_HEAT */, player => {
-                    this.tellPlayer(player, `&oHmmm. It seems this &f&oheat source&r&o is not hot enough.`);
+                    this.tellPlayer(player, '&oHmmm. It seems this &f&oheat source&r&o is not hot enough.');
                 });
             }
             else if (!isLeveled || !isHeatSource) {
                 this.handleHintArea(block.getLocation(), 5, 2 /* SIMPLE_ALCH_NO_PREP_CRAFT */, player => {
-                    this.tellPlayer(player, `&oPsst. You might want to &b&oprepare&r&o your station first.`);
+                    this.tellPlayer(player, '&oPsst. You might want to &b&oprepare&r&o your station first.');
                 });
             }
         }
@@ -344,7 +348,7 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
             }
             else {
                 this.handleHint(player, 0 /* SIMPLE_ALCH_MADE */, () => {
-                    this.tellPlayer(player, `You've just made a &fSimple Alchemy Station&r! Don't forget to &bprepare&r your station!`);
+                    this.tellPlayer(player, 'You\'ve just made a &fSimple Alchemy Station&r! Don\'t forget to &bprepare&r your station!');
                 });
             }
         }

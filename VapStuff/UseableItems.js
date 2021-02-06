@@ -39,6 +39,8 @@ let UseableItems = class UseableItems extends Module {
                 player.openInventory(echest);
                 break;
             }
+            default:
+                break;
         }
     }
     onInventoryClose(listener, event) {
