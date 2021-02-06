@@ -4,6 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+import Sound from '../lib/org/bukkit/Sound.js';
 import { Subscribe } from './EventListener.js';
 import Module from './Module.js';
 let ExtraRecipes = class ExtraRecipes extends Module {
@@ -110,7 +111,7 @@ let ExtraRecipes = class ExtraRecipes extends Module {
                     const result = recipe.createResult();
                     where.getWorld().dropItem(where, result);
                     if (recipe.sound) {
-                        if (this.isSound(recipe.sound)) {
+                        if (Sound.$isInstance(recipe.sound)) {
                             where.getWorld().playSound(where, recipe.sound, 1, 1);
                         }
                         else {

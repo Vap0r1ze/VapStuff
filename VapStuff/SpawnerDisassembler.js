@@ -5,6 +5,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import BlockFace from '../lib/org/bukkit/block/BlockFace.js';
+import Player from '../lib/org/bukkit/entity/Player.js';
 import Action from '../lib/org/bukkit/event/block/Action.js';
 import EquipmentSlot from '../lib/org/bukkit/inventory/EquipmentSlot.js';
 import ItemFlag from '../lib/org/bukkit/inventory/ItemFlag.js';
@@ -182,7 +183,7 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
     }
     onCauldronLevelChange(listener, event) {
         const player = event.getEntity();
-        if (!this.isPlayer(player))
+        if (!Player.$isInstance(player))
             return;
         const cauldron = event.getBlock();
         const cauldronData = cauldron.getBlockData();
@@ -228,7 +229,7 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
         if (!event.getDamager)
             return; // I have no idea why this happens
         const damager = event.getDamager();
-        if (this.isPlayer(damager)) {
+        if (Player.$isInstance(damager)) {
             const inv = damager.getInventory();
             const item = inv.getItemInMainHand();
             const meta = item.getItemMeta();

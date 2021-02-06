@@ -1,7 +1,5 @@
 import Enchantment from '../lib/org/bukkit/enchantments/Enchantment.js';
-import Player from '../lib/org/bukkit/entity/Player.js';
 import ItemFlag from '../lib/org/bukkit/inventory/ItemFlag.js';
-import Sound from '../lib/org/bukkit/Sound.js';
 export default class Module {
     constructor(plugin) {
         this.DUMMY_ENCH = Enchantment.WATER_WORKER;
@@ -88,13 +86,6 @@ export default class Module {
             vec2[0] * (Math.abs(n - 2) - 1) - vec2[1] * (1 - Math.abs(n - 1)),
             vec2[0] * (1 - Math.abs(n - 1)) + vec2[1] * (Math.abs(n - 2) - 1),
         ];
-    }
-    // Type Guards
-    isPlayer(obj) {
-        return obj instanceof Player.$javaClass;
-    }
-    isSound(obj) {
-        return obj instanceof Sound.$javaClass;
     }
     // Java Interop Helpers
     floatSafe(n) {
