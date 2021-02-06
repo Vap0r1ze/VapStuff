@@ -80,8 +80,7 @@ export default class Module {
     if (exp <= 352) level = Math.sqrt(exp + 9) - 3
     else if (level >= 1624) level = (Math.sqrt(72 * exp - 54215) + 325) / 18
     else level = (Math.sqrt(40 * exp - 7839) + 81) / 10
-    // Remove some precision to allow Double -> Float with Polyglot
-    return [Math.floor(level), +(level % 1).toFixed(6)]
+    return [Math.floor(level), this.floatSafe(level % 1)]
   }
 
   protected levelToExp(level: number): number {
