@@ -135,7 +135,7 @@ export default class ExtraRecipes extends Module {
           const result = recipe.createResult()
           where.getWorld().dropItem(where, result)
           if (recipe.sound) {
-            if (this.isSound(recipe.sound)) {
+            if (Sound.$isInstance(recipe.sound)) {
               where.getWorld().playSound(where, recipe.sound, 1, 1)
             } else {
               recipe.sound.forEach(sound => { where.getWorld().playSound(where, sound, 1, 1) })

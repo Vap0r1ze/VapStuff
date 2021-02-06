@@ -105,15 +105,6 @@ export default class Module {
     ]
   }
 
-  // Type Guards
-  protected isPlayer(obj): obj is Player {
-    return obj instanceof Player.$javaClass
-  }
-
-  protected isSound(obj): obj is Sound {
-    return obj instanceof Sound.$javaClass
-  }
-
   // Java Interop Helpers
   protected floatSafe(n: number): number {
     return new (Java.type('java.lang.Float'))(n)

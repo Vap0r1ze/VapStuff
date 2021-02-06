@@ -222,7 +222,7 @@ export default class SpawnerDisassembler extends Module {
 
   onCauldronLevelChange(listener: any, event: CauldronLevelChangeEvent) {
     const player = event.getEntity()
-    if (!this.isPlayer(player)) return
+    if (!Player.$isInstance(player)) return
     const cauldron = event.getBlock()
     const cauldronData = cauldron.getBlockData() as Levelled
     if (event.getNewLevel() !== cauldronData.getMaximumLevel()) return
@@ -276,7 +276,7 @@ export default class SpawnerDisassembler extends Module {
   onEntityDamageByEntity(listener: any, event: EntityDamageByEntityEvent) {
     if (!event.getDamager) return // I have no idea why this happens
     const damager = event.getDamager()
-    if (this.isPlayer(damager)) {
+    if (Player.$isInstance(damager)) {
       const inv = damager.getInventory() as PlayerInventory
       const item = inv.getItemInMainHand()
       const meta = item.getItemMeta()
