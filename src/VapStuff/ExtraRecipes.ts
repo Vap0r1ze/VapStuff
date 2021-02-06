@@ -13,7 +13,7 @@ export interface Recipe {
   advancedIngredients?: [Material, (item: ItemStack) => boolean][];
   checkWorkbench?: (block: Block) => boolean;
   createResult: () => ItemStack;
-  sound?: Sound;
+  sound?: Sound | Sound[];
   postRecipe?: (where: Location) => void;
 }
 
@@ -42,16 +42,13 @@ export default class ExtraRecipes extends Module {
 
   // Hooks
   onEnable () {
-    const scheduler = this.plugin.server.getScheduler()
-    this.scheduleTaskId = scheduler
-      .scheduleSyncRepeatingTask(this.plugin.context.getJavaPlugin(), this.scheduleTask.bind(this), 0, 20)
+    this.scheduleTaskId = this.runTaskRepeat(this.scheduleTask.bind(this), 0, 20)
 
     this.initializeTracked()
   }
   onDisable () {
-    const scheduler = this.plugin.server.getScheduler()
     if (this.scheduleTaskId) {
-      scheduler.cancelTask(this.scheduleTaskId)
+      this.cancelTask(this.scheduleTaskId)
     }
   }
   onPlayerDropItem (listener: any, event: PlayerDropItemEvent) {
@@ -133,7 +130,10 @@ export default class ExtraRecipes extends Module {
           const result = recipe.createResult()
           where.getWorld().dropItem(where, result)
           if (recipe.sound) {
-            where.getWorld().playSound(where, recipe.sound, 1, 1)
+            if (this.isSound(recipe.sound))
+              where.getWorld().playSound(where, recipe.sound, 1, 1)
+            else
+              recipe.sound.forEach(sound => { where.getWorld().playSound(where, sound, 1, 1) })
           }
           if (recipe.postRecipe) {
             recipe.postRecipe(where)

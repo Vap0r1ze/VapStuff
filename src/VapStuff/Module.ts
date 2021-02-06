@@ -1,8 +1,12 @@
 import Enchantment from '../lib/org/bukkit/enchantments/Enchantment.js';
 import Entity from '../lib/org/bukkit/entity/Entity.js';
+import EntityType from '../lib/org/bukkit/entity/EntityType.js';
+import Parrot from '../lib/org/bukkit/entity/Parrot.js';
 import Player from '../lib/org/bukkit/entity/Player.js';
 import ItemFlag from '../lib/org/bukkit/inventory/ItemFlag.js';
 import ItemStack from '../lib/org/bukkit/inventory/ItemStack.js';
+import Location from '../lib/org/bukkit/Location.js';
+import Sound from '../lib/org/bukkit/Sound.js';
 
 export default class Module {
   plugin: import('./main').default;
@@ -29,17 +33,20 @@ export default class Module {
       colorMsg.replace(/&r/g, '&7')
     }`))
   }
-  protected getPlayerDisplayTotalExperience (player: Player): number {
+  protected smartExpGet (player: Player): number {
     const level = player.getLevel()
     const progress = player.getExp()
     const totalExperience = this.levelToExp(level) + this.levelToRequiredExp(level) * progress
     return Math.floor(totalExperience)
   }
-  protected setPlayerDisplayTotalExperience (player: Player, totalExperience: number) {
+  protected smartExpSet (player: Player, totalExperience: number) {
     player.setTotalExperience(totalExperience)
     const [level, progress] = this.expToLevelAndProgress(totalExperience)
     player.setLevel(level)
     player.sendExperienceChange(this.floatSafe(progress), level)
+  }
+  protected smartLvlDecr (player: Player, lvl: number) {
+    this.smartExpSet(player, this.smartExpGet(player) - this.levelToExp(lvl))
   }
 
   // Text Helpers
@@ -82,14 +89,46 @@ export default class Module {
     if (level >= 31) return 9 * level - 158
     return 5 * level - 38
   }
+  protected rotCCW (vec2: [number, number], n: number): [number, number] {
+    return [
+      vec2[0] * (Math.abs(n - 2) - 1) - vec2[1] * (1 - Math.abs(n - 1)),
+      vec2[0] * (1 - Math.abs(n - 1)) + vec2[1] * (Math.abs(n - 2) - 1),
+    ]
+  }
 
   // Type Guards
   protected isPlayer (obj): obj is Player {
     return obj instanceof Player.$javaClass
   }
+  protected isSound (obj): obj is Sound {
+    return obj instanceof Sound.$javaClass
+  }
 
   // Java Interop Helpers
   protected floatSafe (n: number): number {
     return new (Java.type('java.lang.Float'))(n)
+  }
+
+  // Scheduler
+  protected get scheduler () {
+    return this.plugin.server.getScheduler()
+  }
+  protected runTaskLater<F extends CallableFunction> (task: F, inTicks: number) {
+    return this.scheduler.scheduleSyncDelayedTask(
+      this.plugin.context.getJavaPlugin(),
+      task,
+      inTicks,
+    )
+  }
+  protected runTaskRepeat<F extends CallableFunction> (task: F, delayTicks: number, everyTicks: number) {
+    return this.scheduler.scheduleSyncRepeatingTask(
+      this.plugin.context.getJavaPlugin(),
+      task,
+      delayTicks,
+      everyTicks,
+    )
+  }
+  protected cancelTask (id: number) {
+    return this.scheduler.cancelTask(id)
   }
 }
