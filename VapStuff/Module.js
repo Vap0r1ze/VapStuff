@@ -1,6 +1,7 @@
 import Enchantment from '../lib/org/bukkit/enchantments/Enchantment.js';
 import Player from '../lib/org/bukkit/entity/Player.js';
 import ItemFlag from '../lib/org/bukkit/inventory/ItemFlag.js';
+import Sound from '../lib/org/bukkit/Sound.js';
 export default class Module {
     constructor(plugin) {
         this.DUMMY_ENCH = Enchantment.WATER_WORKER;
@@ -19,17 +20,20 @@ export default class Module {
     tellPlayer(player, colorMsg) {
         player.sendMessage(this.colorText(`&a[${this.plugin.pluginName}] &7${colorMsg.replace(/&r/g, '&7')}`));
     }
-    getPlayerDisplayTotalExperience(player) {
+    smartExpGet(player) {
         const level = player.getLevel();
         const progress = player.getExp();
         const totalExperience = this.levelToExp(level) + this.levelToRequiredExp(level) * progress;
         return Math.floor(totalExperience);
     }
-    setPlayerDisplayTotalExperience(player, totalExperience) {
+    smartExpSet(player, totalExperience) {
         player.setTotalExperience(totalExperience);
         const [level, progress] = this.expToLevelAndProgress(totalExperience);
         player.setLevel(level);
         player.sendExperienceChange(this.floatSafe(progress), level);
+    }
+    smartLvlDecr(player, lvl) {
+        this.smartExpSet(player, this.smartExpGet(player) - this.levelToExp(lvl));
     }
     // Text Helpers
     colorText(text) {
@@ -78,12 +82,34 @@ export default class Module {
             return 9 * level - 158;
         return 5 * level - 38;
     }
+    rotCCW(vec2, n) {
+        return [
+            vec2[0] * (Math.abs(n - 2) - 1) - vec2[1] * (1 - Math.abs(n - 1)),
+            vec2[0] * (1 - Math.abs(n - 1)) + vec2[1] * (Math.abs(n - 2) - 1),
+        ];
+    }
     // Type Guards
     isPlayer(obj) {
         return obj instanceof Player.$javaClass;
     }
+    isSound(obj) {
+        return obj instanceof Sound.$javaClass;
+    }
     // Java Interop Helpers
     floatSafe(n) {
         return new (Java.type('java.lang.Float'))(n);
+    }
+    // Scheduler
+    get scheduler() {
+        return this.plugin.server.getScheduler();
+    }
+    runTaskLater(task, inTicks) {
+        return this.scheduler.scheduleSyncDelayedTask(this.plugin.context.getJavaPlugin(), task, inTicks);
+    }
+    runTaskRepeat(task, delayTicks, everyTicks) {
+        return this.scheduler.scheduleSyncRepeatingTask(this.plugin.context.getJavaPlugin(), task, delayTicks, everyTicks);
+    }
+    cancelTask(id) {
+        return this.scheduler.cancelTask(id);
     }
 }

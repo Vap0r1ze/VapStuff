@@ -9,41 +9,38 @@ import Module from './Module.js';
 let ExtraRecipes = class ExtraRecipes extends Module {
     constructor() {
         super(...arguments);
-        this.TRACKED_MATERIALS = [];
-        this.RECIPES = {};
+        this.trackedMaterials = [];
+        this.recipes = {};
         this.trackedDrops = {};
     }
     // API
     addRecipe(id, recipe) {
-        const exists = id in this.RECIPES;
-        this.RECIPES[id] = recipe;
+        const exists = id in this.recipes;
+        this.recipes[id] = recipe;
         this.initializeTracked();
         return !exists;
     }
     removeRecipe(id) {
-        const exists = id in this.RECIPES;
+        const exists = id in this.recipes;
         if (exists) {
-            delete this.RECIPES[id];
+            delete this.recipes[id];
             this.initializeTracked();
         }
         return exists;
     }
     // Hooks
     onEnable() {
-        const scheduler = this.plugin.server.getScheduler();
-        this.scheduleTaskId = scheduler
-            .scheduleSyncRepeatingTask(this.plugin.context.getJavaPlugin(), this.scheduleTask.bind(this), 0, 20);
+        this.scheduleTaskId = this.runTaskRepeat(this.scheduleTask.bind(this), 0, 20);
         this.initializeTracked();
     }
     onDisable() {
-        const scheduler = this.plugin.server.getScheduler();
         if (this.scheduleTaskId) {
-            scheduler.cancelTask(this.scheduleTaskId);
+            this.cancelTask(this.scheduleTaskId);
         }
     }
     onPlayerDropItem(listener, event) {
         const drop = event.getItemDrop();
-        if (this.TRACKED_MATERIALS.includes(drop.getItemStack().getType())) {
+        if (this.trackedMaterials.includes(drop.getItemStack().getType())) {
             const loc = this.serializeLocation(drop.getLocation());
             if (!this.trackedDrops[loc])
                 this.trackedDrops[loc] = [];
@@ -52,18 +49,18 @@ let ExtraRecipes = class ExtraRecipes extends Module {
     }
     // Internal
     initializeTracked() {
-        this.TRACKED_MATERIALS.splice(0, this.TRACKED_MATERIALS.length);
-        for (const recipe of Object.values(this.RECIPES)) {
+        this.trackedMaterials.splice(0, this.trackedMaterials.length);
+        for (const recipe of Object.values(this.recipes)) {
             for (const ingr of recipe.ingredients) {
-                if (!this.TRACKED_MATERIALS.includes(ingr[0])) {
-                    this.TRACKED_MATERIALS.push(ingr[0]);
+                if (!this.trackedMaterials.includes(ingr[0])) {
+                    this.trackedMaterials.push(ingr[0]);
                 }
             }
             if (!recipe.advancedIngredients)
                 continue;
             for (const ingr of recipe.advancedIngredients) {
-                if (!this.TRACKED_MATERIALS.includes(ingr[0])) {
-                    this.TRACKED_MATERIALS.push(ingr[0]);
+                if (!this.trackedMaterials.includes(ingr[0])) {
+                    this.trackedMaterials.push(ingr[0]);
                 }
             }
         }
@@ -72,7 +69,7 @@ let ExtraRecipes = class ExtraRecipes extends Module {
         var _a;
         this.trackItems();
         const required = {};
-        for (const [recipeName, recipe] of Object.entries(this.RECIPES)) {
+        for (const [recipeName, recipe] of Object.entries(this.recipes)) {
             required[recipeName] = {
                 ingr: Array(recipe.ingredients.length).fill(null),
                 advIngr: Array(((_a = recipe.advancedIngredients) === null || _a === void 0 ? void 0 : _a.length) || 0).fill(null),
@@ -81,7 +78,7 @@ let ExtraRecipes = class ExtraRecipes extends Module {
         for (const drops of Object.values(this.trackedDrops)) {
             const where = drops[0].getLocation();
             const block = where.getBlock();
-            for (const [recipeName, recipe] of Object.entries(this.RECIPES)) {
+            for (const [recipeName, recipe] of Object.entries(this.recipes)) {
                 if (recipe.checkWorkbench && !recipe.checkWorkbench(block)) {
                     continue;
                 }
@@ -116,7 +113,10 @@ let ExtraRecipes = class ExtraRecipes extends Module {
                     const result = recipe.createResult();
                     where.getWorld().dropItem(where, result);
                     if (recipe.sound) {
-                        where.getWorld().playSound(where, recipe.sound, 1, 1);
+                        if (this.isSound(recipe.sound))
+                            where.getWorld().playSound(where, recipe.sound, 1, 1);
+                        else
+                            recipe.sound.forEach(sound => { where.getWorld().playSound(where, sound, 1, 1); });
                     }
                     if (recipe.postRecipe) {
                         recipe.postRecipe(where);
