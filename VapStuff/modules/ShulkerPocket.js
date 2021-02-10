@@ -1,20 +1,22 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-import { Config } from './config.js';
-import Bukkit from '../lib/org/bukkit/Bukkit.js';
-import Action from '../lib/org/bukkit/event/block/Action.js';
-import ClickType from '../lib/org/bukkit/event/inventory/ClickType.js';
-import InventoryAction from '../lib/org/bukkit/event/inventory/InventoryAction.js';
-import InventoryType from '../lib/org/bukkit/event/inventory/InventoryType.js';
-import Material from '../lib/org/bukkit/Material.js';
-import Sound from '../lib/org/bukkit/Sound.js';
-import Module from './Module.js';
-import { Subscribe } from './EventListener.js';
-let ShulkerPocket = class ShulkerPocket extends Module {
+Object.defineProperty(exports, "__esModule", { value: true });
+const config_js_1 = require("../config.js");
+const Bukkit_js_1 = require("../../lib/org/bukkit/Bukkit.js");
+const Action_js_1 = require("../../lib/org/bukkit/event/block/Action.js");
+const ClickType_js_1 = require("../../lib/org/bukkit/event/inventory/ClickType.js");
+const InventoryAction_js_1 = require("../../lib/org/bukkit/event/inventory/InventoryAction.js");
+const InventoryType_js_1 = require("../../lib/org/bukkit/event/inventory/InventoryType.js");
+const Material_js_1 = require("../../lib/org/bukkit/Material.js");
+const Sound_js_1 = require("../../lib/org/bukkit/Sound.js");
+const Module_js_1 = require("../types/Module.js");
+const EventListener_js_1 = require("../services/EventListener.js");
+let ShulkerPocket = class ShulkerPocket extends Module_js_1.default {
     constructor() {
         super(...arguments);
         this.shulkerBoxSlots = {};
@@ -22,14 +24,22 @@ let ShulkerPocket = class ShulkerPocket extends Module {
         this.shulkerBoxOnCursors = {};
     }
     get name() { return 'Shulker Pocket'; }
+    onDisable() {
+        for (const playerName of Object.keys(this.shulkerBoxOpen)) {
+            const player = this.plugin.server.getPlayer(playerName);
+            if (player) {
+                player.closeInventory();
+            }
+        }
+    }
     onPlayerInteract(listener, event) {
         const player = event.getPlayer();
         const itemInMainHand = player.getInventory().getItemInMainHand();
-        if (event.getAction() === Action.RIGHT_CLICK_AIR
+        if (event.getAction() === Action_js_1.default.RIGHT_CLICK_AIR
             && itemInMainHand != null
             && this.isShulkerBox(itemInMainHand.getType())
-            && !this.shulkerBoxOpen[player.getUniqueId()]) {
-            this.shulkerBoxOpen[player.getUniqueId()] = true;
+            && !this.shulkerBoxOpen[player.getName()]) {
+            this.shulkerBoxOpen[player.getName()] = true;
             const meta = itemInMainHand.getItemMeta();
             const shulkerBox = meta.getBlockState();
             const title = meta.getDisplayName() == null || meta.getDisplayName() === ''
@@ -40,13 +50,13 @@ let ShulkerPocket = class ShulkerPocket extends Module {
                     .map(w => w[0] + w.slice(1).toLowerCase())
                     .join(' ')
                 : meta.getDisplayName();
-            const inv = Bukkit.createInventory(null, InventoryType.SHULKER_BOX, title);
+            const inv = Bukkit_js_1.default.createInventory(null, InventoryType_js_1.default.SHULKER_BOX, title);
             inv.setContents(shulkerBox.getInventory().getContents());
             player.openInventory(inv);
             this.shulkerBoxSlots[player.getUniqueId()] = this.toRawSlot(player.getInventory().getHeldItemSlot());
             player
                 .getWorld()
-                .playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, 1, 1);
+                .playSound(player.getLocation(), Sound_js_1.default.BLOCK_SHULKER_BOX_OPEN, 1, 1);
             event.setCancelled(true);
             this.debugLog(event);
         }
@@ -57,11 +67,11 @@ let ShulkerPocket = class ShulkerPocket extends Module {
             const items = event.getInventory().getContents();
             this.saveShulkerBoxByPlayer(player, items);
             delete this.shulkerBoxSlots[player.getUniqueId()];
-            if (this.shulkerBoxOpen[player.getUniqueId()]) {
-                delete this.shulkerBoxOpen[player.getUniqueId()];
+            if (this.shulkerBoxOpen[player.getName()]) {
+                delete this.shulkerBoxOpen[player.getName()];
                 player
                     .getWorld()
-                    .playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_CLOSE, 1, 1);
+                    .playSound(player.getLocation(), Sound_js_1.default.BLOCK_SHULKER_BOX_CLOSE, 1, 1);
             }
         }
     }
@@ -86,8 +96,8 @@ let ShulkerPocket = class ShulkerPocket extends Module {
                     this.shulkerBoxOnCursors[player.getUniqueId()] = true;
                     return;
                 }
-                if (event.getAction() === InventoryAction.DROP_ALL_SLOT
-                    || event.getAction() === InventoryAction.DROP_ONE_SLOT) {
+                if (event.getAction() === InventoryAction_js_1.default.DROP_ALL_SLOT
+                    || event.getAction() === InventoryAction_js_1.default.DROP_ONE_SLOT) {
                     this.dropItem(event.getCurrentItem(), player);
                     event.setCurrentItem(null);
                     player.closeInventory();
@@ -96,8 +106,8 @@ let ShulkerPocket = class ShulkerPocket extends Module {
             }
             let newItemSlot;
             if (this.shulkerBoxOnCursors[player.getUniqueId()]) {
-                if (event.getAction() === InventoryAction.DROP_ALL_CURSOR
-                    || event.getAction() === InventoryAction.DROP_ONE_CURSOR) {
+                if (event.getAction() === InventoryAction_js_1.default.DROP_ALL_CURSOR
+                    || event.getAction() === InventoryAction_js_1.default.DROP_ONE_CURSOR) {
                     player.closeInventory();
                     return;
                 }
@@ -106,9 +116,9 @@ let ShulkerPocket = class ShulkerPocket extends Module {
                     delete this.shulkerBoxOnCursors[player.getUniqueId()];
                 }
             }
-            if (event.getClick() === ClickType.NUMBER_KEY
-                && (event.getAction() === InventoryAction.HOTBAR_SWAP
-                    || event.getAction() === InventoryAction.HOTBAR_MOVE_AND_READD)) {
+            if (event.getClick() === ClickType_js_1.default.NUMBER_KEY
+                && (event.getAction() === InventoryAction_js_1.default.HOTBAR_SWAP
+                    || event.getAction() === InventoryAction_js_1.default.HOTBAR_MOVE_AND_READD)) {
                 if (this.isInShulkerBox(event.getRawSlot())
                     && player.getInventory().getItem(event.getHotbarButton()) != null
                     && this.isShulkerBox(player
@@ -126,7 +136,7 @@ let ShulkerPocket = class ShulkerPocket extends Module {
                     newItemSlot = event.getRawSlot();
                 }
             }
-            if (event.getAction() === InventoryAction.MOVE_TO_OTHER_INVENTORY
+            if (event.getAction() === InventoryAction_js_1.default.MOVE_TO_OTHER_INVENTORY
                 && event.getCurrentItem() != null
                 && this.isShulkerBox(event.getCurrentItem().getType())) {
                 if (event.getRawSlot() > 53 && event.getRawSlot() < 63) {
@@ -187,40 +197,40 @@ let ShulkerPocket = class ShulkerPocket extends Module {
     }
     isShulkerBox(m) {
         switch (m) {
-            case Material.SHULKER_BOX:
-            case Material.LIGHT_GRAY_SHULKER_BOX:
-            case Material.BLACK_SHULKER_BOX:
-            case Material.BLUE_SHULKER_BOX:
-            case Material.BROWN_SHULKER_BOX:
-            case Material.CYAN_SHULKER_BOX:
-            case Material.GRAY_SHULKER_BOX:
-            case Material.GREEN_SHULKER_BOX:
-            case Material.LIGHT_BLUE_SHULKER_BOX:
-            case Material.LIME_SHULKER_BOX:
-            case Material.MAGENTA_SHULKER_BOX:
-            case Material.ORANGE_SHULKER_BOX:
-            case Material.PINK_SHULKER_BOX:
-            case Material.PURPLE_SHULKER_BOX:
-            case Material.RED_SHULKER_BOX:
-            case Material.WHITE_SHULKER_BOX:
-            case Material.YELLOW_SHULKER_BOX:
+            case Material_js_1.default.SHULKER_BOX:
+            case Material_js_1.default.LIGHT_GRAY_SHULKER_BOX:
+            case Material_js_1.default.BLACK_SHULKER_BOX:
+            case Material_js_1.default.BLUE_SHULKER_BOX:
+            case Material_js_1.default.BROWN_SHULKER_BOX:
+            case Material_js_1.default.CYAN_SHULKER_BOX:
+            case Material_js_1.default.GRAY_SHULKER_BOX:
+            case Material_js_1.default.GREEN_SHULKER_BOX:
+            case Material_js_1.default.LIGHT_BLUE_SHULKER_BOX:
+            case Material_js_1.default.LIME_SHULKER_BOX:
+            case Material_js_1.default.MAGENTA_SHULKER_BOX:
+            case Material_js_1.default.ORANGE_SHULKER_BOX:
+            case Material_js_1.default.PINK_SHULKER_BOX:
+            case Material_js_1.default.PURPLE_SHULKER_BOX:
+            case Material_js_1.default.RED_SHULKER_BOX:
+            case Material_js_1.default.WHITE_SHULKER_BOX:
+            case Material_js_1.default.YELLOW_SHULKER_BOX:
                 return true;
             default:
                 return false;
         }
     }
     isPlaceAction(action) {
-        return (action === InventoryAction.PLACE_ALL
-            || action === InventoryAction.PLACE_ONE
-            || action === InventoryAction.PLACE_SOME
-            || action === InventoryAction.SWAP_WITH_CURSOR);
+        return (action === InventoryAction_js_1.default.PLACE_ALL
+            || action === InventoryAction_js_1.default.PLACE_ONE
+            || action === InventoryAction_js_1.default.PLACE_SOME
+            || action === InventoryAction_js_1.default.SWAP_WITH_CURSOR);
     }
     isPickupAction(action) {
-        return (action === InventoryAction.PICKUP_ALL
-            || action === InventoryAction.PICKUP_HALF
-            || action === InventoryAction.PICKUP_ONE
-            || action === InventoryAction.PICKUP_SOME
-            || action === InventoryAction.SWAP_WITH_CURSOR);
+        return (action === InventoryAction_js_1.default.PICKUP_ALL
+            || action === InventoryAction_js_1.default.PICKUP_HALF
+            || action === InventoryAction_js_1.default.PICKUP_ONE
+            || action === InventoryAction_js_1.default.PICKUP_SOME
+            || action === InventoryAction_js_1.default.SWAP_WITH_CURSOR);
     }
     isInShulkerBox(rawSlot) {
         return rawSlot >= 0 && rawSlot < 27;
@@ -237,7 +247,7 @@ let ShulkerPocket = class ShulkerPocket extends Module {
                 || event
                     .getClickedInventory()
                     .getItem(i)
-                    .getType() === Material.AIR) {
+                    .getType() === Material_js_1.default.AIR) {
                 event.getClickedInventory().setItem(i, event.getCurrentItem());
                 event.setCurrentItem(null);
                 return this.toRawSlot(i);
@@ -254,7 +264,7 @@ let ShulkerPocket = class ShulkerPocket extends Module {
         item.setPickupDelay(40);
     }
     debugLog(event) {
-        if (Config.DEBUG) {
+        if (config_js_1.Config.DEBUG) {
             console.log(event.getAction());
             console.log(`Cursor: [${Object.keys(this.shulkerBoxOnCursors).join(', ')}]`);
             console.log(`Open: [${Object.keys(this.shulkerBoxOpen).join(', ')}]`);
@@ -265,6 +275,6 @@ let ShulkerPocket = class ShulkerPocket extends Module {
     }
 };
 ShulkerPocket = __decorate([
-    Subscribe
+    EventListener_js_1.Subscribe
 ], ShulkerPocket);
-export default ShulkerPocket;
+exports.default = ShulkerPocket;

@@ -1,3 +1,6 @@
-export const Config = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Config = void 0;
+exports.Config = {
     DEBUG: false,
 };

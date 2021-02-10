@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import VapStuff from './VapStuff/main.js';
-[VapStuff];
+const main_js_1 = require("./VapStuff/main.js");
+[main_js_1.default];

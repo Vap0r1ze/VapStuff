@@ -1,13 +1,15 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-import Sound from '../lib/org/bukkit/Sound.js';
-import { Subscribe } from './EventListener.js';
-import Module from './Module.js';
-let ExtraRecipes = class ExtraRecipes extends Module {
+Object.defineProperty(exports, "__esModule", { value: true });
+const Sound_js_1 = require("../../lib/org/bukkit/Sound.js");
+const EventListener_js_1 = require("../services/EventListener.js");
+const Module_js_1 = require("../types/Module.js");
+let ExtraRecipes = class ExtraRecipes extends Module_js_1.default {
     constructor() {
         super(...arguments);
         this.trackedMaterials = [];
@@ -111,7 +113,7 @@ let ExtraRecipes = class ExtraRecipes extends Module {
                     const result = recipe.createResult();
                     where.getWorld().dropItem(where, result);
                     if (recipe.sound) {
-                        if (Sound.$isInstance(recipe.sound)) {
+                        if (Sound_js_1.default.$isInstance(recipe.sound)) {
                             where.getWorld().playSound(where, recipe.sound, 1, 1);
                         }
                         else {
@@ -154,6 +156,6 @@ let ExtraRecipes = class ExtraRecipes extends Module {
     }
 };
 ExtraRecipes = __decorate([
-    Subscribe
+    EventListener_js_1.Subscribe
 ], ExtraRecipes);
-export default ExtraRecipes;
+exports.default = ExtraRecipes;

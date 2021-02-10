@@ -1,8 +1,10 @@
-import Enchantment from '../lib/org/bukkit/enchantments/Enchantment.js';
-import ItemFlag from '../lib/org/bukkit/inventory/ItemFlag.js';
-export default class Module {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Enchantment_js_1 = require("../../lib/org/bukkit/enchantments/Enchantment.js");
+const ItemFlag_js_1 = require("../../lib/org/bukkit/inventory/ItemFlag.js");
+class Module {
     constructor(plugin) {
-        this.DUMMY_ENCH = Enchantment.WATER_WORKER;
+        this.DUMMY_ENCH = Enchantment_js_1.default.WATER_WORKER;
         this.plugin = plugin;
     }
     get name() {
@@ -12,9 +14,9 @@ export default class Module {
     onDisable() { }
     // Bukkit Helpers
     addGlowEffect(item, dummyEnch) {
-        item.addUnsafeEnchantment(this.DUMMY_ENCH, 1);
+        item.addUnsafeEnchantment(dummyEnch || this.DUMMY_ENCH, 1);
         const meta = item.getItemMeta();
-        meta.addItemFlags([ItemFlag.HIDE_ENCHANTS]);
+        meta.addItemFlags([ItemFlag_js_1.default.HIDE_ENCHANTS]);
         item.setItemMeta(meta);
         return item;
     }
@@ -104,3 +106,4 @@ export default class Module {
         return this.scheduler.cancelTask(id);
     }
 }
+exports.default = Module;

@@ -1,20 +1,22 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-import BlockFace from '../lib/org/bukkit/block/BlockFace.js';
-import Player from '../lib/org/bukkit/entity/Player.js';
-import Action from '../lib/org/bukkit/event/block/Action.js';
-import EquipmentSlot from '../lib/org/bukkit/inventory/EquipmentSlot.js';
-import ItemFlag from '../lib/org/bukkit/inventory/ItemFlag.js';
-import ItemStack from '../lib/org/bukkit/inventory/ItemStack.js';
-import Material from '../lib/org/bukkit/Material.js';
-import Sound from '../lib/org/bukkit/Sound.js';
-import { Subscribe } from './EventListener.js';
-import Module from './Module.js';
-let SpawnerDisassembler = class SpawnerDisassembler extends Module {
+Object.defineProperty(exports, "__esModule", { value: true });
+const BlockFace_js_1 = require("../../lib/org/bukkit/block/BlockFace.js");
+const Player_js_1 = require("../../lib/org/bukkit/entity/Player.js");
+const Action_js_1 = require("../../lib/org/bukkit/event/block/Action.js");
+const EquipmentSlot_js_1 = require("../../lib/org/bukkit/inventory/EquipmentSlot.js");
+const ItemFlag_js_1 = require("../../lib/org/bukkit/inventory/ItemFlag.js");
+const ItemStack_js_1 = require("../../lib/org/bukkit/inventory/ItemStack.js");
+const Material_js_1 = require("../../lib/org/bukkit/Material.js");
+const Sound_js_1 = require("../../lib/org/bukkit/Sound.js");
+const EventListener_js_1 = require("../services/EventListener.js");
+const Module_js_1 = require("../types/Module.js");
+let SpawnerDisassembler = class SpawnerDisassembler extends Module_js_1.default {
     constructor() {
         super(...arguments);
         this.PICK_NAME = this.colorText('&#2CDA9DSpawner Disassembler');
@@ -38,16 +40,17 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
         for (let i = 0; i < 4 /* MAX_HINT */; i += 1) {
             this.hintsShown.set(i, []);
         }
-        this.plugin.extraRecipes.addRecipe('spawnerDisassembler', {
+        // Init Recipes
+        this.addSimpleAlchRecipe('spawnerDisassembler', {
             ingredients: [
-                [Material.PRISMARINE_CRYSTALS, 10],
-                [Material.ENDER_EYE, 6],
-                [Material.GHAST_TEAR, 2],
-                [Material.NETHER_STAR, 1],
+                [Material_js_1.default.PRISMARINE_CRYSTALS, 10],
+                [Material_js_1.default.ENDER_EYE, 6],
+                [Material_js_1.default.GHAST_TEAR, 2],
+                [Material_js_1.default.NETHER_STAR, 1],
             ],
             advancedIngredients: [
                 [
-                    Material.NETHERITE_PICKAXE,
+                    Material_js_1.default.NETHERITE_PICKAXE,
                     item => {
                         const isNotBroken = item.getDurability() === 0;
                         const meta = item.getItemMeta();
@@ -56,32 +59,25 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
                     },
                 ],
             ],
-            checkWorkbench: this.isPrepSimpleAlch.bind(this),
             createResult: () => {
-                const result = new ItemStack(Material.NETHERITE_PICKAXE);
+                const result = new ItemStack_js_1.default(Material_js_1.default.NETHERITE_PICKAXE);
                 const meta = result.getItemMeta();
                 meta.setDisplayName(this.PICK_NAME);
                 meta.setLore(this.colorText(`${'&7Status: &8Not Activated\n'
                     + `&7Level Cost: &a${this.LEVEL_COST}\n\n`}${this.INFO}\n\n&8&oRight click to activate`).split('\n'));
-                meta.addItemFlags([ItemFlag.HIDE_ATTRIBUTES]);
+                meta.addItemFlags([ItemFlag_js_1.default.HIDE_ATTRIBUTES]);
                 result.setItemMeta(meta);
                 return result;
             },
-            sound: [Sound.ITEM_BUCKET_EMPTY, Sound.BLOCK_FIRE_EXTINGUISH],
-            postRecipe(where) {
-                const block = where.getBlock();
-                const cauldronData = block.getBlockData();
-                cauldronData.setLevel(0);
-                block.setBlockData(cauldronData);
-                const heatSource = where.clone().add(0, -1, 0).getBlock();
-                switch (heatSource.getType()) {
-                    case Material.LAVA:
-                        heatSource.setType(Material.OBSIDIAN);
-                        break;
-                    default:
-                        break;
-                }
-            },
+        });
+        this.addSimpleAlchRecipe('nametag', {
+            ingredients: [
+                [Material_js_1.default.LEAD, 1],
+                [Material_js_1.default.WRITABLE_BOOK, 1],
+                [Material_js_1.default.SLIME_BALL, 1],
+                [Material_js_1.default.LEATHER, 1],
+            ],
+            createResult: () => new ItemStack_js_1.default(Material_js_1.default.NAME_TAG),
         });
     }
     onDisable() {
@@ -103,10 +99,10 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
                 item.setAmount(0);
                 player
                     .getWorld()
-                    .playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+                    .playSound(player.getLocation(), Sound_js_1.default.ENTITY_ITEM_BREAK, 1, 1);
                 const spawnerState = block.getState();
                 block.breakNaturally();
-                const spawnerItem = new ItemStack(blockMat);
+                const spawnerItem = new ItemStack_js_1.default(blockMat);
                 const spawnerMeta = spawnerItem.getItemMeta();
                 spawnerMeta.setDisplayName(this.SPAWNER_TEMPLATE(this.capitalizeWords(spawnerState.getCreatureTypeName())));
                 spawnerItem.setItemMeta(spawnerMeta);
@@ -140,23 +136,23 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
         else if (this.isSimpleAlchMat(block.getType())) {
             let where = block.getLocation();
             switch (block.getType()) {
-                case Material.CAULDRON:
+                case Material_js_1.default.CAULDRON:
                     break;
-                case Material.REDSTONE_TORCH:
+                case Material_js_1.default.REDSTONE_TORCH:
                     for (let i = 0; i < 4; i += 1) {
                         const dxz = this.rotCCW([0, 1], i);
                         const newWhere = where.clone().add(dxz[0], 0, dxz[1]);
-                        if (newWhere.getBlock().getType() === Material.CAULDRON) {
+                        if (newWhere.getBlock().getType() === Material_js_1.default.CAULDRON) {
                             where = newWhere;
                             break;
                         }
                     }
                     break;
-                case Material.REDSTONE_WIRE:
+                case Material_js_1.default.REDSTONE_WIRE:
                     for (let i = 0; i < 4; i += 1) {
                         const dxz = this.rotCCW([1, 1], i);
                         const newWhere = where.clone().add(dxz[0], 0, dxz[1]);
-                        if (newWhere.getBlock().getType() === Material.CAULDRON) {
+                        if (newWhere.getBlock().getType() === Material_js_1.default.CAULDRON) {
                             where = newWhere;
                             break;
                         }
@@ -166,7 +162,7 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
                     break;
             }
             const alchBlock = where.getBlock();
-            if (alchBlock.getType() !== Material.CAULDRON)
+            if (alchBlock.getType() !== Material_js_1.default.CAULDRON)
                 return;
             this.onSimpleAlchNewMat(alchBlock, event.getPlayer());
         }
@@ -183,7 +179,7 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
     }
     onCauldronLevelChange(listener, event) {
         const player = event.getEntity();
-        if (!Player.$isInstance(player))
+        if (!Player_js_1.default.$isInstance(player))
             return;
         const cauldron = event.getBlock();
         const cauldronData = cauldron.getBlockData();
@@ -198,7 +194,7 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
         const inv = player.getInventory();
         const item = inv.getItemInMainHand();
         const meta = item.getItemMeta();
-        if (event.getHand() !== EquipmentSlot.HAND)
+        if (event.getHand() !== EquipmentSlot_js_1.default.HAND)
             return;
         if (!meta)
             return;
@@ -211,7 +207,7 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
             if (level < this.LEVEL_COST) {
                 player
                     .getWorld()
-                    .playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 1, 1);
+                    .playSound(player.getLocation(), Sound_js_1.default.BLOCK_FIRE_EXTINGUISH, 1, 1);
                 this.tellPlayer(player, `You're &aExperience Level &ris not high enough to activate this. ${this.LEARN_MORE}`);
             }
             else {
@@ -221,7 +217,7 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
                 this.addGlowEffect(item);
                 player
                     .getWorld()
-                    .playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1, 1);
+                    .playSound(player.getLocation(), Sound_js_1.default.BLOCK_BEACON_POWER_SELECT, 1, 1);
             }
         }
     }
@@ -229,7 +225,7 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
         if (!event.getDamager)
             return; // I have no idea why this happens
         const damager = event.getDamager();
-        if (Player.$isInstance(damager)) {
+        if (Player_js_1.default.$isInstance(damager)) {
             const inv = damager.getInventory();
             const item = inv.getItemInMainHand();
             const meta = item.getItemMeta();
@@ -243,11 +239,32 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
         }
     }
     // Internals
+    addSimpleAlchRecipe(id, data) {
+        this.plugin.extraRecipes.addRecipe(id, {
+            ...data,
+            checkWorkbench: this.isPrepSimpleAlch.bind(this),
+            sound: [Sound_js_1.default.ITEM_BUCKET_EMPTY, Sound_js_1.default.BLOCK_FIRE_EXTINGUISH],
+            postRecipe(where) {
+                const block = where.getBlock();
+                const cauldronData = block.getBlockData();
+                cauldronData.setLevel(0);
+                block.setBlockData(cauldronData);
+                const heatSource = where.clone().add(0, -1, 0).getBlock();
+                switch (heatSource.getType()) {
+                    case Material_js_1.default.LAVA:
+                        heatSource.setType(Material_js_1.default.OBSIDIAN);
+                        break;
+                    default:
+                        break;
+                }
+            },
+        });
+    }
     isSpawner(mat) {
-        return mat === Material.SPAWNER;
+        return mat === Material_js_1.default.SPAWNER;
     }
     isRightClick(action) {
-        return (action === Action.RIGHT_CLICK_AIR || action === Action.RIGHT_CLICK_BLOCK);
+        return (action === Action_js_1.default.RIGHT_CLICK_AIR || action === Action_js_1.default.RIGHT_CLICK_BLOCK);
     }
     isPickActivated(pick) {
         return pick.containsEnchantment(this.DUMMY_ENCH);
@@ -277,18 +294,18 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
     }
     // Simple Alchemy Station
     isSimpleAlch(block) {
-        if (block.getType() !== Material.CAULDRON)
+        if (block.getType() !== Material_js_1.default.CAULDRON)
             return false;
         const where = block.getLocation();
         for (let i = 0; i < 4; i += 1) {
             const dxzDust = this.rotCCW([1, 1], i);
             const dxzTorch = this.rotCCW([0, 1], i);
             if (where.clone().add(dxzDust[0], 0, dxzDust[1]).getBlock().getType()
-                !== Material.REDSTONE_WIRE) {
+                !== Material_js_1.default.REDSTONE_WIRE) {
                 return false;
             }
             if (where.clone().add(dxzTorch[0], 0, dxzTorch[1]).getBlock().getType()
-                !== Material.REDSTONE_TORCH) {
+                !== Material_js_1.default.REDSTONE_TORCH) {
                 return false;
             }
         }
@@ -299,7 +316,7 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
             return false;
         const cauldronData = block.getBlockData();
         const isLeveled = cauldronData.getLevel() === cauldronData.getMaximumLevel();
-        const heatSource = block.getRelative(BlockFace.DOWN);
+        const heatSource = block.getRelative(BlockFace_js_1.default.DOWN);
         const isHeatSource = this.isSimpleAlchHeat(heatSource.getType());
         if (!ignoreHints) {
             if (isLeveled && this.isSimpleAlchLowHeat(heatSource.getType())) {
@@ -316,28 +333,28 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
         return isLeveled && isHeatSource;
     }
     isSimpleAlchMat(mat) {
-        return [Material.REDSTONE_WIRE, Material.REDSTONE_TORCH, Material.CAULDRON].includes(mat);
+        return [Material_js_1.default.REDSTONE_WIRE, Material_js_1.default.REDSTONE_TORCH, Material_js_1.default.CAULDRON].includes(mat);
     }
     isSimpleAlchHeat(mat) {
-        return Material.LAVA === mat;
+        return Material_js_1.default.LAVA === mat;
     }
     isSimpleAlchLowHeat(mat) {
         return [
-            Material.MAGMA_BLOCK,
-            Material.FIRE,
-            Material.TORCH,
-            Material.REDSTONE_TORCH,
-            Material.SOUL_TORCH,
-            Material.WALL_TORCH,
-            Material.REDSTONE_WALL_TORCH,
-            Material.SOUL_WALL_TORCH,
-            Material.LANTERN,
-            Material.REDSTONE_LAMP,
-            Material.SOUL_LANTERN,
-            Material.SEA_LANTERN,
-            Material.CAMPFIRE,
-            Material.SOUL_CAMPFIRE,
-            Material.BREWING_STAND,
+            Material_js_1.default.MAGMA_BLOCK,
+            Material_js_1.default.FIRE,
+            Material_js_1.default.TORCH,
+            Material_js_1.default.REDSTONE_TORCH,
+            Material_js_1.default.SOUL_TORCH,
+            Material_js_1.default.WALL_TORCH,
+            Material_js_1.default.REDSTONE_WALL_TORCH,
+            Material_js_1.default.SOUL_WALL_TORCH,
+            Material_js_1.default.LANTERN,
+            Material_js_1.default.REDSTONE_LAMP,
+            Material_js_1.default.SOUL_LANTERN,
+            Material_js_1.default.SEA_LANTERN,
+            Material_js_1.default.CAMPFIRE,
+            Material_js_1.default.SOUL_CAMPFIRE,
+            Material_js_1.default.BREWING_STAND,
         ].includes(mat);
     }
     onSimpleAlchNewMat(block, player) {
@@ -363,6 +380,6 @@ let SpawnerDisassembler = class SpawnerDisassembler extends Module {
     }
 };
 SpawnerDisassembler = __decorate([
-    Subscribe
+    EventListener_js_1.Subscribe
 ], SpawnerDisassembler);
-export default SpawnerDisassembler;
+exports.default = SpawnerDisassembler;
