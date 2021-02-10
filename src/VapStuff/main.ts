@@ -1,11 +1,12 @@
 import JsPlugin from '../lib/JsPlugin.js'
-import ExtraRecipes from './ExtraRecipes.js'
-import ShulkerPocket from './ShulkerPocket.js'
-import UseableItems from './UseableItems.js'
-import GrassPlanter from './GrassPlanter.js'
-import SpawnerDisassembler from './SpawnerDisassembler.js'
-import NoWitherGrief from './NoWitherGrief.js'
-import Module from './Module.js'
+import ExtraRecipes from './modules/ExtraRecipes.js'
+import ShulkerPocket from './modules/ShulkerPocket.js'
+import UseableItems from './modules/UseableItems.js'
+import GrassPlanter from './modules/GrassPlanter.js'
+import SpawnerDisassembler from './modules/SpawnerDisassembler.js'
+import NoWitherGrief from './modules/NoWitherGrief.js'
+import Guide from './modules/Guide.js'
+import Module from './types/Module.js'
 
 export default class VapStuff extends JsPlugin {
   extraRecipes = new ExtraRecipes(this)
@@ -20,6 +21,8 @@ export default class VapStuff extends JsPlugin {
 
   noWitherGrief = new NoWitherGrief(this)
 
+  guide = new Guide(this)
+
   modules: Module[] = [
     this.extraRecipes,
     this.useableItems,
@@ -27,6 +30,7 @@ export default class VapStuff extends JsPlugin {
     this.grassPlanter,
     this.spawnerDisassembler,
     this.noWitherGrief,
+    this.guide,
   ]
 
   onLoad() {
@@ -43,7 +47,7 @@ export default class VapStuff extends JsPlugin {
   }
 
   onDisable() {
-    this.modules.forEach(module => {
+    this.modules.slice().reverse().forEach(module => {
       module.onDisable()
       this.log(`Module disabled: \xA7b${module.name}\xA7r`)
     })

@@ -1,4 +1,5 @@
 /node_modules
 /dist
 /build.sh
+/mctest
 config.ts

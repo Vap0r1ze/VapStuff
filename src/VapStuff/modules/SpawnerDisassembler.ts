@@ -1,24 +1,25 @@
-import Block from '../lib/org/bukkit/block/Block.js'
-import BlockFace from '../lib/org/bukkit/block/BlockFace.js'
-import CreatureSpawner from '../lib/org/bukkit/block/CreatureSpawner.js'
-import Levelled from '../lib/org/bukkit/block/data/Levelled.js'
-import Player from '../lib/org/bukkit/entity/Player.js'
-import Action from '../lib/org/bukkit/event/block/Action.js'
-import BlockBreakEvent from '../lib/org/bukkit/event/block/BlockBreakEvent.js'
-import BlockPlaceEvent from '../lib/org/bukkit/event/block/BlockPlaceEvent.js'
-import CauldronLevelChangeEvent from '../lib/org/bukkit/event/block/CauldronLevelChangeEvent.js'
-import EntityDamageByEntityEvent from '../lib/org/bukkit/event/entity/EntityDamageByEntityEvent.js'
-import PlayerBucketEmptyEvent from '../lib/org/bukkit/event/player/PlayerBucketEmptyEvent.js'
-import PlayerInteractEvent from '../lib/org/bukkit/event/player/PlayerInteractEvent.js'
-import EquipmentSlot from '../lib/org/bukkit/inventory/EquipmentSlot.js'
-import ItemFlag from '../lib/org/bukkit/inventory/ItemFlag.js'
-import ItemStack from '../lib/org/bukkit/inventory/ItemStack.js'
-import PlayerInventory from '../lib/org/bukkit/inventory/PlayerInventory.js'
-import Location from '../lib/org/bukkit/Location.js'
-import Material from '../lib/org/bukkit/Material.js'
-import Sound from '../lib/org/bukkit/Sound.js'
-import { Subscribe } from './EventListener.js'
-import Module from './Module.js'
+import Block from '../../lib/org/bukkit/block/Block.js'
+import BlockFace from '../../lib/org/bukkit/block/BlockFace.js'
+import CreatureSpawner from '../../lib/org/bukkit/block/CreatureSpawner.js'
+import Levelled from '../../lib/org/bukkit/block/data/Levelled.js'
+import Player from '../../lib/org/bukkit/entity/Player.js'
+import Action from '../../lib/org/bukkit/event/block/Action.js'
+import BlockBreakEvent from '../../lib/org/bukkit/event/block/BlockBreakEvent.js'
+import BlockPlaceEvent from '../../lib/org/bukkit/event/block/BlockPlaceEvent.js'
+import CauldronLevelChangeEvent from '../../lib/org/bukkit/event/block/CauldronLevelChangeEvent.js'
+import EntityDamageByEntityEvent from '../../lib/org/bukkit/event/entity/EntityDamageByEntityEvent.js'
+import PlayerBucketEmptyEvent from '../../lib/org/bukkit/event/player/PlayerBucketEmptyEvent.js'
+import PlayerInteractEvent from '../../lib/org/bukkit/event/player/PlayerInteractEvent.js'
+import EquipmentSlot from '../../lib/org/bukkit/inventory/EquipmentSlot.js'
+import ItemFlag from '../../lib/org/bukkit/inventory/ItemFlag.js'
+import ItemStack from '../../lib/org/bukkit/inventory/ItemStack.js'
+import PlayerInventory from '../../lib/org/bukkit/inventory/PlayerInventory.js'
+import Location from '../../lib/org/bukkit/Location.js'
+import Material from '../../lib/org/bukkit/Material.js'
+import Sound from '../../lib/org/bukkit/Sound.js'
+import { Subscribe } from '../services/EventListener.js'
+import { Recipe } from './ExtraRecipes.js'
+import Module from '../types/Module.js'
 
 const enum Hint {
   SIMPLE_ALCH_MADE,
@@ -32,9 +33,9 @@ const enum Hint {
 export default class SpawnerDisassembler extends Module {
   get name() { return 'Spawner Disassembler' }
 
-  private readonly PICK_NAME = this.colorText('&#2CDA9DSpawner Disassembler')
+  readonly PICK_NAME = this.colorText('&#2CDA9DSpawner Disassembler')
 
-  private readonly INFO =
+  readonly INFO =
   '&7Once activated, this pickaxe can\n'
     + '&7carefully disassemble\n'
     + '&7a mob spawner without destroying it,\n'
@@ -42,21 +43,21 @@ export default class SpawnerDisassembler extends Module {
     + '&7However, it only works &bonce&7,\n'
     + '&7so choose carefully.'
 
-  private readonly CANNOT_USE = 'You cannot use this pickaxe normally.'
+  readonly CANNOT_USE = 'You cannot use this pickaxe normally.'
 
-  private readonly LEARN_MORE = '&8(Hover over this item to learn more)'
+  readonly LEARN_MORE = '&8(Hover over this item to learn more)'
 
-  private readonly NOW_READY = 'Now you\'re ready to perform &binfusion&r!'
+  readonly NOW_READY = 'Now you\'re ready to perform &binfusion&r!'
 
-  private readonly SPAWNER_TEMPLATE = (mobName: string) => this.colorText(`&b${mobName} Spawner`)
+  readonly SPAWNER_TEMPLATE = (mobName: string) => this.colorText(`&b${mobName} Spawner`)
 
-  private readonly SPAWNER_TEST = new RegExp(
+  readonly SPAWNER_TEST = new RegExp(
     `^${this.SPAWNER_TEMPLATE('([\\w ]+)')}$`,
   )
 
-  private readonly LEVEL_COST = 85
+  readonly LEVEL_COST = 85
 
-  private hintsShown: Map<Hint, UUID[]> = new Map()
+  hintsShown: Map<Hint, UUID[]> = new Map()
 
   // Hooks
   onEnable() {
@@ -64,7 +65,8 @@ export default class SpawnerDisassembler extends Module {
       this.hintsShown.set(i, [])
     }
 
-    this.plugin.extraRecipes.addRecipe('spawnerDisassembler', {
+    // Init Recipes
+    this.addSimpleAlchRecipe('spawnerDisassembler', {
       ingredients: [
         [Material.PRISMARINE_CRYSTALS, 10],
         [Material.ENDER_EYE, 6],
@@ -82,7 +84,6 @@ export default class SpawnerDisassembler extends Module {
           },
         ],
       ],
-      checkWorkbench: this.isPrepSimpleAlch.bind(this),
       createResult: () => {
         const result = new ItemStack(Material.NETHERITE_PICKAXE)
         const meta = result.getItemMeta()
@@ -99,21 +100,15 @@ export default class SpawnerDisassembler extends Module {
         result.setItemMeta(meta)
         return result
       },
-      sound: [Sound.ITEM_BUCKET_EMPTY, Sound.BLOCK_FIRE_EXTINGUISH],
-      postRecipe(where) {
-        const block = where.getBlock()
-        const cauldronData = block.getBlockData() as Levelled
-        cauldronData.setLevel(0)
-        block.setBlockData(cauldronData)
-        const heatSource = where.clone().add(0, -1, 0).getBlock()
-        switch (heatSource.getType()) {
-          case Material.LAVA:
-            heatSource.setType(Material.OBSIDIAN)
-            break
-          default:
-            break
-        }
-      },
+    })
+    this.addSimpleAlchRecipe('nametag', {
+      ingredients: [
+        [Material.LEAD, 1],
+        [Material.WRITABLE_BOOK, 1],
+        [Material.SLIME_BALL, 1],
+        [Material.LEATHER, 1],
+      ],
+      createResult: () => new ItemStack(Material.NAME_TAG),
     })
   }
 
@@ -293,21 +288,43 @@ export default class SpawnerDisassembler extends Module {
   }
 
   // Internals
-  private isSpawner(mat: Material): boolean {
+  addSimpleAlchRecipe(id: string, data: Pick<Recipe, 'ingredients' | 'advancedIngredients' | 'createResult'>) {
+    this.plugin.extraRecipes.addRecipe(id, {
+      ...data,
+      checkWorkbench: this.isPrepSimpleAlch.bind(this),
+      sound: [Sound.ITEM_BUCKET_EMPTY, Sound.BLOCK_FIRE_EXTINGUISH],
+      postRecipe(where) {
+        const block = where.getBlock()
+        const cauldronData = block.getBlockData() as Levelled
+        cauldronData.setLevel(0)
+        block.setBlockData(cauldronData)
+        const heatSource = where.clone().add(0, -1, 0).getBlock()
+        switch (heatSource.getType()) {
+          case Material.LAVA:
+            heatSource.setType(Material.OBSIDIAN)
+            break
+          default:
+            break
+        }
+      },
+    })
+  }
+
+  isSpawner(mat: Material): boolean {
     return mat === Material.SPAWNER
   }
 
-  private isRightClick(action: Action): boolean {
+  isRightClick(action: Action): boolean {
     return (
       action === Action.RIGHT_CLICK_AIR || action === Action.RIGHT_CLICK_BLOCK
     )
   }
 
-  private isPickActivated(pick: ItemStack): boolean {
+  isPickActivated(pick: ItemStack): boolean {
     return pick.containsEnchantment(this.DUMMY_ENCH)
   }
 
-  private handleHint(player: Player, hint: Hint, handler: () => void, childHints?: Hint[]) {
+  handleHint(player: Player, hint: Hint, handler: () => void, childHints?: Hint[]) {
     const shownTo = this.hintsShown.get(hint)
     const uuid = player.getUniqueId()
     if (!shownTo.includes(uuid)) {
@@ -322,7 +339,7 @@ export default class SpawnerDisassembler extends Module {
     }
   }
 
-  private handleHintArea(
+  handleHintArea(
     area: Location,
     radius: number,
     hint: Hint,
@@ -338,7 +355,7 @@ export default class SpawnerDisassembler extends Module {
   }
 
   // Simple Alchemy Station
-  private isSimpleAlch(block: Block): boolean {
+  isSimpleAlch(block: Block): boolean {
     if (block.getType() !== Material.CAULDRON) return false
     const where = block.getLocation()
     for (let i = 0; i < 4; i += 1) {
@@ -356,7 +373,7 @@ export default class SpawnerDisassembler extends Module {
     return true
   }
 
-  private isPrepSimpleAlch(block: Block, ignoreHints = false): boolean {
+  isPrepSimpleAlch(block: Block, ignoreHints = false): boolean {
     if (!this.isSimpleAlch(block)) return false
     const cauldronData = block.getBlockData() as Levelled
     const isLeveled = cauldronData.getLevel() === cauldronData.getMaximumLevel()
@@ -376,15 +393,15 @@ export default class SpawnerDisassembler extends Module {
     return isLeveled && isHeatSource
   }
 
-  private isSimpleAlchMat(mat: Material): boolean {
+  isSimpleAlchMat(mat: Material): boolean {
     return [Material.REDSTONE_WIRE, Material.REDSTONE_TORCH, Material.CAULDRON].includes(mat)
   }
 
-  private isSimpleAlchHeat(mat: Material): boolean {
+  isSimpleAlchHeat(mat: Material): boolean {
     return Material.LAVA === mat
   }
 
-  private isSimpleAlchLowHeat(mat: Material): boolean {
+  isSimpleAlchLowHeat(mat: Material): boolean {
     return [
       Material.MAGMA_BLOCK,
       Material.FIRE,
@@ -404,7 +421,7 @@ export default class SpawnerDisassembler extends Module {
     ].includes(mat)
   }
 
-  private onSimpleAlchNewMat(block: Block, player: Player) {
+  onSimpleAlchNewMat(block: Block, player: Player) {
     if (this.isSimpleAlch(block)) {
       if (this.isPrepSimpleAlch(block, true)) {
         this.handleHint(player, Hint.SIMPLE_ALCH_PREP, () => {
@@ -418,7 +435,7 @@ export default class SpawnerDisassembler extends Module {
     }
   }
 
-  private onSimpleAlchNewPrep(block: Block, player: Player) {
+  onSimpleAlchNewPrep(block: Block, player: Player) {
     if (this.isPrepSimpleAlch(block, true)) {
       this.handleHint(player, Hint.SIMPLE_ALCH_PREP, () => {
         this.tellPlayer(player, `You've just &a&lprepared &ra &fSimple Alchemy Station&r! ${this.NOW_READY}`)

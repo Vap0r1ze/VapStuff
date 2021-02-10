@@ -1,10 +1,10 @@
-import Action from '../lib/org/bukkit/event/block/Action.js'
-import InventoryCloseEvent from '../lib/org/bukkit/event/inventory/InventoryCloseEvent.js'
-import PlayerInteractEvent from '../lib/org/bukkit/event/player/PlayerInteractEvent.js'
-import Material from '../lib/org/bukkit/Material.js'
-import Sound from '../lib/org/bukkit/Sound.js'
-import { Subscribe } from './EventListener.js'
-import Module from './Module.js'
+import Action from '../../lib/org/bukkit/event/block/Action.js'
+import InventoryCloseEvent from '../../lib/org/bukkit/event/inventory/InventoryCloseEvent.js'
+import PlayerInteractEvent from '../../lib/org/bukkit/event/player/PlayerInteractEvent.js'
+import Material from '../../lib/org/bukkit/Material.js'
+import Sound from '../../lib/org/bukkit/Sound.js'
+import { Subscribe } from '../services/EventListener.js'
+import Module from '../types/Module.js'
 
 @Subscribe
 export default class UseableItems extends Module {

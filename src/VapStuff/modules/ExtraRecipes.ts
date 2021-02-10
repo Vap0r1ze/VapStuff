@@ -1,12 +1,12 @@
-import Block from '../lib/org/bukkit/block/Block.js'
-import Item from '../lib/org/bukkit/entity/Item.js'
-import PlayerDropItemEvent from '../lib/org/bukkit/event/player/PlayerDropItemEvent.js'
-import ItemStack from '../lib/org/bukkit/inventory/ItemStack.js'
-import Location from '../lib/org/bukkit/Location.js'
-import Material from '../lib/org/bukkit/Material.js'
-import Sound from '../lib/org/bukkit/Sound.js'
-import { Subscribe } from './EventListener.js'
-import Module from './Module.js'
+import Block from '../../lib/org/bukkit/block/Block.js'
+import Item from '../../lib/org/bukkit/entity/Item.js'
+import PlayerDropItemEvent from '../../lib/org/bukkit/event/player/PlayerDropItemEvent.js'
+import ItemStack from '../../lib/org/bukkit/inventory/ItemStack.js'
+import Location from '../../lib/org/bukkit/Location.js'
+import Material from '../../lib/org/bukkit/Material.js'
+import Sound from '../../lib/org/bukkit/Sound.js'
+import { Subscribe } from '../services/EventListener.js'
+import Module from '../types/Module.js'
 
 export interface Recipe {
   ingredients: [Material, number][];
@@ -21,13 +21,13 @@ export interface Recipe {
 export default class ExtraRecipes extends Module {
   get name() { return 'Extra Recipes' }
 
-  private trackedMaterials = []
+  trackedMaterials = []
 
-  private recipes: Record<string, Recipe> = {}
+  recipes: Record<string, Recipe> = {}
 
-  private trackedDrops: Record<string, Item[]> = {}
+  trackedDrops: Record<string, Item[]> = {}
 
-  private scheduleTaskId?: number
+  scheduleTaskId?: number
 
   // API
   addRecipe(id: string, recipe: Recipe): boolean {

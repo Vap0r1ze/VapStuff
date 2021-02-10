@@ -20,6 +20,18 @@ jobs:
           npm install
           npm run compile
 
+      - name: Prune Dev Dependencies
+        run: |
+          npm install
+          npm prune --production
+
+      - name: Prune NPX Binaries
+        run: rm -r node_modules/.bin
+
+      - name: Copy Dependencies
+        run: |
+          cp -r node_modules dist/node_modules
+
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:

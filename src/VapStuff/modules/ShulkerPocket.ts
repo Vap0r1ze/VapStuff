@@ -1,22 +1,22 @@
-import { Config } from './config.js'
-import ShulkerBox from '../lib/org/bukkit/block/ShulkerBox.js'
-import Bukkit from '../lib/org/bukkit/Bukkit.js'
-import HumanEntity from '../lib/org/bukkit/entity/HumanEntity.js'
-import Action from '../lib/org/bukkit/event/block/Action.js'
-import ClickType from '../lib/org/bukkit/event/inventory/ClickType.js'
-import InventoryAction from '../lib/org/bukkit/event/inventory/InventoryAction.js'
-import InventoryClickEvent from '../lib/org/bukkit/event/inventory/InventoryClickEvent.js'
-import InventoryCloseEvent from '../lib/org/bukkit/event/inventory/InventoryCloseEvent.js'
-import InventoryDragEvent from '../lib/org/bukkit/event/inventory/InventoryDragEvent.js'
-import InventoryType from '../lib/org/bukkit/event/inventory/InventoryType.js'
-import PlayerInteractEvent from '../lib/org/bukkit/event/player/PlayerInteractEvent.js'
-import ItemStack from '../lib/org/bukkit/inventory/ItemStack.js'
-import BlockStateMeta from '../lib/org/bukkit/inventory/meta/BlockStateMeta.js'
-import PlayerInventory from '../lib/org/bukkit/inventory/PlayerInventory.js'
-import Material from '../lib/org/bukkit/Material.js'
-import Sound from '../lib/org/bukkit/Sound.js'
-import Module from './Module.js'
-import { Subscribe } from './EventListener.js'
+import { Config } from '../config.js'
+import ShulkerBox from '../../lib/org/bukkit/block/ShulkerBox.js'
+import Bukkit from '../../lib/org/bukkit/Bukkit.js'
+import HumanEntity from '../../lib/org/bukkit/entity/HumanEntity.js'
+import Action from '../../lib/org/bukkit/event/block/Action.js'
+import ClickType from '../../lib/org/bukkit/event/inventory/ClickType.js'
+import InventoryAction from '../../lib/org/bukkit/event/inventory/InventoryAction.js'
+import InventoryClickEvent from '../../lib/org/bukkit/event/inventory/InventoryClickEvent.js'
+import InventoryCloseEvent from '../../lib/org/bukkit/event/inventory/InventoryCloseEvent.js'
+import InventoryDragEvent from '../../lib/org/bukkit/event/inventory/InventoryDragEvent.js'
+import InventoryType from '../../lib/org/bukkit/event/inventory/InventoryType.js'
+import PlayerInteractEvent from '../../lib/org/bukkit/event/player/PlayerInteractEvent.js'
+import ItemStack from '../../lib/org/bukkit/inventory/ItemStack.js'
+import BlockStateMeta from '../../lib/org/bukkit/inventory/meta/BlockStateMeta.js'
+import PlayerInventory from '../../lib/org/bukkit/inventory/PlayerInventory.js'
+import Material from '../../lib/org/bukkit/Material.js'
+import Sound from '../../lib/org/bukkit/Sound.js'
+import Module from '../types/Module.js'
+import { Subscribe } from '../services/EventListener.js'
 
 @Subscribe
 export default class ShulkerPocket extends Module {
@@ -24,9 +24,18 @@ export default class ShulkerPocket extends Module {
 
   private shulkerBoxSlots: Record<UUID, number> = {}
 
-  private shulkerBoxOpen: Record<UUID, boolean> = {}
+  private shulkerBoxOpen: Record<string, boolean> = {}
 
   private shulkerBoxOnCursors: Record<UUID, boolean> = {}
+
+  onDisable() {
+    for (const playerName of Object.keys(this.shulkerBoxOpen)) {
+      const player = this.plugin.server.getPlayer(playerName)
+      if (player) {
+        player.closeInventory()
+      }
+    }
+  }
 
   onPlayerInteract(listener: any, event: PlayerInteractEvent) {
     const player = event.getPlayer()
@@ -35,9 +44,9 @@ export default class ShulkerPocket extends Module {
       event.getAction() === Action.RIGHT_CLICK_AIR
       && itemInMainHand != null
       && this.isShulkerBox(itemInMainHand.getType())
-      && !this.shulkerBoxOpen[player.getUniqueId()]
+      && !this.shulkerBoxOpen[player.getName()]
     ) {
-      this.shulkerBoxOpen[player.getUniqueId()] = true
+      this.shulkerBoxOpen[player.getName()] = true
       const meta = itemInMainHand.getItemMeta() as BlockStateMeta
       const shulkerBox = meta.getBlockState() as ShulkerBox
       const title = meta.getDisplayName() == null || meta.getDisplayName() === ''
@@ -68,8 +77,8 @@ export default class ShulkerPocket extends Module {
       const items = event.getInventory().getContents()
       this.saveShulkerBoxByPlayer(player, items)
       delete this.shulkerBoxSlots[player.getUniqueId()]
-      if (this.shulkerBoxOpen[player.getUniqueId()]) {
-        delete this.shulkerBoxOpen[player.getUniqueId()]
+      if (this.shulkerBoxOpen[player.getName()]) {
+        delete this.shulkerBoxOpen[player.getName()]
         player
           .getWorld()
           .playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_CLOSE, 1, 1)
