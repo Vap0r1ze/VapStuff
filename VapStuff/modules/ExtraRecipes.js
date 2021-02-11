@@ -9,25 +9,49 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Sound_js_1 = require("../../lib/org/bukkit/Sound.js");
 const EventListener_js_1 = require("../services/EventListener.js");
 const Module_js_1 = require("../types/Module.js");
+const SimpleAlchemyStation_js_1 = require("./workbenches/SimpleAlchemyStation/SimpleAlchemyStation.js");
 let ExtraRecipes = class ExtraRecipes extends Module_js_1.default {
     constructor() {
         super(...arguments);
         this.trackedMaterials = [];
-        this.recipes = {};
+        this.workbenches = {};
+        this.workbenchModules = [
+            new SimpleAlchemyStation_js_1.default(this.plugin),
+        ];
         this.trackedDrops = {};
     }
     get name() { return 'Extra Recipes'; }
     // API
-    addRecipe(id, recipe) {
-        const exists = id in this.recipes;
-        this.recipes[id] = recipe;
+    addWorkbench(workbenchId, workbench) {
+        const exists = workbenchId in this.workbenches;
+        this.workbenches[workbenchId] = workbench;
         this.initializeTracked();
         return !exists;
     }
-    removeRecipe(id) {
-        const exists = id in this.recipes;
+    removeWorkbench(workbenchId) {
+        const exists = workbenchId in this.workbenches;
         if (exists) {
-            delete this.recipes[id];
+            delete this.workbenches[workbenchId];
+            this.initializeTracked();
+        }
+        return exists;
+    }
+    addRecipe(workbenchId, recipeId, recipe) {
+        const workbench = this.workbenches[workbenchId];
+        if (!workbench)
+            return false;
+        const exists = recipeId in workbench.recipes;
+        workbench.recipes[recipeId] = recipe;
+        this.initializeTracked();
+        return !exists;
+    }
+    removeRecipe(workbenchId, recipeId) {
+        const workbench = this.workbenches[workbenchId];
+        if (!workbench)
+            return false;
+        const exists = recipeId in workbench.recipes;
+        if (exists) {
+            delete workbench.recipes[recipeId];
             this.initializeTracked();
         }
         return exists;
@@ -35,11 +59,17 @@ let ExtraRecipes = class ExtraRecipes extends Module_js_1.default {
     // Hooks
     onEnable() {
         this.scheduleTaskId = this.runTaskRepeat(this.scheduleTask.bind(this), 0, 20);
+        for (const workbenchModule of this.workbenchModules) {
+            workbenchModule.onEnable();
+        }
         this.initializeTracked();
     }
     onDisable() {
         if (this.scheduleTaskId) {
             this.cancelTask(this.scheduleTaskId);
+        }
+        for (const workbenchModule of this.workbenchModules) {
+            workbenchModule.onDisable();
         }
     }
     onPlayerDropItem(listener, event) {
@@ -54,17 +84,19 @@ let ExtraRecipes = class ExtraRecipes extends Module_js_1.default {
     // Internal
     initializeTracked() {
         this.trackedMaterials.splice(0, this.trackedMaterials.length);
-        for (const recipe of Object.values(this.recipes)) {
-            for (const ingr of recipe.ingredients) {
-                if (!this.trackedMaterials.includes(ingr[0])) {
-                    this.trackedMaterials.push(ingr[0]);
+        for (const workbench of Object.values(this.workbenches)) {
+            for (const recipe of Object.values(workbench.recipes)) {
+                for (const ingr of recipe.ingredients) {
+                    if (!this.trackedMaterials.includes(ingr[0])) {
+                        this.trackedMaterials.push(ingr[0]);
+                    }
                 }
-            }
-            if (!recipe.advancedIngredients)
-                continue;
-            for (const ingr of recipe.advancedIngredients) {
-                if (!this.trackedMaterials.includes(ingr[0])) {
-                    this.trackedMaterials.push(ingr[0]);
+                if (!recipe.advancedIngredients)
+                    continue;
+                for (const ingr of recipe.advancedIngredients) {
+                    if (!this.trackedMaterials.includes(ingr[0])) {
+                        this.trackedMaterials.push(ingr[0]);
+                    }
                 }
             }
         }
@@ -73,55 +105,76 @@ let ExtraRecipes = class ExtraRecipes extends Module_js_1.default {
         var _a;
         this.trackItems();
         const required = {};
-        for (const [recipeName, recipe] of Object.entries(this.recipes)) {
-            required[recipeName] = {
-                ingr: Array(recipe.ingredients.length).fill(null),
-                advIngr: Array(((_a = recipe.advancedIngredients) === null || _a === void 0 ? void 0 : _a.length) || 0).fill(null),
-            };
+        for (const [workbenchId, workbench] of Object.entries(this.workbenches)) {
+            required[workbenchId] = {};
+            for (const [recipeId, recipe] of Object.entries(workbench.recipes)) {
+                required[workbenchId][recipeId] = {
+                    ingr: Array(recipe.ingredients.length).fill(null),
+                    advIngr: Array(((_a = recipe.advancedIngredients) === null || _a === void 0 ? void 0 : _a.length) || 0).fill(null),
+                };
+            }
         }
         for (const drops of Object.values(this.trackedDrops)) {
             const where = drops[0].getLocation();
             const block = where.getBlock();
-            for (const [recipeName, recipe] of Object.entries(this.recipes)) {
-                if (recipe.checkWorkbench && !recipe.checkWorkbench(block)) {
-                    continue;
-                }
-                for (const drop of drops) {
-                    let index = recipe.ingredients.findIndex(e => e[0] === drop.getItemStack().getType()
-                        && e[1] <= drop.getItemStack().getAmount());
-                    if (index > -1) {
-                        required[recipeName].ingr[index] = drop;
-                    }
-                    if (recipe.advancedIngredients) {
-                        index = recipe.advancedIngredients.findIndex(e => e[0] === drop.getItemStack().getType()
-                            && e[1](drop.getItemStack()));
+            for (const [workbenchId, workbench] of Object.entries(this.workbenches)) {
+                for (const [recipeId, recipe] of Object.entries(workbench.recipes)) {
+                    for (const drop of drops) {
+                        let index = recipe.ingredients.findIndex(e => e[0] === drop.getItemStack().getType()
+                            && e[1] <= drop.getItemStack().getAmount());
                         if (index > -1) {
-                            required[recipeName].advIngr[index] = drop;
+                            required[workbenchId][recipeId].ingr[index] = drop;
+                        }
+                        if (recipe.advancedIngredients) {
+                            index = recipe.advancedIngredients
+                                .findIndex(e => e[0] === drop.getItemStack().getType() && e[1](drop.getItemStack()));
+                            if (index > -1) {
+                                required[workbenchId][recipeId].advIngr[index] = drop;
+                            }
                         }
                     }
-                }
-                if (required[recipeName].ingr.every(Boolean)
-                    && required[recipeName].advIngr.every(Boolean)) {
-                    for (let i = 0; i < required[recipeName].ingr.length; i += 1) {
-                        const stack = required[recipeName].ingr[i].getItemStack();
-                        stack.setAmount(Math.max(0, stack.getAmount() - recipe.ingredients[i][1]));
-                    }
-                    for (let i = 0; i < required[recipeName].advIngr.length; i += 1) {
-                        const stack = required[recipeName].advIngr[i].getItemStack();
-                        stack.setAmount(0);
-                    }
-                    const result = recipe.createResult();
-                    where.getWorld().dropItem(where, result);
-                    if (recipe.sound) {
-                        if (Sound_js_1.default.$isInstance(recipe.sound)) {
-                            where.getWorld().playSound(where, recipe.sound, 1, 1);
+                    if (required[workbenchId][recipeId].ingr.every(Boolean)
+                        && required[workbenchId][recipeId].advIngr.every(Boolean)) {
+                        if (!workbench.checkWorkbench(block, recipe)) {
+                            continue;
+                        }
+                        for (let i = 0; i < required[workbenchId][recipeId].ingr.length; i += 1) {
+                            const stack = required[workbenchId][recipeId].ingr[i].getItemStack();
+                            stack.setAmount(Math.max(0, stack.getAmount() - recipe.ingredients[i][1]));
+                        }
+                        for (let i = 0; i < required[workbenchId][recipeId].advIngr.length; i += 1) {
+                            const stack = required[workbenchId][recipeId].advIngr[i].getItemStack();
+                            stack.setAmount(0);
+                        }
+                        const result = recipe.createResult();
+                        if (workbench.naturalDrop) {
+                            where.getWorld().dropItemNaturally(where, result);
                         }
                         else {
-                            recipe.sound.forEach(sound => { where.getWorld().playSound(where, sound, 1, 1); });
+                            where.getWorld().dropItem(where, result);
                         }
-                    }
-                    if (recipe.postRecipe) {
-                        recipe.postRecipe(where);
+                        if (workbench.sound) {
+                            if (Sound_js_1.default.$isInstance(workbench.sound)) {
+                                where.getWorld().playSound(where, workbench.sound, 1, 1);
+                            }
+                            else {
+                                workbench.sound.forEach(sound => { where.getWorld().playSound(where, sound, 1, 1); });
+                            }
+                        }
+                        if (recipe.sound) {
+                            if (Sound_js_1.default.$isInstance(recipe.sound)) {
+                                where.getWorld().playSound(where, recipe.sound, 1, 1);
+                            }
+                            else {
+                                recipe.sound.forEach(sound => { where.getWorld().playSound(where, sound, 1, 1); });
+                            }
+                        }
+                        if (workbench.postRecipe) {
+                            workbench.postRecipe(where, recipe);
+                        }
+                        if (recipe.postRecipe) {
+                            recipe.postRecipe(where);
+                        }
                     }
                 }
             }

@@ -10,6 +10,7 @@ const ItemBuilder_js_1 = require("../../lib/com/smc/utils/ItemBuilder.js");
 const Bukkit_js_1 = require("../../lib/org/bukkit/Bukkit.js");
 const Player_js_1 = require("../../lib/org/bukkit/entity/Player.js");
 const InventoryAction_js_1 = require("../../lib/org/bukkit/event/inventory/InventoryAction.js");
+const InventoryType_js_1 = require("../../lib/org/bukkit/event/inventory/InventoryType.js");
 const ItemStack_js_1 = require("../../lib/org/bukkit/inventory/ItemStack.js");
 const Material_js_1 = require("../../lib/org/bukkit/Material.js");
 const CommandManager_js_1 = require("../services/CommandManager.js");
@@ -111,8 +112,11 @@ let Guide = class Guide extends Module_js_1.default {
         const playerName = player.getName();
         if (this.guideViews[playerName]) {
             const guideInv = this.createInventoryFromView(this.guideViews[playerName]);
-            // const currentInvView = player.getOpenInventory()
-            this.expectingClose[playerName] = true;
+            const currentInvType = player.getOpenInventory().getType();
+            if (currentInvType !== InventoryType_js_1.default.CREATIVE
+                && currentInvType !== InventoryType_js_1.default.CRAFTING) {
+                this.expectingClose[playerName] = true;
+            }
             player.openInventory(guideInv);
         }
     }
