@@ -10,7 +10,7 @@ export default class DefaultPage extends GuideBase implements GuideSection {
 
   pageNumber = 0
 
-  private sections: GuideSection[] = [
+  sections: GuideSection[] = [
     new RecipePage(this.context, this.player),
   ]
 

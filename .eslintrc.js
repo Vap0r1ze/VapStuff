@@ -14,9 +14,29 @@ module.exports = {
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/member-delimiter-style': ['error', {
+      'multiline': {
+        'delimiter': 'semi',
+        'requireLast': true,
+      },
+      'singleline': {
+        'delimiter': 'semi',
+        'requireLast': false,
+      },
+    }],
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/semi': [2, 'never'],
+    '@typescript-eslint/type-annotation-spacing': ['error', {
+      'before': true,
+      'after': true,
+      'overrides': {
+        'colon': {
+          'before': false,
+          'after': true,
+        },
+      },
+    }],
     'unused-imports/no-unused-imports': 'error',
     'arrow-parens': ['error', 'as-needed'],
     'class-methods-use-this': 'off',

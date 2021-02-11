@@ -5,6 +5,7 @@ import Player from '../../lib/org/bukkit/entity/Player.js'
 import InventoryAction from '../../lib/org/bukkit/event/inventory/InventoryAction.js'
 import InventoryClickEvent from '../../lib/org/bukkit/event/inventory/InventoryClickEvent.js'
 import InventoryCloseEvent from '../../lib/org/bukkit/event/inventory/InventoryCloseEvent.js'
+import InventoryType from '../../lib/org/bukkit/event/inventory/InventoryType.js'
 import Inventory from '../../lib/org/bukkit/inventory/Inventory.js'
 import ItemStack from '../../lib/org/bukkit/inventory/ItemStack.js'
 import Material from '../../lib/org/bukkit/Material.js'
@@ -19,9 +20,9 @@ import DefaultPage from './guide/DefaultPage.js'
 export default class Guide extends Module {
   get name() { return 'Vap Guide' }
 
-  private guideViews: Record<string, GuideView> = {}
+  guideViews: Record<string, GuideView> = {}
 
-  private expectingClose: Record<string, boolean> = {}
+  expectingClose: Record<string, boolean> = {}
 
   icons = {
     null: new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
@@ -113,17 +114,22 @@ export default class Guide extends Module {
     return false
   }
 
-  private updateView(player: Player) {
+  updateView(player: Player) {
     const playerName = player.getName()
     if (this.guideViews[playerName]) {
       const guideInv = this.createInventoryFromView(this.guideViews[playerName])
-      // const currentInvView = player.getOpenInventory()
-      this.expectingClose[playerName] = true
+      const currentInvType = player.getOpenInventory().getType()
+      if (
+        currentInvType !== InventoryType.CREATIVE
+        && currentInvType !== InventoryType.CRAFTING
+      ) {
+        this.expectingClose[playerName] = true
+      }
       player.openInventory(guideInv)
     }
   }
 
-  private createInventoryFromView(view: GuideView): Inventory {
+  createInventoryFromView(view: GuideView): Inventory {
     const inv = Bukkit.createInventory(null, 54, view.name)
     for (let i = 0; i < 54; i += 1) {
       inv.setItem(i, this.icons.null)
@@ -149,7 +155,7 @@ export default class Guide extends Module {
     return inv
   }
 
-  private sendViewPress(player: Player, view: GuideView, slot: number) {
+  sendViewPress(player: Player, view: GuideView, slot: number) {
     const subviews = view.getSubviews()
     const slotX = slot % 9
     const slotY = Math.floor(slot / 9)

@@ -3,32 +3,36 @@ import ExtraRecipes from './modules/ExtraRecipes.js'
 import ShulkerPocket from './modules/ShulkerPocket.js'
 import UseableItems from './modules/UseableItems.js'
 import GrassPlanter from './modules/GrassPlanter.js'
-import SpawnerDisassembler from './modules/SpawnerDisassembler.js'
 import NoWitherGrief from './modules/NoWitherGrief.js'
 import Guide from './modules/Guide.js'
 import Module from './types/Module.js'
+import Hints from './modules/Hints.js'
 
 export default class VapStuff extends JsPlugin {
+  // Level 0
+  hints = new Hints(this)
+
+  // Level 1
   extraRecipes = new ExtraRecipes(this)
 
+  // Level 2 - Modules
   useableItems = new UseableItems(this)
 
   shulkerPocket = new ShulkerPocket(this)
 
   grassPlanter = new GrassPlanter(this)
 
-  spawnerDisassembler = new SpawnerDisassembler(this)
-
   noWitherGrief = new NoWitherGrief(this)
 
+  // Level 3
   guide = new Guide(this)
 
   modules: Module[] = [
+    this.hints,
     this.extraRecipes,
     this.useableItems,
     this.shulkerPocket,
     this.grassPlanter,
-    this.spawnerDisassembler,
     this.noWitherGrief,
     this.guide,
   ]
