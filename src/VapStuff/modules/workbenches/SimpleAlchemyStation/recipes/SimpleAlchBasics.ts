@@ -16,7 +16,7 @@ export default class SimpleAlchBasics extends Module {
     ], Material.LEATHER)
     this.addSimpleRecipe('slimeball', [
       Material.WATER_BUCKET,
-      [Material.KELP_PLANT, 4],
+      [Material.KELP, 4],
       [Material.LIME_DYE, 4],
     ], Material.SLIME_BALL)
     this.addSimpleRecipe('nameTag', [
@@ -44,7 +44,7 @@ export default class SimpleAlchBasics extends Module {
     } else {
       [mat, amount] = result
     }
-    this.plugin.extraRecipes.addRecipe(this.WORKBENCH_ID, 'nameTag', {
+    this.plugin.extraRecipes.addRecipe(this.WORKBENCH_ID, id, {
       name: MinecraftData('1.16.5').itemsByName[`${mat.getKey()}`.replace('minecraft:', '')].displayName,
       ingredients: ingredients.map(ingr => (Material.$isInstance(ingr) ? [ingr, 1] : ingr)),
       createResult: () => new ItemStack(mat, amount),

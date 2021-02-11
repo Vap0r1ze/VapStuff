@@ -66,11 +66,7 @@ export default class RecipePage extends GuideBase implements GuideSection {
       for (const recipe of Object.values(workbench.recipes)) {
         const iconBuilder = new ItemBuilder(recipe.createResult(ItemEnv.GUIDE_LIST))
         const icon = iconBuilder
-          .setLore([
-            ...iconBuilder.getLore(),
-            '',
-            colorText('&eClick to view recipe!'),
-          ])
+          .setLore((Array.from(iconBuilder.getLore()).join('\n') + colorText('\n\n&eClick to view recipe!')).trim().split('\n'))
           .build()
         recipesView.items.push(icon)
       }
