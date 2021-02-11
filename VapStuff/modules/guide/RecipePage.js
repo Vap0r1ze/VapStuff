@@ -41,7 +41,7 @@ class RecipePage extends GuideSection_js_1.GuideBase {
             const workbenchesView = {
                 id: 'workbenches',
                 items: [],
-                xywh: [1, 1, 7, 3],
+                xywh: [2, 2, 5, 2],
             };
             for (const workbench of Object.values(extraRecipes.workbenches)) {
                 const icon = new ItemBuilder_js_1.default(workbench.icon)
@@ -56,7 +56,7 @@ class RecipePage extends GuideSection_js_1.GuideBase {
             const recipesView = {
                 id: 'recipes',
                 items: [],
-                xywh: [1, 1, 7, 3],
+                xywh: [2, 2, 5, 2],
             };
             for (const recipe of Object.values(workbench.recipes)) {
                 const iconBuilder = new ItemBuilder_js_1.default(recipe.createResult(1 /* GUIDE_LIST */));

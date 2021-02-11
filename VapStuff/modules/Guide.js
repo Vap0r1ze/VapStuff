@@ -143,6 +143,9 @@ let Guide = class Guide extends Module_js_1.default {
         if (view.getParent) {
             inv.setItem(48, this.icons.back(view.getParent().name));
         }
+        if (this.isViewSection(view) && inv.getItem(4).isSimilar(this.icons.null)) {
+            inv.setItem(4, view.getButton());
+        }
         inv.setItem(49, this.icons.close);
         return inv;
     }
@@ -165,6 +168,9 @@ let Guide = class Guide extends Module_js_1.default {
                 break;
             }
         }
+    }
+    isViewSection(view) {
+        return Boolean(view.getButton);
     }
 };
 __decorate([

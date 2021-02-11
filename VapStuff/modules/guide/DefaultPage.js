@@ -1,7 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const ItemStack_js_1 = require("../../../lib/org/bukkit/inventory/ItemStack.js");
-const Material_js_1 = require("../../../lib/org/bukkit/Material.js");
 const GuideSection_js_1 = require("../../types/GuideSection.js");
 const RecipePage_js_1 = require("./RecipePage.js");
 class DefaultPage extends GuideSection_js_1.GuideBase {
@@ -22,7 +20,7 @@ class DefaultPage extends GuideSection_js_1.GuideBase {
         return [sectionsView];
     }
     getButton() {
-        return new ItemStack_js_1.default(Material_js_1.default.AIR);
+        return this.context.icons.null;
     }
     onSelect(subviewId, index) {
         switch (subviewId) {
