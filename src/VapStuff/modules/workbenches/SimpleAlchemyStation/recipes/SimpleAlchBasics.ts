@@ -14,6 +14,10 @@ export default class SimpleAlchBasics extends Module {
       Material.BLAZE_POWDER,
       Material.ROTTEN_FLESH,
     ], Material.LEATHER)
+    this.addSimpleRecipe('slimeball', [
+      [Material.KELP, 8],
+      [Material.LIME_DYE, 8],
+    ], Material.SLIME_BALL, 2)
     this.addSimpleRecipe('nameTag', [
       Material.LEAD,
       Material.SLIME_BALL,
