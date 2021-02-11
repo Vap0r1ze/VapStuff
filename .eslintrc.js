@@ -40,11 +40,12 @@ module.exports = {
     'unused-imports/no-unused-imports': 'error',
     'arrow-parens': ['error', 'as-needed'],
     'class-methods-use-this': 'off',
-    'import/prefer-default-export': 'off',
     'import/extensions': ['error', {
       'js': 'always',
       'ts': 'always',
     }],
+    'import/prefer-default-export': 'off',
+    'import/order': 'off',
     'no-await-in-loop': 'off',
     'no-bitwise': 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
