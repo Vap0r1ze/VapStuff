@@ -11,7 +11,7 @@ import ItemStack from '../../lib/org/bukkit/inventory/ItemStack.js'
 import Material from '../../lib/org/bukkit/Material.js'
 import { CommandHandler, CommandRegister } from '../services/CommandManager.js'
 import { Subscribe } from '../services/EventListener.js'
-import { GuideView } from '../types/GuideSection.js'
+import { GuideSection, GuideView } from '../types/GuideSection.js'
 import Module from '../types/Module.js'
 import DefaultPage from './guide/DefaultPage.js'
 
@@ -151,6 +151,9 @@ export default class Guide extends Module {
     if (view.getParent) {
       inv.setItem(48, this.icons.back(view.getParent().name))
     }
+    if (this.isViewSection(view) && inv.getItem(4).isSimilar(this.icons.null)) {
+      inv.setItem(4, view.getButton())
+    }
     inv.setItem(49, this.icons.close)
     return inv
   }
@@ -176,5 +179,9 @@ export default class Guide extends Module {
         break
       }
     }
+  }
+
+  isViewSection(view: GuideView): view is GuideSection {
+    return Boolean((view as any).getButton)
   }
 }

@@ -1,5 +1,3 @@
-import ItemStack from '../../../lib/org/bukkit/inventory/ItemStack.js'
-import Material from '../../../lib/org/bukkit/Material.js'
 import {
   GuideSection, GuideBase, GuideSubview,
 } from '../../types/GuideSection.js'
@@ -24,7 +22,7 @@ export default class DefaultPage extends GuideBase implements GuideSection {
   }
 
   getButton() {
-    return new ItemStack(Material.AIR)
+    return this.context.icons.null
   }
 
   onSelect(subviewId: string, index: number) {
