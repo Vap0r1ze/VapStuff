@@ -18,7 +18,7 @@ export default class SimpleAlchBasics extends Module {
       Material.WATER_BUCKET,
       [Material.KELP, 4],
       [Material.LIME_DYE, 4],
-    ], Material.SLIME_BALL)
+    ], Material.SLIME_BALL, 2)
     this.addSimpleRecipe('nameTag', [
       Material.LEAD,
       Material.SLIME_BALL,
