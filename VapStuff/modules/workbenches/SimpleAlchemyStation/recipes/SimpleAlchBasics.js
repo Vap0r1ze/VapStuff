@@ -14,11 +14,6 @@ class SimpleAlchBasics extends Module_js_1.default {
             Material_js_1.default.BLAZE_POWDER,
             Material_js_1.default.ROTTEN_FLESH,
         ], Material_js_1.default.LEATHER);
-        this.addSimpleRecipe('slimeball', [
-            Material_js_1.default.WATER_BUCKET,
-            [Material_js_1.default.KELP, 4],
-            [Material_js_1.default.LIME_DYE, 4],
-        ], Material_js_1.default.SLIME_BALL, 2);
         this.addSimpleRecipe('nameTag', [
             Material_js_1.default.LEAD,
             Material_js_1.default.SLIME_BALL,

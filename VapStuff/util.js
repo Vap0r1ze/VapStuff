@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.capitalizeWords = exports.capitalize = exports.colorText = exports.hexChatColor = exports.Array2D = void 0;
+exports.capitalizeWords = exports.capitalize = exports.colorStrip = exports.colorText = exports.hexChatColor = exports.Array2D = void 0;
+// Data Structure
 function Array2D(w = 0, h = 0) {
     const arr2d = new Array(h);
     for (let i = 0; i < h; i += 1) {
@@ -9,6 +10,7 @@ function Array2D(w = 0, h = 0) {
     return arr2d;
 }
 exports.Array2D = Array2D;
+// Text
 function hexChatColor(hex) {
     return `\xA7x${[...hex].map(c => `\xA7${c}`).join('')}`;
 }
@@ -20,6 +22,15 @@ function colorText(text) {
         .replace(/&&/g, '&');
 }
 exports.colorText = colorText;
+function colorStrip(text) {
+    return text
+        .replace(/\xA7{2}/g, '\x00')
+        .replace(/\xA7x(\xA7[0-9a-f]){6}/gi, '')
+        .replace(/\xA7([0-9a-fklmnor])/gi, '')
+        // eslint-disable-next-line no-control-regex
+        .replace(/\x00/g, '\xA7');
+}
+exports.colorStrip = colorStrip;
 function capitalize(text) {
     return text[0].toUpperCase() + text.slice(1);
 }
