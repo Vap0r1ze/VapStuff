@@ -16,7 +16,7 @@ class SimpleAlchBasics extends Module_js_1.default {
         ], Material_js_1.default.LEATHER);
         this.addSimpleRecipe('slimeball', [
             Material_js_1.default.WATER_BUCKET,
-            [Material_js_1.default.KELP_PLANT, 4],
+            [Material_js_1.default.KELP, 4],
             [Material_js_1.default.LIME_DYE, 4],
         ], Material_js_1.default.SLIME_BALL);
         this.addSimpleRecipe('nameTag', [
@@ -38,7 +38,7 @@ class SimpleAlchBasics extends Module_js_1.default {
         else {
             [mat, amount] = result;
         }
-        this.plugin.extraRecipes.addRecipe(this.WORKBENCH_ID, 'nameTag', {
+        this.plugin.extraRecipes.addRecipe(this.WORKBENCH_ID, id, {
             name: MinecraftData('1.16.5').itemsByName[`${mat.getKey()}`.replace('minecraft:', '')].displayName,
             ingredients: ingredients.map(ingr => (Material_js_1.default.$isInstance(ingr) ? [ingr, 1] : ingr)),
             createResult: () => new ItemStack_js_1.default(mat, amount),

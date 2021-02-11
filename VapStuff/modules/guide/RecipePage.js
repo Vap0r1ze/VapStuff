@@ -61,11 +61,7 @@ class RecipePage extends GuideSection_js_1.GuideBase {
             for (const recipe of Object.values(workbench.recipes)) {
                 const iconBuilder = new ItemBuilder_js_1.default(recipe.createResult(1 /* GUIDE_LIST */));
                 const icon = iconBuilder
-                    .setLore([
-                    ...iconBuilder.getLore(),
-                    '',
-                    util_js_1.colorText('&eClick to view recipe!'),
-                ])
+                    .setLore((Array.from(iconBuilder.getLore()).join('\n') + util_js_1.colorText('\n\n&eClick to view recipe!')).trim().split('\n'))
                     .build();
                 recipesView.items.push(icon);
             }
