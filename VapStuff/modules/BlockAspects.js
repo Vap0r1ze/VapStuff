@@ -34,6 +34,8 @@ let BlockAspects = class BlockAspects extends Module_js_1.default {
                     data: aspectData,
                 };
                 this.db.save();
+                if (aspect.onPlace)
+                    aspect.onPlace(aspectData, event);
                 break;
             }
         }
@@ -80,10 +82,32 @@ let BlockAspects = class BlockAspects extends Module_js_1.default {
             this.db.save();
         }
     }
+    onEntityExplode(listener, event) {
+        const blocks = Array.from(event.blockList());
+        let stopYield = false;
+        for (const block of blocks) {
+            const where = block.getLocation();
+            const whereStr = util_js_1.serializeLocation(where);
+            const aspectData = this.db.data[whereStr];
+            if (aspectData) {
+                const aspect = this.aspects[aspectData.aspectId];
+                if (aspect) {
+                    const drop = aspect.createDrop(aspectData.data);
+                    if (drop)
+                        where.getWorld().dropItemNaturally(where, drop);
+                    stopYield = true;
+                }
+                delete this.db.data[whereStr];
+                this.db.save();
+            }
+        }
+        if (stopYield)
+            event.setYield(0);
+    }
     // API
     getBlockAspect(where) {
-        where.getBlock().getLocation();
-        return this.db.data[util_js_1.serializeLocation(where)] || null;
+        const blockWhere = where.getBlock().getLocation();
+        return this.db.data[util_js_1.serializeLocation(blockWhere)] || null;
     }
     getMap() {
         const map = new Map();

@@ -61,6 +61,12 @@ class RainbowBlocks extends Module_js_1.default {
                 }
                 return null;
             },
+            onPlace: (data, event) => {
+                const block = event.getBlockPlaced();
+                const cycleColor = this.COLOR_CYCLE[this.cycle];
+                const mat = Material_js_1.default[`${cycleColor.name()}_${data.type}`];
+                block.setType(mat);
+            },
             createDrop: (data, player) => {
                 const { type } = data;
                 if (player) {
@@ -117,6 +123,10 @@ class RainbowBlocks extends Module_js_1.default {
         }
     }
     onPaint() {
+        this.cycle += 1;
+        if (this.cycle >= this.COLOR_CYCLE.length) {
+            this.cycle = 0;
+        }
         const aspectMap = this.plugin.blockAspects.filterMapById(this.ID);
         const cycleColor = this.COLOR_CYCLE[this.cycle];
         for (const [where, aspectData] of aspectMap.entries()) {
@@ -126,10 +136,6 @@ class RainbowBlocks extends Module_js_1.default {
             const mat = Material_js_1.default[`${cycleColor.name()}_${type}`];
             const block = where.getBlock();
             block.setType(mat);
-        }
-        this.cycle += 1;
-        if (this.cycle >= this.COLOR_CYCLE.length) {
-            this.cycle = 0;
         }
     }
     isRainbowItem(item) {
