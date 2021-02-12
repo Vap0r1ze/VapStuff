@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.capitalizeWords = exports.capitalize = exports.colorStrip = exports.colorText = exports.hexChatColor = exports.Array2D = void 0;
+exports.deserializeLocation = exports.serializeLocation = exports.capitalizeWords = exports.capitalize = exports.colorStrip = exports.colorText = exports.hexChatColor = exports.Array2D = void 0;
+const Location_js_1 = require("../lib/org/bukkit/Location.js");
 // Data Structure
 function Array2D(w = 0, h = 0) {
     const arr2d = new Array(h);
@@ -39,3 +40,13 @@ function capitalizeWords(words) {
     return words.split(' ').map(w => capitalize(w)).join(' ');
 }
 exports.capitalizeWords = capitalizeWords;
+function serializeLocation(where) {
+    return `${where.getWorld().getName()},${where.getBlockX()},${where.getBlockY()},${where.getBlockZ()}`;
+}
+exports.serializeLocation = serializeLocation;
+function deserializeLocation(whereStr, server) {
+    const [worldName, x, y, z] = whereStr.split(',');
+    const world = server.getWorld(worldName);
+    return new Location_js_1.default(world, +x, +y, +z);
+}
+exports.deserializeLocation = deserializeLocation;

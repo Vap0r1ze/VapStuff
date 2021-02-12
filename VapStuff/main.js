@@ -8,12 +8,14 @@ const GrassPlanter_js_1 = require("./modules/GrassPlanter.js");
 const NoWitherGrief_js_1 = require("./modules/NoWitherGrief.js");
 const Guide_js_1 = require("./modules/Guide.js");
 const Hints_js_1 = require("./modules/Hints.js");
+const DBFactory_js_1 = require("./modules/DBFactory.js");
+const BlockAspects_js_1 = require("./modules/BlockAspects.js");
 class VapStuff extends JsPlugin_js_1.default {
     constructor() {
         super(...arguments);
-        // Level 0
+        this.dbFactory = new DBFactory_js_1.default(this);
         this.hints = new Hints_js_1.default(this);
-        // Level 1
+        this.blockAspects = new BlockAspects_js_1.default(this);
         this.extraRecipes = new ExtraRecipes_js_1.default(this);
         // Level 2 - Modules
         this.useableItems = new UseableItems_js_1.default(this);
@@ -23,7 +25,9 @@ class VapStuff extends JsPlugin_js_1.default {
         // Level 3
         this.guide = new Guide_js_1.default(this);
         this.modules = [
+            this.dbFactory,
             this.hints,
+            this.blockAspects,
             this.extraRecipes,
             this.useableItems,
             this.shulkerPocket,

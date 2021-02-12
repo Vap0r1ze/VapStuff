@@ -10,6 +10,7 @@ const Sound_js_1 = require("../../lib/org/bukkit/Sound.js");
 const EventListener_js_1 = require("../services/EventListener.js");
 const Module_js_1 = require("../types/Module.js");
 const SimpleAlchemyStation_js_1 = require("./workbenches/SimpleAlchemyStation/SimpleAlchemyStation.js");
+const util_js_1 = require("../util.js");
 let ExtraRecipes = class ExtraRecipes extends Module_js_1.default {
     constructor() {
         super(...arguments);
@@ -75,10 +76,10 @@ let ExtraRecipes = class ExtraRecipes extends Module_js_1.default {
     onPlayerDropItem(listener, event) {
         const drop = event.getItemDrop();
         if (this.trackedMaterials.includes(drop.getItemStack().getType())) {
-            const loc = this.serializeLocation(drop.getLocation());
-            if (!this.trackedDrops[loc])
-                this.trackedDrops[loc] = [];
-            this.trackedDrops[loc].push(drop);
+            const where = util_js_1.serializeLocation(drop.getLocation());
+            if (!this.trackedDrops[where])
+                this.trackedDrops[where] = [];
+            this.trackedDrops[where].push(drop);
         }
     }
     // Internal
@@ -181,31 +182,28 @@ let ExtraRecipes = class ExtraRecipes extends Module_js_1.default {
         }
     }
     trackItems() {
-        for (const [loc, drops] of Object.entries(this.trackedDrops)) {
-            this.trackedDrops[loc] = drops.filter(drop => !drop.isDead());
-            if (this.trackedDrops[loc].length === 0) {
-                delete this.trackedDrops[loc];
+        for (const [where, drops] of Object.entries(this.trackedDrops)) {
+            this.trackedDrops[where] = drops.filter(drop => !drop.isDead());
+            if (this.trackedDrops[where].length === 0) {
+                delete this.trackedDrops[where];
             }
             else {
-                for (let i = 0; i < this.trackedDrops[loc].length; i += 1) {
-                    const drop = this.trackedDrops[loc][i];
-                    const newLoc = this.serializeLocation(drop.getLocation());
-                    if (newLoc !== loc) {
-                        this.trackedDrops[loc].splice(i, 1);
+                for (let i = 0; i < this.trackedDrops[where].length; i += 1) {
+                    const drop = this.trackedDrops[where][i];
+                    const newLoc = util_js_1.serializeLocation(drop.getLocation());
+                    if (newLoc !== where) {
+                        this.trackedDrops[where].splice(i, 1);
                         i -= 1;
                         if (!this.trackedDrops[newLoc])
                             this.trackedDrops[newLoc] = [];
                         this.trackedDrops[newLoc].push(drop);
                     }
                 }
-                if (this.trackedDrops[loc].length === 0) {
-                    delete this.trackedDrops[loc];
+                if (this.trackedDrops[where].length === 0) {
+                    delete this.trackedDrops[where];
                 }
             }
         }
-    }
-    serializeLocation(loc) {
-        return `${loc.getWorld().getName()}[${loc.getBlockX()},${loc.getBlockY()},${loc.getBlockZ()}]`;
     }
 };
 ExtraRecipes = __decorate([
