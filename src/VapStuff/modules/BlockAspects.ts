@@ -3,6 +3,7 @@ import BlockBreakEvent from '../../lib/org/bukkit/event/block/BlockBreakEvent.js
 import BlockPistonExtendEvent from '../../lib/org/bukkit/event/block/BlockPistonExtendEvent.js'
 import BlockPistonRetractEvent from '../../lib/org/bukkit/event/block/BlockPistonRetractEvent.js'
 import BlockPlaceEvent from '../../lib/org/bukkit/event/block/BlockPlaceEvent.js'
+import EntityExplodeEvent from '../../lib/org/bukkit/event/entity/EntityExplodeEvent.js'
 import ItemStack from '../../lib/org/bukkit/inventory/ItemStack.js'
 import Location from '../../lib/org/bukkit/Location.js'
 import { Subscribe } from '../services/EventListener.js'
@@ -101,10 +102,31 @@ export default class BlockAspects extends Module {
     }
   }
 
+  onEntityExplode(listener: any, event: EntityExplodeEvent) {
+    const blocks = Array.from(event.blockList())
+    let stopYield = false
+    for (const block of blocks) {
+      const where = block.getLocation()
+      const whereStr = serializeLocation(where)
+      const aspectData = this.db.data[whereStr]
+      if (aspectData) {
+        const aspect = this.aspects[aspectData.aspectId]
+        if (aspect) {
+          const drop = aspect.createDrop(aspectData.data)
+          if (drop) where.getWorld().dropItemNaturally(where, drop)
+          stopYield = true
+        }
+        delete this.db.data[whereStr]
+        this.db.save()
+      }
+    }
+    if (stopYield) event.setYield(0)
+  }
+
   // API
   getBlockAspect(where: Location) {
-    where.getBlock().getLocation()
-    return this.db.data[serializeLocation(where)] || null
+    const blockWhere = where.getBlock().getLocation()
+    return this.db.data[serializeLocation(blockWhere)] || null
   }
 
   getMap() {
