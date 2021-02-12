@@ -2,6 +2,7 @@ import ItemBuilder from '../../../../../lib/com/smc/utils/ItemBuilder.js'
 import DyeColor from '../../../../../lib/org/bukkit/DyeColor.js'
 import Enchantment from '../../../../../lib/org/bukkit/enchantments/Enchantment.js'
 import Player from '../../../../../lib/org/bukkit/entity/Player.js'
+import BlockPlaceEvent from '../../../../../lib/org/bukkit/event/block/BlockPlaceEvent.js'
 import GameMode from '../../../../../lib/org/bukkit/GameMode.js'
 import ItemStack from '../../../../../lib/org/bukkit/inventory/ItemStack.js'
 import PlayerInventory from '../../../../../lib/org/bukkit/inventory/PlayerInventory.js'
@@ -75,6 +76,12 @@ export default class RainbowBlocks extends Module {
         }
         return null
       },
+      onPlace: (data: RainbowBlockData, event: BlockPlaceEvent) => {
+        const block = event.getBlockPlaced()
+        const cycleColor = this.COLOR_CYCLE[this.cycle]
+        const mat = Material[`${cycleColor.name()}_${data.type}`] as Material
+        block.setType(mat)
+      },
       createDrop: (data: RainbowBlockData, player?: Player): ItemStack => {
         const { type } = data
         if (player) {
@@ -132,6 +139,10 @@ export default class RainbowBlocks extends Module {
   }
 
   onPaint() {
+    this.cycle += 1
+    if (this.cycle >= this.COLOR_CYCLE.length) {
+      this.cycle = 0
+    }
     const aspectMap = this.plugin.blockAspects.filterMapById(this.ID)
     const cycleColor = this.COLOR_CYCLE[this.cycle]
 
@@ -141,11 +152,6 @@ export default class RainbowBlocks extends Module {
       const mat = Material[`${cycleColor.name()}_${type}`] as Material
       const block = where.getBlock()
       block.setType(mat)
-    }
-
-    this.cycle += 1
-    if (this.cycle >= this.COLOR_CYCLE.length) {
-      this.cycle = 0
     }
   }
 

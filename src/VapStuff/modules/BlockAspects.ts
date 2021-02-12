@@ -13,6 +13,7 @@ import { deserializeLocation, serializeLocation } from '../util.js'
 
 export interface Aspect {
   serializeItem: (item: ItemStack, player: Player) => any | Error;
+  onPlace?: (data: any, event: BlockPlaceEvent) => void;
   createDrop: (data: any, player?: Player) => ItemStack;
 }
 
@@ -52,6 +53,7 @@ export default class BlockAspects extends Module {
           data: aspectData,
         }
         this.db.save()
+        if (aspect.onPlace) aspect.onPlace(aspectData, event)
         break
       }
     }
