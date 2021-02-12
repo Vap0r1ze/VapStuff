@@ -7,12 +7,16 @@ import NoWitherGrief from './modules/NoWitherGrief.js'
 import Guide from './modules/Guide.js'
 import Module from './types/Module.js'
 import Hints from './modules/Hints.js'
+import DBFactory from './modules/DBFactory.js'
+import BlockAspects from './modules/BlockAspects.js'
 
 export default class VapStuff extends JsPlugin {
-  // Level 0
+  dbFactory = new DBFactory(this)
+
   hints = new Hints(this)
 
-  // Level 1
+  blockAspects = new BlockAspects(this)
+
   extraRecipes = new ExtraRecipes(this)
 
   // Level 2 - Modules
@@ -28,7 +32,9 @@ export default class VapStuff extends JsPlugin {
   guide = new Guide(this)
 
   modules: Module[] = [
+    this.dbFactory,
     this.hints,
+    this.blockAspects,
     this.extraRecipes,
     this.useableItems,
     this.shulkerPocket,

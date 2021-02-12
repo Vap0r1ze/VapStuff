@@ -10,6 +10,7 @@ import { GuideSubview } from '../types/GuideSection.js'
 import Module from '../types/Module.js'
 import RecipePage from './guide/RecipePage.js'
 import SimpleAlchemyStation, { SimpleAlchRecipe } from './workbenches/SimpleAlchemyStation/SimpleAlchemyStation.js'
+import { serializeLocation } from '../util.js'
 
 export const enum ItemEnv {
   DEFAULT,
@@ -120,9 +121,9 @@ export default class ExtraRecipes extends Module {
   onPlayerDropItem(listener: any, event: PlayerDropItemEvent) {
     const drop = event.getItemDrop()
     if (this.trackedMaterials.includes(drop.getItemStack().getType())) {
-      const loc = this.serializeLocation(drop.getLocation())
-      if (!this.trackedDrops[loc]) this.trackedDrops[loc] = []
-      this.trackedDrops[loc].push(drop)
+      const where = serializeLocation(drop.getLocation())
+      if (!this.trackedDrops[where]) this.trackedDrops[where] = []
+      this.trackedDrops[where].push(drop)
     }
   }
 
@@ -226,29 +227,25 @@ export default class ExtraRecipes extends Module {
   }
 
   trackItems() {
-    for (const [loc, drops] of Object.entries(this.trackedDrops)) {
-      this.trackedDrops[loc] = drops.filter(drop => !drop.isDead())
-      if (this.trackedDrops[loc].length === 0) {
-        delete this.trackedDrops[loc]
+    for (const [where, drops] of Object.entries(this.trackedDrops)) {
+      this.trackedDrops[where] = drops.filter(drop => !drop.isDead())
+      if (this.trackedDrops[where].length === 0) {
+        delete this.trackedDrops[where]
       } else {
-        for (let i = 0; i < this.trackedDrops[loc].length; i += 1) {
-          const drop = this.trackedDrops[loc][i]
-          const newLoc = this.serializeLocation(drop.getLocation())
-          if (newLoc !== loc) {
-            this.trackedDrops[loc].splice(i, 1)
+        for (let i = 0; i < this.trackedDrops[where].length; i += 1) {
+          const drop = this.trackedDrops[where][i]
+          const newLoc = serializeLocation(drop.getLocation())
+          if (newLoc !== where) {
+            this.trackedDrops[where].splice(i, 1)
             i -= 1
             if (!this.trackedDrops[newLoc]) this.trackedDrops[newLoc] = []
             this.trackedDrops[newLoc].push(drop)
           }
         }
-        if (this.trackedDrops[loc].length === 0) {
-          delete this.trackedDrops[loc]
+        if (this.trackedDrops[where].length === 0) {
+          delete this.trackedDrops[where]
         }
       }
     }
-  }
-
-  serializeLocation(loc: Location) {
-    return `${loc.getWorld().getName()}[${loc.getBlockX()},${loc.getBlockY()},${loc.getBlockZ()}]`
   }
 }

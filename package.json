@@ -29,7 +29,8 @@
   },
   "homepage": "https://github.com/astorks/ScriptableMC-TypeScript#readme",
   "dependencies": {
-    "minecraft-data": "^2.74.0"
+    "minecraft-data": "^2.74.0",
+    "yaml": "^1.10.0"
   },
   "devDependencies": {
     "@types/node": "^14.14.25",

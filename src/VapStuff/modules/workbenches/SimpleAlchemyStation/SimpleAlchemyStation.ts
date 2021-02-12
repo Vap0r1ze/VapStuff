@@ -16,6 +16,7 @@ import { colorText } from '../../../util.js'
 import { Recipe, ItemEnv } from '../../ExtraRecipes.js'
 import RecipePage from '../../guide/RecipePage.js'
 import { Hint } from '../../Hints.js'
+import RainbowBlocks from './recipes/RainbowBlocks.js'
 import SimpleAlchBasics from './recipes/SimpleAlchBasics.js'
 import SpawnerDisassembler from './recipes/SpawnerDisassembler.js'
 
@@ -31,6 +32,7 @@ export default class SimpleAlchemyStation extends Module {
 
   readonly RECIPES: Module[] = [
     new SimpleAlchBasics(this.plugin),
+    new RainbowBlocks(this.plugin),
     new SpawnerDisassembler(this.plugin),
   ]
 

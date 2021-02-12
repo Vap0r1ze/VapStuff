@@ -1,3 +1,6 @@
+import Location from '../lib/org/bukkit/Location.js'
+import Server from '../lib/org/bukkit/Server.js'
+
 // Data Structure
 export function Array2D(w = 0, h = 0) {
   const arr2d = new Array(h)
@@ -30,4 +33,12 @@ export function capitalize(text: string) {
 }
 export function capitalizeWords(words: string): string {
   return words.split(' ').map(w => capitalize(w)).join(' ')
+}
+export function serializeLocation(where: Location) {
+  return `${where.getWorld().getName()},${where.getBlockX()},${where.getBlockY()},${where.getBlockZ()}`
+}
+export function deserializeLocation(whereStr: string, server: Server) {
+  const [worldName, x, y, z] = whereStr.split(',')
+  const world = server.getWorld(worldName)
+  return new Location(world, +x, +y, +z)
 }
