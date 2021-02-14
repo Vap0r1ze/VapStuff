@@ -16,7 +16,7 @@ type AspectMetadata = any
 export interface Aspect {
   serializeItem: (item: ItemStack, player: Player) => AspectMetadata | null | Error;
   onPlace?: (data: AspectMetadata, event: BlockPlaceEvent) => void;
-  createDrop: (data: AspectMetadata, player?: Player) => ItemStack;
+  createDrop?: (data: AspectMetadata, player?: Player) => ItemStack;
 }
 
 export interface AspectData {
@@ -71,11 +71,13 @@ export default class BlockAspects extends Module {
       delete this.db.data[whereStr]
       this.db.save()
       const aspect = this.aspects[aspectId]
-      event.setDropItems(false)
-      event.setExpToDrop(0)
-      const drop = aspect.createDrop(aspectData.data, event.getPlayer())
-      if (drop) {
-        where.getWorld().dropItemNaturally(where, drop)
+      if (aspect.createDrop) {
+        const drop = aspect.createDrop(aspectData.data, event.getPlayer())
+        if (drop) {
+          event.setDropItems(false)
+          event.setExpToDrop(0)
+          where.getWorld().dropItemNaturally(where, drop)
+        }
       }
     }
   }
