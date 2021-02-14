@@ -15,6 +15,7 @@ const Sound_js_1 = require("../../../../lib/org/bukkit/Sound.js");
 const EventListener_js_1 = require("../../../services/EventListener.js");
 const Module_js_1 = require("../../../types/Module.js");
 const util_js_1 = require("../../../util.js");
+const MagnumRod_js_1 = require("./recipes/MagnumRod.js");
 const RainbowBlocks_js_1 = require("./recipes/RainbowBlocks.js");
 const SimpleAlchBasics_js_1 = require("./recipes/SimpleAlchBasics.js");
 const SpawnerDisassembler_js_1 = require("./recipes/SpawnerDisassembler.js");
@@ -26,6 +27,7 @@ let SimpleAlchemyStation = class SimpleAlchemyStation extends Module_js_1.defaul
         this.RECIPES = [
             new SimpleAlchBasics_js_1.default(this.plugin),
             new RainbowBlocks_js_1.default(this.plugin),
+            new MagnumRod_js_1.default(this.plugin),
             new SpawnerDisassembler_js_1.default(this.plugin),
         ];
     }
