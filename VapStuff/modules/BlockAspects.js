@@ -50,11 +50,13 @@ let BlockAspects = class BlockAspects extends Module_js_1.default {
             delete this.db.data[whereStr];
             this.db.save();
             const aspect = this.aspects[aspectId];
-            event.setDropItems(false);
-            event.setExpToDrop(0);
-            const drop = aspect.createDrop(aspectData.data, event.getPlayer());
-            if (drop) {
-                where.getWorld().dropItemNaturally(where, drop);
+            if (aspect.createDrop) {
+                const drop = aspect.createDrop(aspectData.data, event.getPlayer());
+                if (drop) {
+                    event.setDropItems(false);
+                    event.setExpToDrop(0);
+                    where.getWorld().dropItemNaturally(where, drop);
+                }
             }
         }
     }
