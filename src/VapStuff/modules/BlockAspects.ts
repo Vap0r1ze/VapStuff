@@ -11,15 +11,17 @@ import YAMLDatabase from '../services/YAMLDatabase.js'
 import Module from '../types/Module.js'
 import { deserializeLocation, serializeLocation } from '../util.js'
 
+type AspectMetadata = any
+
 export interface Aspect {
-  serializeItem: (item: ItemStack, player: Player) => any | Error;
-  onPlace?: (data: any, event: BlockPlaceEvent) => void;
-  createDrop: (data: any, player?: Player) => ItemStack;
+  serializeItem: (item: ItemStack, player: Player) => AspectMetadata | null | Error;
+  onPlace?: (data: AspectMetadata, event: BlockPlaceEvent) => void;
+  createDrop: (data: AspectMetadata, player?: Player) => ItemStack;
 }
 
 export interface AspectData {
   aspectId: string;
-  data: any;
+  data: AspectMetadata;
 }
 
 interface AspectDB extends YAMLDatabase {

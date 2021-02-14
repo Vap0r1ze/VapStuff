@@ -46,7 +46,7 @@ export default class RecipePage extends GuideBase implements GuideSection {
       const workbenchesView: GuideSubview = {
         id: 'workbenches',
         items: [],
-        xywh: [2, 2, 5, 2],
+        xywh: [1, 2, 7, 2],
       }
       for (const workbench of Object.values(extraRecipes.workbenches)) {
         const icon = new ItemBuilder(workbench.icon)
@@ -61,7 +61,7 @@ export default class RecipePage extends GuideBase implements GuideSection {
       const recipesView: GuideSubview = {
         id: 'recipes',
         items: [],
-        xywh: [2, 2, 5, 2],
+        xywh: [1, 2, 7, 2],
       }
       for (const recipe of Object.values(workbench.recipes)) {
         const iconBuilder = new ItemBuilder(recipe.createResult(ItemEnv.GUIDE_LIST))
