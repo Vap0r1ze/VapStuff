@@ -66,9 +66,7 @@ let MagnumRod = class MagnumRod extends Module_js_1.default {
                 [Material_js_1.default.END_ROD, 1],
                 [Material_js_1.default.SOUL_TORCH, 1],
             ],
-            createResult: () => (new ItemBuilder_js_1.default(Material_js_1.default.END_ROD)
-                .setDisplayName(this.MAGNUM_NAME)
-                .build()),
+            createResult: () => this.createMagnumRod(),
         });
         this.plugin.blockAspects.addAspect(this.ID, {
             serializeItem: (item) => {
@@ -80,9 +78,7 @@ let MagnumRod = class MagnumRod extends Module_js_1.default {
             createDrop: (data, player) => {
                 if (player.getGameMode() === GameMode_js_1.default.CREATIVE)
                     return null;
-                return new ItemBuilder_js_1.default(Material_js_1.default.END_ROD)
-                    .setDisplayName(this.MAGNUM_NAME)
-                    .build();
+                return this.createMagnumRod();
             },
         });
     }
@@ -100,6 +96,17 @@ let MagnumRod = class MagnumRod extends Module_js_1.default {
                 return;
             }
         }
+    }
+    createMagnumRod() {
+        return new ItemBuilder_js_1.default(Material_js_1.default.END_ROD)
+            .setDisplayName(this.MAGNUM_NAME)
+            .setLore([
+            '&7This ethereal rod counteracts the natural',
+            '&7summoning of &chostile &7 creatures',
+            `&7within the range of &b${this.RADIUS} &7blocks`,
+            '&7in all directions',
+        ].map(str => util_js_1.colorText(str)))
+            .build();
     }
     isMagnumRod(item) {
         if (item.getItemMeta().getDisplayName() === this.MAGNUM_NAME) {
