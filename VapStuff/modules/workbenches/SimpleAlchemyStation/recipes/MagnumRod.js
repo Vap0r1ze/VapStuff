@@ -16,7 +16,7 @@ const util_js_1 = require("../../../../util.js");
 let MagnumRod = class MagnumRod extends Module_js_1.default {
     constructor() {
         super(...arguments);
-        this.ASPECT_ID = 'magnumRod';
+        this.ID = 'magnumRod';
         this.MAGNUM_NAME = util_js_1.colorText('&#FF3080Magnum Rod');
         this.RADIUS = 50;
         this.forbiddenEntities = [
@@ -57,7 +57,7 @@ let MagnumRod = class MagnumRod extends Module_js_1.default {
     }
     get name() { return 'Magnum Rod'; }
     onEnable() {
-        this.plugin.extraRecipes.addRecipe('simpleAlch', 'magnumRod', {
+        this.plugin.extraRecipes.addRecipe('simpleAlch', this.ID, {
             waterUsage: 1,
             name: 'Magnum Rod',
             ingredients: [
@@ -70,7 +70,7 @@ let MagnumRod = class MagnumRod extends Module_js_1.default {
                 .setDisplayName(this.MAGNUM_NAME)
                 .build()),
         });
-        this.plugin.blockAspects.addAspect(this.ASPECT_ID, {
+        this.plugin.blockAspects.addAspect(this.ID, {
             serializeItem: (item) => {
                 if (item.getType() === Material_js_1.default.END_ROD && this.isMagnumRod(item)) {
                     return {};
@@ -86,10 +86,14 @@ let MagnumRod = class MagnumRod extends Module_js_1.default {
             },
         });
     }
+    onDisable() {
+        this.plugin.extraRecipes.removeRecipe('simpleAlch', this.ID);
+        this.plugin.blockAspects.removeAspect(this.ID);
+    }
     onEntitySpawn(listener, event) {
         if (!this.forbiddenEntities.includes(event.getEntityType()))
             return;
-        const rodMap = this.plugin.blockAspects.filterMapById(this.ASPECT_ID);
+        const rodMap = this.plugin.blockAspects.filterMapById(this.ID);
         for (const rodLocation of rodMap.keys()) {
             if (event.getLocation().distance(rodLocation) <= this.RADIUS) {
                 event.setCancelled(true);
