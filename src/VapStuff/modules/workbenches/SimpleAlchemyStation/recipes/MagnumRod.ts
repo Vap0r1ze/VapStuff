@@ -13,7 +13,7 @@ import { colorText } from '../../../../util.js'
 export default class MagnumRod extends Module {
   get name() { return 'Magnum Rod' }
 
-  readonly ASPECT_ID = 'magnumRod'
+  readonly ID = 'magnumRod'
 
   readonly MAGNUM_NAME = colorText('&#FF3080Magnum Rod')
 
@@ -56,7 +56,7 @@ export default class MagnumRod extends Module {
   ]
 
   onEnable() {
-    this.plugin.extraRecipes.addRecipe('simpleAlch', 'magnumRod', {
+    this.plugin.extraRecipes.addRecipe('simpleAlch', this.ID, {
       waterUsage: 1,
       name: 'Magnum Rod',
       ingredients: [
@@ -69,7 +69,7 @@ export default class MagnumRod extends Module {
         .setDisplayName(this.MAGNUM_NAME)
         .build()),
     })
-    this.plugin.blockAspects.addAspect(this.ASPECT_ID, {
+    this.plugin.blockAspects.addAspect(this.ID, {
       serializeItem: (item: ItemStack) => {
         if (item.getType() === Material.END_ROD && this.isMagnumRod(item)) {
           return {}
@@ -85,9 +85,14 @@ export default class MagnumRod extends Module {
     })
   }
 
+  onDisable() {
+    this.plugin.extraRecipes.removeRecipe('simpleAlch', this.ID)
+    this.plugin.blockAspects.removeAspect(this.ID)
+  }
+
   onEntitySpawn(listener: any, event: EntitySpawnEvent) {
     if (!this.forbiddenEntities.includes(event.getEntityType())) return
-    const rodMap = this.plugin.blockAspects.filterMapById(this.ASPECT_ID)
+    const rodMap = this.plugin.blockAspects.filterMapById(this.ID)
     for (const rodLocation of rodMap.keys()) {
       if (event.getLocation().distance(rodLocation) <= this.RADIUS) {
         event.setCancelled(true)
