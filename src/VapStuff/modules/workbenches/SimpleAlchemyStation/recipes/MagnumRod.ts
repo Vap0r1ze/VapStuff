@@ -65,9 +65,7 @@ export default class MagnumRod extends Module {
         [Material.END_ROD, 1],
         [Material.SOUL_TORCH, 1],
       ],
-      createResult: () => (new ItemBuilder(Material.END_ROD)
-        .setDisplayName(this.MAGNUM_NAME)
-        .build()),
+      createResult: () => this.createMagnumRod(),
     })
     this.plugin.blockAspects.addAspect(this.ID, {
       serializeItem: (item: ItemStack) => {
@@ -78,9 +76,7 @@ export default class MagnumRod extends Module {
       },
       createDrop: (data: any, player: Player) => {
         if (player.getGameMode() === GameMode.CREATIVE) return null
-        return new ItemBuilder(Material.END_ROD)
-          .setDisplayName(this.MAGNUM_NAME)
-          .build()
+        return this.createMagnumRod()
       },
     })
   }
@@ -99,6 +95,18 @@ export default class MagnumRod extends Module {
         return
       }
     }
+  }
+
+  private createMagnumRod() {
+    return new ItemBuilder(Material.END_ROD)
+      .setDisplayName(this.MAGNUM_NAME)
+      .setLore([
+        '&7This ethereal rod counteracts the natural',
+        '&7summoning of &chostile &7 creatures',
+        `&7within the range of &b${this.RADIUS} &7blocks`,
+        '&7in all directions',
+      ].map(str => colorText(str)))
+      .build()
   }
 
   private isMagnumRod(item: ItemStack): boolean {
