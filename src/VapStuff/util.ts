@@ -42,3 +42,15 @@ export function deserializeLocation(whereStr: string, server: Server) {
   const world = server.getWorld(worldName)
   return new Location(world, +x, +y, +z)
 }
+export function getDeltasFromTaxicabRadius(radius: number) {
+  const deltas: [number, number, number][] = []
+  for (let dy = -radius; dy <= radius; dy += 1) {
+    const layerRadius = radius - Math.abs(dy)
+    for (let dz = -layerRadius; dz <= layerRadius; dz += 1) {
+      for (let dx = Math.abs(dz) - layerRadius; dx <= layerRadius - Math.abs(dz); dx += 1) {
+        deltas.push([dx, dy, dz])
+      }
+    }
+  }
+  return deltas
+}

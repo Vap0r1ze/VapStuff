@@ -1,3 +1,5 @@
+const { off } = require("process");
+
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
@@ -51,6 +53,7 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-continue': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-param-reassign': 'off',
     'no-sparse-arrays': 'off',
     'no-restricted-syntax': 'off',
     'prefer-destructuring': ['error', {
