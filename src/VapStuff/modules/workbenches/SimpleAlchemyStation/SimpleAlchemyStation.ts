@@ -17,6 +17,7 @@ import { Recipe, ItemEnv } from '../../ExtraRecipes.js'
 import RecipePage from '../../guide/RecipePage.js'
 import { Hint } from '../../Hints.js'
 import MagmaticSponge from './recipes/MagmaticSponge.js'
+import DebugLamp from './recipes/DebugLamp.js'
 import MagnumRod from './recipes/MagnumRod.js'
 import RainbowBlocks from './recipes/RainbowBlocks.js'
 import SimpleAlchBasics from './recipes/SimpleAlchBasics.js'
@@ -38,6 +39,7 @@ export default class SimpleAlchemyStation extends Module {
     new MagnumRod(this.plugin),
     new MagmaticSponge(this.plugin),
     new SpawnerDisassembler(this.plugin),
+    new DebugLamp(this.plugin),
   ]
 
   // Hooks
