@@ -56,5 +56,9 @@ class VapStuff extends JsPlugin_js_1.default {
     log(message) {
         console.log(`\xA7a[${this.pluginName}]\xA7r ${message}`);
     }
+    getPlayer(uuid) {
+        const players = Array.from(this.server.getOnlinePlayers());
+        return players.find(player => player.getUniqueId().toString() === uuid);
+    }
 }
 exports.default = VapStuff;
