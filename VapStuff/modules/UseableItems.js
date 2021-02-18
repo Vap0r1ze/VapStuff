@@ -23,7 +23,7 @@ let UseableItems = class UseableItems extends Module_js_1.default {
         const action = event.getAction();
         if (!item)
             return;
-        if (action !== Action_js_1.default.RIGHT_CLICK_AIR)
+        if (action !== Action_js_1.default.RIGHT_CLICK_AIR && this.isLeftClick(action))
             return;
         switch (item.getType()) {
             case Material_js_1.default.CRAFTING_TABLE: {
@@ -53,6 +53,9 @@ let UseableItems = class UseableItems extends Module_js_1.default {
                 .getWorld()
                 .playSound(player.getLocation(), Sound_js_1.default.BLOCK_ENDER_CHEST_CLOSE, 1, 1);
         }
+    }
+    isLeftClick(action) {
+        return action === Action_js_1.default.LEFT_CLICK_BLOCK || action === Action_js_1.default.LEFT_CLICK_AIR;
     }
 };
 UseableItems = __decorate([

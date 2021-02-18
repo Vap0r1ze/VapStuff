@@ -35,7 +35,8 @@ let ShulkerPocket = class ShulkerPocket extends Module_js_1.default {
     onPlayerInteract(listener, event) {
         const player = event.getPlayer();
         const itemInMainHand = player.getInventory().getItemInMainHand();
-        if (event.getAction() === Action_js_1.default.RIGHT_CLICK_AIR
+        const action = event.getAction();
+        if ((action === Action_js_1.default.RIGHT_CLICK_AIR || this.isLeftClick(action))
             && itemInMainHand != null
             && this.isShulkerBox(itemInMainHand.getType())
             && !this.shulkerBoxOpen[player.getName()]) {
@@ -272,6 +273,9 @@ let ShulkerPocket = class ShulkerPocket extends Module_js_1.default {
                 .map(e => `'${e[0]}': ${e[1]}`)
                 .join(', ')}}`);
         }
+    }
+    isLeftClick(action) {
+        return action === Action_js_1.default.LEFT_CLICK_BLOCK || action === Action_js_1.default.LEFT_CLICK_AIR;
     }
 };
 ShulkerPocket = __decorate([
