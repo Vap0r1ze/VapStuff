@@ -40,8 +40,9 @@ export default class ShulkerPocket extends Module {
   onPlayerInteract(listener: any, event: PlayerInteractEvent) {
     const player = event.getPlayer()
     const itemInMainHand = (player.getInventory() as PlayerInventory).getItemInMainHand()
+    const action = event.getAction()
     if (
-      event.getAction() === Action.RIGHT_CLICK_AIR
+      (action === Action.RIGHT_CLICK_AIR || action === Action.LEFT_CLICK)
       && itemInMainHand != null
       && this.isShulkerBox(itemInMainHand.getType())
       && !this.shulkerBoxOpen[player.getName()]
