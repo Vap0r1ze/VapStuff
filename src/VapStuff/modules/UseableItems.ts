@@ -17,7 +17,7 @@ export default class UseableItems extends Module {
     const item = event.getItem()
     const action = event.getAction()
     if (!item) return
-    if (action !== Action.RIGHT_CLICK_AIR) return
+    if (action !== Action.RIGHT_CLICK_AIR && action !== Action.LEFT_CLICK) return
     switch (item.getType()) {
       case Material.CRAFTING_TABLE: {
         player.openWorkbench(null, true)
