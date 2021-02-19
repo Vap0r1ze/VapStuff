@@ -40,8 +40,9 @@ export default class ShulkerPocket extends Module {
   onPlayerInteract(listener: any, event: PlayerInteractEvent) {
     const player = event.getPlayer()
     const itemInMainHand = (player.getInventory() as PlayerInventory).getItemInMainHand()
+    const action = event.getAction()
     if (
-      event.getAction() === Action.RIGHT_CLICK_AIR
+      (action === Action.RIGHT_CLICK_AIR || this.isLeftClick(action))
       && itemInMainHand != null
       && this.isShulkerBox(itemInMainHand.getType())
       && !this.shulkerBoxOpen[player.getName()]
@@ -346,5 +347,9 @@ export default class ShulkerPocket extends Module {
           .join(', ')}}`,
       )
     }
+  }
+
+  private isLeftClick(action: Action) {
+    return action === Action.LEFT_CLICK_BLOCK || action === Action.LEFT_CLICK_AIR
   }
 }

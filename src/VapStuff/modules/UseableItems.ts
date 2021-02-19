@@ -17,7 +17,7 @@ export default class UseableItems extends Module {
     const item = event.getItem()
     const action = event.getAction()
     if (!item) return
-    if (action !== Action.RIGHT_CLICK_AIR) return
+    if (action !== Action.RIGHT_CLICK_AIR && this.isLeftClick(action)) return
     switch (item.getType()) {
       case Material.CRAFTING_TABLE: {
         player.openWorkbench(null, true)
@@ -47,5 +47,9 @@ export default class UseableItems extends Module {
         .getWorld()
         .playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_CLOSE, 1, 1)
     }
+  }
+
+  private isLeftClick(action: Action) {
+    return action === Action.LEFT_CLICK_BLOCK || action === Action.LEFT_CLICK_AIR
   }
 }

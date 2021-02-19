@@ -10,6 +10,7 @@ import Hints from './modules/Hints.js'
 import DBFactory from './modules/DBFactory.js'
 import BlockAspects from './modules/BlockAspects.js'
 import AntiCarter from './modules/AntiCarter.js'
+import Player from '../lib/org/bukkit/entity/Player.js'
 
 export default class VapStuff extends JsPlugin {
   dbFactory = new DBFactory(this)
@@ -71,5 +72,10 @@ export default class VapStuff extends JsPlugin {
 
   log(message: string) {
     console.log(`\xA7a[${this.pluginName}]\xA7r ${message}`)
+  }
+
+  getPlayer(uuid: UUID): Player | null {
+    const players = Array.from(this.server.getOnlinePlayers())
+    return players.find(player => player.getUniqueId().toString() === uuid)
   }
 }
