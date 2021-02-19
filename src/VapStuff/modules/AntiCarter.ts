@@ -5,7 +5,11 @@ import Module from '../types/Module.js'
 
 @Subscribe
 export default class AntiCarter extends Module {
+  get name() { return 'Anti-Carter' }
+
   onEntityDamageByEntity(listener: any, event: EntityDamageByEntityEvent) {
+    // idk
+    if (!('getDamager' in event && 'getEntity' in event)) return
     const damager = event.getDamager()
     const victim = event.getEntity()
     if (Player.$isInstance(victim) && Player.$isInstance(damager)) {
