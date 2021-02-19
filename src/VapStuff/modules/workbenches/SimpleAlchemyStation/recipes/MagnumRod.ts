@@ -90,6 +90,7 @@ export default class MagnumRod extends Module {
     if (!this.forbiddenEntities.includes(event.getEntityType())) return
     const rodMap = this.plugin.blockAspects.filterMapById(this.ID)
     for (const rodLocation of rodMap.keys()) {
+      if (event.getLocation().getWorld().getName() !== rodLocation.getWorld().getName()) return
       if (event.getLocation().distance(rodLocation) <= this.RADIUS) {
         event.setCancelled(true)
         return
