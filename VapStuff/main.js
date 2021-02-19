@@ -10,6 +10,7 @@ const Guide_js_1 = require("./modules/Guide.js");
 const Hints_js_1 = require("./modules/Hints.js");
 const DBFactory_js_1 = require("./modules/DBFactory.js");
 const BlockAspects_js_1 = require("./modules/BlockAspects.js");
+const AntiCarter_js_1 = require("./modules/AntiCarter.js");
 class VapStuff extends JsPlugin_js_1.default {
     constructor() {
         super(...arguments);
@@ -22,6 +23,7 @@ class VapStuff extends JsPlugin_js_1.default {
         this.shulkerPocket = new ShulkerPocket_js_1.default(this);
         this.grassPlanter = new GrassPlanter_js_1.default(this);
         this.noWitherGrief = new NoWitherGrief_js_1.default(this);
+        this.antiCarter = new AntiCarter_js_1.default(this);
         // Level 3
         this.guide = new Guide_js_1.default(this);
         this.modules = [
@@ -33,6 +35,7 @@ class VapStuff extends JsPlugin_js_1.default {
             this.shulkerPocket,
             this.grassPlanter,
             this.noWitherGrief,
+            this.antiCarter,
             this.guide,
         ];
     }
