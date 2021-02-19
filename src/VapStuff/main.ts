@@ -9,6 +9,7 @@ import Module from './types/Module.js'
 import Hints from './modules/Hints.js'
 import DBFactory from './modules/DBFactory.js'
 import BlockAspects from './modules/BlockAspects.js'
+import AntiCarter from './modules/AntiCarter.js'
 
 export default class VapStuff extends JsPlugin {
   dbFactory = new DBFactory(this)
@@ -28,6 +29,8 @@ export default class VapStuff extends JsPlugin {
 
   noWitherGrief = new NoWitherGrief(this)
 
+  antiCarter = new AntiCarter(this)
+
   // Level 3
   guide = new Guide(this)
 
@@ -40,6 +43,7 @@ export default class VapStuff extends JsPlugin {
     this.shulkerPocket,
     this.grassPlanter,
     this.noWitherGrief,
+    this.antiCarter,
     this.guide,
   ]
 
