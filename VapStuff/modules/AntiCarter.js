@@ -10,7 +10,11 @@ const Player_js_1 = require("../../lib/org/bukkit/entity/Player.js");
 const EventListener_js_1 = require("../services/EventListener.js");
 const Module_js_1 = require("../types/Module.js");
 let AntiCarter = class AntiCarter extends Module_js_1.default {
+    get name() { return 'Anti-Carter'; }
     onEntityDamageByEntity(listener, event) {
+        // idk
+        if (!('getDamager' in event && 'getEntity' in event))
+            return;
         const damager = event.getDamager();
         const victim = event.getEntity();
         if (Player_js_1.default.$isInstance(victim) && Player_js_1.default.$isInstance(damager)) {
