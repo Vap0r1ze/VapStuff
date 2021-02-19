@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import ItemBuilder from '../../../../../lib/com/smc/utils/ItemBuilder.js'
 import Player from '../../../../../lib/org/bukkit/entity/Player.js'
 import BlockPlaceEvent from '../../../../../lib/org/bukkit/event/block/BlockPlaceEvent.js'
@@ -55,18 +54,23 @@ export default class MagmaticSponge extends Module {
         const player = event.getPlayer()
         for (const block of blocks) {
           const deltaLoc = location.clone().add(...block)
-          if (deltaLoc.getBlock().getType() === Material.WATER && locationDataType === Material.SPONGE) {
+          if (deltaLoc.getBlock().getType() === Material.WATER
+          && locationDataType === Material.SPONGE) {
             event.setCancelled(true)
             player
               .getWorld()
-              .playSound(player.getLocation(), Sound.BLOCK_LAVA_EXTINGUISH, 0.5, 0.5)
+              .playSound(player.getLocation(), Sound.BLOCK_LAVA_EXTINGUISH, 1, 0.5)
+            this.tellPlayer(event.getPlayer(), 'The sponge writhes in agony, don\'t place it near water while it\'s dry!')
+            return
           }
-          if (deltaLoc.getBlock().getType() === Material.LAVA && locationDataType === Material.SPONGE) {
+          if (deltaLoc.getBlock().getType() === Material.LAVA
+          && locationDataType === Material.SPONGE) {
             deltaLoc.getBlock().setType(Material.AIR)
             data.isLavaWet = true
             event.getBlockPlaced().setType(Material.WET_SPONGE)
           }
-          if (deltaLoc.getBlock().getType() === Material.WATER && locationDataType === Material.WET_SPONGE) {
+          if (deltaLoc.getBlock().getType() === Material.WATER
+          && locationDataType === Material.WET_SPONGE) {
             deltaLoc.getBlock().setType(Material.AIR)
             data.isLavaWet = false
           }
