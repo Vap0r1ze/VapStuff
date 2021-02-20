@@ -104,7 +104,7 @@ let MagnumRod = class MagnumRod extends Module_js_1.default {
             .setDisplayName(this.MAGNUM_NAME)
             .setLore([
             '&7This ethereal rod counteracts the natural',
-            '&7summoning of &chostile &7 creatures',
+            '&7spawning of &chostile &7creatures',
             `&7within the range of &b${this.RADIUS} &7blocks`,
             '&7in all directions',
         ].map(str => util_js_1.colorText(str)))

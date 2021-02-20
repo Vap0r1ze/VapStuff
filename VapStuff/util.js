@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deserializeLocation = exports.serializeLocation = exports.capitalizeWords = exports.capitalize = exports.colorStrip = exports.colorText = exports.hexChatColor = exports.Array2D = void 0;
+exports.getDeltasFromTaxicabRadius = exports.deserializeLocation = exports.serializeLocation = exports.capitalizeWords = exports.capitalize = exports.colorStrip = exports.colorText = exports.hexChatColor = exports.Array2D = void 0;
 const Location_js_1 = require("../lib/org/bukkit/Location.js");
 // Data Structure
 function Array2D(w = 0, h = 0) {
@@ -50,3 +50,16 @@ function deserializeLocation(whereStr, server) {
     return new Location_js_1.default(world, +x, +y, +z);
 }
 exports.deserializeLocation = deserializeLocation;
+function getDeltasFromTaxicabRadius(radius) {
+    const deltas = [];
+    for (let dy = -radius; dy <= radius; dy += 1) {
+        const layerRadius = radius - Math.abs(dy);
+        for (let dz = -layerRadius; dz <= layerRadius; dz += 1) {
+            for (let dx = Math.abs(dz) - layerRadius; dx <= layerRadius - Math.abs(dz); dx += 1) {
+                deltas.push([dx, dy, dz]);
+            }
+        }
+    }
+    return deltas;
+}
+exports.getDeltasFromTaxicabRadius = getDeltasFromTaxicabRadius;
